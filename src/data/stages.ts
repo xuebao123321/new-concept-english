@@ -85,7 +85,7 @@ export const STAGES: StageInfo[] = [
     description: '用宾语从句、条件句、间接引语，让表达有了逻辑层次和思辨能力。',
     lessonStart: 97,
     lessonEnd: 120,
-    groups: [],
+    groups: ['lesson-97-98', 'lesson-99-100', 'lesson-101-102', 'lesson-103-104', 'lesson-105-106', 'lesson-107-108', 'lesson-109-110', 'lesson-111-112', 'lesson-113-114', 'lesson-115-116', 'lesson-117-118', 'lesson-119-120'],
     abilityGoal: '能转述别人的话、表达条件和因果关系',
     grammarSummary: '宾语从句 · 条件句(第一类) · 直接/间接引语 · 定语从句初步',
   },

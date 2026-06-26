@@ -49,6 +49,18 @@ import { lesson8990Questions } from './lesson-89-90';
 import { lesson9192Questions } from './lesson-91-92';
 import { lesson9394Questions } from './lesson-93-94';
 import { lesson9596Questions } from './lesson-95-96';
+import { lesson9798Questions } from './lesson-97-98';
+import { lesson99100Questions } from './lesson-99-100';
+import { lesson101102Questions } from './lesson-101-102';
+import { lesson103104Questions } from './lesson-103-104';
+import { lesson105106Questions } from './lesson-105-106';
+import { lesson107108Questions } from './lesson-107-108';
+import { lesson109110Questions } from './lesson-109-110';
+import { lesson111112Questions } from './lesson-111-112';
+import { lesson113114Questions } from './lesson-113-114';
+import { lesson115116Questions } from './lesson-115-116';
+import { lesson117118Questions } from './lesson-117-118';
+import { lesson119120Questions } from './lesson-119-120';
 import type { Question } from '../../types';
 
 const allQuestionArrays: Question[][] = [
@@ -100,6 +112,18 @@ const allQuestionArrays: Question[][] = [
   lesson9192Questions,
   lesson9394Questions,
   lesson9596Questions,
+  lesson9798Questions,
+  lesson99100Questions,
+  lesson101102Questions,
+  lesson103104Questions,
+  lesson105106Questions,
+  lesson107108Questions,
+  lesson109110Questions,
+  lesson111112Questions,
+  lesson113114Questions,
+  lesson115116Questions,
+  lesson117118Questions,
+  lesson119120Questions,
 ];
 
 export function getAllQuestions(): Question[] {
