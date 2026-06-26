@@ -57,7 +57,7 @@ export const STAGES: StageInfo[] = [
     description: '掌握一般过去时和比较级，能够讲述过去的故事，比较事物的差异。',
     lessonStart: 49,
     lessonEnd: 72,
-    groups: [],
+    groups: ['lesson-49-50', 'lesson-51-52', 'lesson-53-54', 'lesson-55-56', 'lesson-57-58', 'lesson-59-60', 'lesson-61-62', 'lesson-63-64', 'lesson-65-66', 'lesson-67-68', 'lesson-69-70', 'lesson-71-72'],
     abilityGoal: '能讲述过去的事、比较事物、表达计划',
     grammarSummary: '一般过去时 · 形容词比较级 · be going to · 时间介词',
   },
