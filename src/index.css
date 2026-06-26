@@ -1,0 +1,375 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════
+   熊出没 · 温暖森林学院 v5.0
+   设计系统：浅色系 + 卡通人物 + 柔和渐变
+   目标用户：小学生（6-12岁）
+   ═══════════════════════════════════════════════ */
+
+@theme {
+  /* ── 主题色（温暖森林）── */
+  --color-forest:       #5B9A5A;
+  --color-forest-light: #8BC48A;
+  --color-forest-pale:  #E8F5E8;
+  --color-honey:        #FF8C42;
+  --color-honey-light:  #FFB380;
+  --color-honey-pale:   #FFF2E8;
+  --color-sky:          #5B9ED4;
+  --color-sky-light:    #8DC5F0;
+  --color-sky-pale:     #E8F2FC;
+  --color-sun:          #FBBF24;
+  --color-sun-pale:     #FFF8E1;
+  --color-berry:        #E57373;
+  --color-berry-pale:   #FFEBEE;
+  --color-plum:         #7E57C2;
+  --color-plum-pale:    #EDE7F6;
+
+  /* ── 中性色 ── */
+  --color-cream:        #FFFBF5;
+  --color-paper:        #FFFFFF;
+  --color-ink:          #3D3830;
+  --color-ink-light:    #8B8580;
+  --color-ink-muted:    #BFBAB5;
+  --color-warm-border:  #E8E0D5;
+  --color-warm-bg:      #F5F2EC;
+
+  /* ── 功能映射（兼容旧代码）── */
+  --color-brand:        #5B9A5A;
+  --color-brand-light:  #8BC48A;
+  --color-brand-pale:   #E8F5E8;
+  --color-accent:       #FF8C42;
+  --color-accent-light: #FFB380;
+  --color-accent-pale:  #FFF2E8;
+  --color-success:      #4CAF50;
+  --color-success-pale: #E8F5E9;
+  --color-correct:      #2E7D32;
+  --color-wrong:        #E57373;
+  --color-wrong-pale:   #FFEBEE;
+  --color-purple:       #7E57C2;
+  --color-purple-pale:  #EDE7F6;
+  --color-bg:           #FFFBF5;
+  --color-surface:      #FFFFFF;
+  --color-border:       #E8E0D5;
+  --color-border-light: #F2EDE4;
+  --color-text:         #3D3830;
+  --color-text-secondary: #8B8580;
+  --color-text-muted:   #BFBAB5;
+  --color-primary:      #5B9A5A;
+  --color-primary-light:#8BC48A;
+  --color-deep-space:   #5B9A5A;
+  --color-neon-cyan:    #5B9ED4;
+  --color-energy-gold:  #FF8C42;
+  --color-danger:       #E57373;
+}
+
+/* ═══════════════ 基础 ═══════════════ */
+html {
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+}
+body {
+  margin: 0; padding: 0;
+  overscroll-behavior: none;
+  background: #FFFBF5;
+  color: #3D3830;
+}
+#root { position: relative; z-index: 1; min-height: 100vh; }
+
+/* ── 背景装饰：柔和森林光斑 ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.04;
+  background-image:
+    radial-gradient(circle at 10% 15%, #5B9A5A 0%, transparent 45%),
+    radial-gradient(circle at 90% 50%, #FF8C42 0%, transparent 40%),
+    radial-gradient(circle at 50% 85%, #5B9ED4 0%, transparent 45%);
+}
+
+/* ═══════════════ 卡通卡片 ═══════════════ */
+.card {
+  background: #fff;
+  border: 2.5px solid #E8E0D5;
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.04), 0 6px 16px rgba(0,0,0,0.03);
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.card:hover {
+  box-shadow: 0 5px 0 rgba(0,0,0,0.05), 0 10px 28px rgba(0,0,0,0.04);
+  border-color: #D5C9B8;
+}
+.card:active { transform: scale(0.995); }
+
+.card-highlight {
+  border-color: #5B9A5A;
+  background: linear-gradient(180deg, #F8FCF8 0%, #fff 100%);
+  box-shadow: 0 3px 0 #4A8B49, 0 6px 20px rgba(91,154,90,0.08);
+}
+.card-success {
+  border-color: #5B9A5A;
+  background: linear-gradient(180deg, #F8FCF8 0%, #fff 100%);
+}
+.card-accent {
+  border-color: #FF8C42;
+  background: linear-gradient(180deg, #FFFBF8 0%, #fff 100%);
+}
+
+/* ═══════════════ 按钮系统（卡通 3D 按压） ═══════════════ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 15px 22px;
+  font-size: 1.05rem; font-weight: 700;
+  border: none; border-radius: 18px;
+  cursor: pointer; transition: all 0.12s ease;
+  position: relative; overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { transform: scale(0.96); }
+.btn:focus-visible { outline: 3px solid #8BC48A; outline-offset: 3px; }
+
+/* 主按钮 — 森林绿 */
+.btn-brand {
+  color: #fff;
+  background: linear-gradient(180deg, #6DB56C 0%, #5B9A5A 100%);
+  box-shadow: 0 5px 0 #4A8B49, 0 8px 24px rgba(91,154,90,0.2);
+}
+.btn-brand:hover { box-shadow: 0 6px 0 #4A8B49, 0 10px 30px rgba(91,154,90,0.25); }
+.btn-brand:active { box-shadow: 0 2px 0 #4A8B49, 0 3px 10px rgba(91,154,90,0.1); }
+
+/* 活力按钮 — 蜜橙 */
+.btn-accent {
+  color: #fff;
+  background: linear-gradient(180deg, #FF9D5C 0%, #FF8C42 100%);
+  box-shadow: 0 5px 0 #D06820, 0 8px 24px rgba(255,140,66,0.2);
+}
+.btn-accent:hover { box-shadow: 0 6px 0 #D06820, 0 10px 30px rgba(255,140,66,0.25); }
+.btn-accent:active { box-shadow: 0 2px 0 #D06820, 0 3px 10px rgba(255,140,66,0.1); }
+
+/* 成功按钮 — 翠绿 */
+.btn-success {
+  color: #fff;
+  background: linear-gradient(180deg, #66BB6A 0%, #4CAF50 100%);
+  box-shadow: 0 5px 0 #357A38, 0 8px 24px rgba(76,175,80,0.2);
+}
+
+/* 幽灵按钮 */
+.btn-ghost {
+  color: #8B8580; background: #F5F2EC;
+  box-shadow: 0 3px 0 #E8E0D5;
+}
+.btn-ghost:hover { background: #EDE8E0; }
+
+.btn-sm { width: auto; padding: 8px 18px; font-size: 0.9rem; border-radius: 14px; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+.btn:disabled:active { transform: none; }
+
+/* ── 兼容深空主题的 .btn-primary / .btn-gold ── */
+.btn-primary {
+  color: #fff;
+  background: linear-gradient(180deg, #6DB56C 0%, #5B9A5A 100%);
+  box-shadow: 0 5px 0 #4A8B49, 0 8px 24px rgba(91,154,90,0.2);
+  font-weight: 700; border-radius: 18px; padding: 15px 22px;
+  cursor: pointer; transition: all 0.12s ease; border: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%;
+}
+.btn-primary:hover { box-shadow: 0 6px 0 #4A8B49, 0 10px 30px rgba(91,154,90,0.25); }
+.btn-primary:active { transform: scale(0.96); box-shadow: 0 2px 0 #4A8B49; }
+
+.btn-gold {
+  color: #fff;
+  background: linear-gradient(180deg, #FF9D5C 0%, #FF8C42 100%);
+  box-shadow: 0 5px 0 #D06820, 0 8px 24px rgba(255,140,66,0.2);
+  font-weight: 700; border-radius: 18px; padding: 15px 22px;
+  cursor: pointer; transition: all 0.12s ease; border: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%;
+}
+.btn-gold:hover { box-shadow: 0 6px 0 #D06820, 0 10px 30px rgba(255,140,66,0.25); }
+.btn-gold:active { transform: scale(0.96); box-shadow: 0 2px 0 #D06820; }
+
+/* ═══════════════ 标签 ═══════════════ */
+.tag {
+  display: inline-block; padding: 4px 14px;
+  font-size: 0.72rem; font-weight: 700; border-radius: 999px;
+  letter-spacing: 0.01em;
+}
+.tag-brand  { background: #E8F5E8; color: #5B9A5A; border: 2px solid #B9DFBA; }
+.tag-accent { background: #FFF2E8; color: #FF8C42; border: 2px solid #FFD4B5; }
+.tag-success{ background: #E8F5E9; color: #4CAF50; border: 2px solid #B9DFBA; }
+.tag-purple { background: #EDE7F6; color: #7E57C2; border: 2px solid #D1C4E9; }
+.tag-red    { background: #FFEBEE; color: #E57373; border: 2px solid #FFCDD2; }
+.tag-blue   { background: #E8F2FC; color: #5B9ED4; border: 2px solid #C5DFF5; }
+.tag-orange { background: #FFF2E8; color: #FF8C42; border: 2px solid #FFD4B5; }
+.tag-green  { background: #E8F5E9; color: #4CAF50; border: 2px solid #B9DFBA; }
+
+/* ═══════════════ 进度条 ═══════════════ */
+.progress-track {
+  height: 14px; background: #F2EDE4; border-radius: 8px;
+  overflow: hidden; border: 2px solid #E8E0D5;
+}
+.progress-fill { height: 100%; border-radius: 6px; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.progress-brand  { background: linear-gradient(90deg, #8BC48A, #5B9A5A); }
+.progress-accent { background: linear-gradient(90deg, #FFB380, #FF8C42); }
+.progress-success{ background: linear-gradient(90deg, #81C784, #4CAF50); }
+
+.progress-shimmer {
+  background: linear-gradient(90deg, #8BC48A 25%, #5B9A5A 50%, #8BC48A 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease infinite;
+}
+
+/* ═══════════════ 输入框 ═══════════════ */
+input[type="text"], textarea {
+  background: #fff; border: 2.5px solid #E8E0D5; color: #3D3830;
+  border-radius: 16px; padding: 12px 16px; font-size: 1rem;
+  outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+}
+input[type="text"]:focus, textarea:focus {
+  border-color: #5B9A5A;
+  box-shadow: 0 0 0 5px rgba(91,154,90,0.08);
+}
+
+/* ═══════════════ 导航 ═══════════════ */
+.nav-top {
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 2px solid #F2EDE4;
+}
+.nav-bottom {
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 2px solid #F2EDE4;
+}
+
+/* ═══════════════ 深色兼容层（glass-panel → card） ═══════════════ */
+.glass-panel {
+  background: #fff;
+  border: 2.5px solid #E8E0D5;
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.04), 0 6px 16px rgba(0,0,0,0.03);
+}
+.neon-border {
+  border-color: #5B9A5A !important;
+  box-shadow: 0 0 0 3px rgba(91,154,90,0.08);
+}
+
+/* ═══════════════ 工具类 ═══════════════ */
+button, a, [role="button"] { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.no-select { user-select: none; -webkit-user-select: none; }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.safe-top { padding-top: env(safe-area-inset-top, 0px); }
+
+/* ═══════════════ 滚动条 ═══════════════ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D5CEC4; border-radius: 3px; }
+
+/* ═══════════════ 动画 ═══════════════ */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes pop-in {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes slide-up {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.94); }
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@keyframes bounce-slight {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-12px); }
+  50% { transform: translateY(0); }
+  70% { transform: translateY(-6px); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
+}
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-pop-in { animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.animate-slide-up { animation: slide-up 0.4s ease-out; }
+.animate-bounce-slight { animation: bounce-slight 2s ease-in-out infinite; }
+.animate-wiggle { animation: wiggle 0.6s ease-in-out; }
+
+.page-enter { animation: slideUp 0.4s ease forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ═══════════════ 响应式（手机 → 平板 → 桌面） ═══════════════ */
+/* 手机（<640px）：全宽，底部导航 */
+/* 默认样式即为手机端 */
+
+/* 大手机 (430-640px) */
+@media (min-width: 430px) {
+  .max-w-lg { max-width: 430px; }
+}
+
+/* 平板 (768px+) */
+@media (min-width: 768px) {
+  .max-w-lg { max-width: 620px; }
+}
+
+/* 桌面 (1024px+) */
+@media (min-width: 1024px) {
+  .max-w-lg { max-width: 680px; }
+  .quick-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* 大桌面 (1366px+) */
+@media (min-width: 1366px) {
+  .max-w-lg { max-width: 800px; }
+  .home-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+}
+
+/* ── 触控目标最小 44px ── */
+.nav-bottom button {
+  min-height: 44px;
+  min-width: 44px;
+}
+button, [role="button"] {
+  min-height: 44px;
+}
+.btn-sm {
+  min-height: 36px;
+  padding: 8px 16px;
+}
+
+/* 底部导航文字放大 */
+.nav-bottom span {
+  font-size: 11px;
+}
+
+/* 筛选标签放大 */
+.tag, .tag-brand, .tag-accent, .tag-success, .tag-purple, .tag-red, .tag-blue, .tag-orange, .tag-green {
+  font-size: 0.78rem;
+  padding: 5px 14px;
+}
