@@ -71,7 +71,7 @@ export const STAGES: StageInfo[] = [
     description: '学会现在完成时和过去进行时，能够处理更复杂的时间关系和表达。',
     lessonStart: 73,
     lessonEnd: 96,
-    groups: [],
+    groups: ['lesson-73-74', 'lesson-75-76', 'lesson-77-78', 'lesson-79-80', 'lesson-81-82', 'lesson-83-84', 'lesson-85-86', 'lesson-87-88', 'lesson-89-90', 'lesson-91-92', 'lesson-93-94', 'lesson-95-96'],
     abilityGoal: '能表达已完成的事、描述过去的进行场景',
     grammarSummary: '现在完成时 · 过去进行时 · 不定式 · 时间状语从句',
   },
