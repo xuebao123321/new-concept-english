@@ -43,7 +43,7 @@ export const STAGES: StageInfo[] = [
     description: '学习现在进行时、There be句型、情态动词，让句子有了动作和活力。',
     lessonStart: 25,
     lessonEnd: 48,
-    groups: [],
+    groups: ['lesson-25-26','lesson-27-28','lesson-29-30','lesson-31-32','lesson-33-34','lesson-35-36','lesson-37-38','lesson-39-40','lesson-41-42','lesson-43-44','lesson-45-46','lesson-47-48'],
     abilityGoal: '能描述正在发生的事、存在的物品、表达能力和义务',
     grammarSummary: '现在进行时 · There be · 情态动词(can/must) · 一般将来时',
   },

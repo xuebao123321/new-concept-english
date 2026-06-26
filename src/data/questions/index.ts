@@ -13,6 +13,18 @@ import { lesson1718Questions } from './lesson-17-18';
 import { lesson1920Questions } from './lesson-19-20';
 import { lesson2122Questions } from './lesson-21-22';
 import { lesson2324Questions } from './lesson-23-24';
+import { lesson2526Questions } from './lesson-25-26';
+import { lesson2728Questions } from './lesson-27-28';
+import { lesson2930Questions } from './lesson-29-30';
+import { lesson3132Questions } from './lesson-31-32';
+import { lesson3334Questions } from './lesson-33-34';
+import { lesson3536Questions } from './lesson-35-36';
+import { lesson3738Questions } from './lesson-37-38';
+import { lesson3940Questions } from './lesson-39-40';
+import { lesson4142Questions } from './lesson-41-42';
+import { lesson4344Questions } from './lesson-43-44';
+import { lesson4546Questions } from './lesson-45-46';
+import { lesson4748Questions } from './lesson-47-48';
 import type { Question } from '../../types';
 
 const allQuestionArrays: Question[][] = [
@@ -28,6 +40,18 @@ const allQuestionArrays: Question[][] = [
   lesson1920Questions,
   lesson2122Questions,
   lesson2324Questions,
+  lesson2526Questions,
+  lesson2728Questions,
+  lesson2930Questions,
+  lesson3132Questions,
+  lesson3334Questions,
+  lesson3536Questions,
+  lesson3738Questions,
+  lesson3940Questions,
+  lesson4142Questions,
+  lesson4344Questions,
+  lesson4546Questions,
+  lesson4748Questions,
 ];
 
 export function getAllQuestions(): Question[] {
