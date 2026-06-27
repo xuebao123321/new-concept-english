@@ -22,7 +22,7 @@ def create_token(user_id: int) -> str:
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
 
 
-def decode_token(token: str) -> int | None:
+def decode_token(token: str):  # -> int | None (3.10+)
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
         return payload.get("user_id")

@@ -18,8 +18,13 @@ export default function LoginPage() {
     } else {
       await register(username, password, nickname || username);
     }
-    const token = useAuthStore.getState().token;
-    if (token) nav('/');
+    // 等一小段确保 state 更新完毕
+    setTimeout(() => {
+      const st = useAuthStore.getState();
+      if (st.token && st.isLoggedIn) {
+        nav('/', { replace: true });
+      }
+    }, 200);
   };
 
   return (
@@ -60,7 +65,7 @@ export default function LoginPage() {
           )}
           <div>
             <label className="text-xs font-bold text-[#8B8580] block mb-1">密码</label>
-            <input type="text" value={password} onChange={e => setPassword(e.target.value)}
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)}
               className="w-full" placeholder="请输入密码" required minLength={4} />
           </div>
           <button type="submit" disabled={isLoading}
