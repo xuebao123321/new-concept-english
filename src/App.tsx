@@ -14,7 +14,7 @@ import AchievementsPage from './pages/AchievementsPage';
 import ProfilePage from './pages/ProfilePage';
 import DiagnosisPage from './pages/DiagnosisPage';
 import LoginPage from './pages/LoginPage';
-import { useAuthStore } from './stores/useAuthStore';
+import { useAuthStore } from './stores/useAuthStore'; // getState() called in useEffect
 import { useUserStore } from './stores/useUserStore';
 import { useLessonProgressStore } from './stores/useLessonProgressStore';
 import { checkAndRefillHearts } from './utils/streak';
@@ -31,8 +31,7 @@ export default function App() {
     });
   }, [init, loadProgress]);
 
-  const loadAuth = useAuthStore(s => s.loadFromStorage);
-  useEffect(() => { loadAuth(); }, [loadAuth]);
+  useEffect(() => { useAuthStore.getState().loadFromStorage(); }, []);
 
   return (
     <ErrorBoundary>
