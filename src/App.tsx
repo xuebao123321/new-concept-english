@@ -13,6 +13,8 @@ import ReviewPage from './pages/ReviewPage';
 import AchievementsPage from './pages/AchievementsPage';
 import ProfilePage from './pages/ProfilePage';
 import DiagnosisPage from './pages/DiagnosisPage';
+import LoginPage from './pages/LoginPage';
+import { useAuthStore } from './stores/useAuthStore';
 import { useUserStore } from './stores/useUserStore';
 import { useLessonProgressStore } from './stores/useLessonProgressStore';
 import { checkAndRefillHearts } from './utils/streak';
@@ -29,9 +31,13 @@ export default function App() {
     });
   }, [init, loadProgress]);
 
+  const loadAuth = useAuthStore(s => s.loadFromStorage);
+  useEffect(() => { loadAuth(); }, [loadAuth]);
+
   return (
     <ErrorBoundary>
     <Routes>
+      <Route path="/login" element={<LoginPage />} />
       <Route element={<AppShell />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/star-map" element={<StarMapPage />} />
