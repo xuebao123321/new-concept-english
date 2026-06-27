@@ -1,4 +1,7 @@
-const API_BASE = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:8000');
+// 生产用 Railway，开发用本地
+const API_BASE = import.meta.env.PROD
+  ? (import.meta.env.VITE_API_URL || 'https://nce-api.up.railway.app')
+  : 'http://localhost:8000';
 
 async function request(path: string, options: RequestInit = {}): Promise<any> {
   const token = localStorage.getItem('nce_token');
