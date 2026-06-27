@@ -1,86 +1,56 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { api } from '../db/api';
 
 export default function LoginPage() {
-  const nav = useNavigate();
   const [mode, setMode] = useState<'login' | 'register'>('register');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [ok, setOk] = useState('');
+  const [msg, setMsg] = useState('');
+
+  const API = import.meta.env.PROD
+    ? 'https://haven-girdle-chitchat.ngrok-free.dev'
+    : 'http://localhost:8000';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setOk('');
-    setLoading(true);
+    setMsg('');
     try {
-      if (mode === 'login') {
-        const res = await api.login(username, password);
-        localStorage.setItem('nce_token', res.access_token);
-        setOk('登录成功！跳转中...');
-        setTimeout(() => nav('/', { replace: true }), 500);
-      } else {
-        await api.register(username, password, nickname || username);
-        setOk('注册成功！请切换到登录');
-        setMode('login');
-        setPassword('');
-      }
+      const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/register';
+      const res = await fetch(`${API}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, nickname: username }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Error');
+      localStorage.setItem('nce_token', data.access_token);
+      setMsg(mode === 'login' ? '登录成功！' : '注册成功！请切换到登录');
+      if (mode === 'register') { setMode('login'); setPassword(''); }
+      if (mode === 'login') { window.location.href = '/'; }
     } catch (e: any) {
-      setError(e.message || '操作失败');
-    } finally {
-      setLoading(false);
+      setMsg('❌ ' + (e.message || '网络错误'));
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-[#FFFBF5]">
-      <motion.div className="card p-8 w-full max-w-sm" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="text-center mb-6">
-          <div className="text-5xl mb-2">🐻</div>
-          <h2 className="text-xl font-extrabold text-[#3D3830]">{mode === 'login' ? '欢迎回来' : '创建账号'}</h2>
-          <p className="text-sm text-[#8B8580] mt-1">新概念英语智能练习</p>
-        </div>
-
-        {error && <div className="mb-4 p-3 rounded-xl bg-[#FFEBEE] border border-[#E57373] text-sm text-[#E57373] font-bold text-center">{error}</div>}
-        {ok && <div className="mb-4 p-3 rounded-xl bg-[#E8F5E9] border border-[#4CAF50] text-sm text-[#4CAF50] font-bold text-center">{ok}</div>}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="text-xs font-bold text-[#8B8580] block mb-1">用户名</label>
-            <input value={username} onChange={e => setUsername(e.target.value)}
-              className="w-full" placeholder="请输入用户名" required minLength={3} autoComplete="username" />
-          </div>
-          {mode === 'register' && (
-            <div>
-              <label className="text-xs font-bold text-[#8B8580] block mb-1">昵称</label>
-              <input value={nickname} onChange={e => setNickname(e.target.value)}
-                className="w-full" placeholder="给自己取个名字" autoComplete="name" />
-            </div>
-          )}
-          <div>
-            <label className="text-xs font-bold text-[#8B8580] block mb-1">密码</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-              className="w-full" placeholder="请输入密码" required minLength={4} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
-          </div>
-          <button type="submit" disabled={loading}
-            className="w-full py-3 rounded-2xl text-white font-extrabold text-base bg-[#5B9A5A]"
-            style={{ opacity: loading ? 0.6 : 1 }}>
-            {loading ? '处理中...' : mode === 'login' ? '登录' : '注册'}
-          </button>
-        </form>
-
-        <div className="text-center mt-4">
-          <button onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); setOk(''); }}
-            className="text-sm font-bold text-[#5B9A5A]">
-            {mode === 'login' ? '还没有账号？去注册 →' : '已有账号？去登录 →'}
-          </button>
-        </div>
-      </motion.div>
+    <div style={{ maxWidth: 400, margin: '60px auto', padding: 30, background: '#fff', borderRadius: 16 }}>
+      <h2 style={{ textAlign: 'center' }}>🐻 {mode === 'login' ? '登录' : '注册'}</h2>
+      {msg && <p style={{ textAlign: 'center', color: msg.startsWith('❌') ? 'red' : 'green' }}>{msg}</p>}
+      <form onSubmit={handleSubmit}>
+        <input value={username} onChange={e => setUsername(e.target.value)}
+          placeholder="用户名" required minLength={3}
+          style={{ width: '100%', padding: 10, margin: '8px 0', borderRadius: 8, border: '1px solid #ddd' }} />
+        <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+          placeholder="密码" required minLength={4}
+          style={{ width: '100%', padding: 10, margin: '8px 0', borderRadius: 8, border: '1px solid #ddd' }} />
+        <button type="submit"
+          style={{ width: '100%', padding: 12, margin: '8px 0', background: '#5B9A5A', color: '#fff', border: 'none', borderRadius: 10, fontSize: 16, fontWeight: 'bold', cursor: 'pointer' }}>
+          {mode === 'login' ? '登录' : '注册'}
+        </button>
+      </form>
+      <p style={{ textAlign: 'center', cursor: 'pointer', color: '#5B9A5A' }}
+        onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setMsg(''); }}>
+        {mode === 'login' ? '去注册 →' : '去登录 →'}
+      </p>
     </div>
   );
 }
