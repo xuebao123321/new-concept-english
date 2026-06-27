@@ -17,7 +17,6 @@ import LoginPage from './pages/LoginPage';
 import { useAuthStore } from './stores/useAuthStore';
 import { useUserStore } from './stores/useUserStore';
 import { useLessonProgressStore } from './stores/useLessonProgressStore';
-import { checkAndRefillHearts } from './utils/streak';
 
 export default function App() {
   const done = useRef(false);
@@ -25,14 +24,11 @@ export default function App() {
   useEffect(() => {
     if (done.current) return;
     done.current = true;
+    console.log('[App] init once');
 
-    // 一次性初始化
     useAuthStore.getState().loadFromStorage();
     useUserStore.getState().init();
     useLessonProgressStore.getState().load();
-    checkAndRefillHearts().then(() => {
-      useUserStore.getState().refreshUser();
-    });
   }, []);
 
   return (
