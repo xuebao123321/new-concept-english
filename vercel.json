@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "backend/main.py": {
+      "runtime": "python3.11",
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/backend/main.py" }
+  ]
+}
