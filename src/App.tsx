@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import AppShell from './components/layout/AppShell';
 import HomePage from './pages/HomePage';
@@ -14,24 +14,26 @@ import AchievementsPage from './pages/AchievementsPage';
 import ProfilePage from './pages/ProfilePage';
 import DiagnosisPage from './pages/DiagnosisPage';
 import LoginPage from './pages/LoginPage';
-import { useAuthStore } from './stores/useAuthStore'; // getState() called in useEffect
+import { useAuthStore } from './stores/useAuthStore';
 import { useUserStore } from './stores/useUserStore';
 import { useLessonProgressStore } from './stores/useLessonProgressStore';
 import { checkAndRefillHearts } from './utils/streak';
 
 export default function App() {
-  const init = useUserStore(s => s.init);
-  const loadProgress = useLessonProgressStore(s => s.load);
+  const done = useRef(false);
 
   useEffect(() => {
-    init();
-    loadProgress();
+    if (done.current) return;
+    done.current = true;
+
+    // 一次性初始化
+    useAuthStore.getState().loadFromStorage();
+    useUserStore.getState().init();
+    useLessonProgressStore.getState().load();
     checkAndRefillHearts().then(() => {
       useUserStore.getState().refreshUser();
     });
-  }, [init, loadProgress]);
-
-  useEffect(() => { useAuthStore.getState().loadFromStorage(); }, []);
+  }, []);
 
   return (
     <ErrorBoundary>
