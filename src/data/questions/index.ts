@@ -61,6 +61,18 @@ import { lesson113114Questions } from './lesson-113-114';
 import { lesson115116Questions } from './lesson-115-116';
 import { lesson117118Questions } from './lesson-117-118';
 import { lesson119120Questions } from './lesson-119-120';
+import { lesson121122Questions } from './lesson-121-122';
+import { lesson123124Questions } from './lesson-123-124';
+import { lesson125126Questions } from './lesson-125-126';
+import { lesson127128Questions } from './lesson-127-128';
+import { lesson129130Questions } from './lesson-129-130';
+import { lesson131132Questions } from './lesson-131-132';
+import { lesson133134Questions } from './lesson-133-134';
+import { lesson135136Questions } from './lesson-135-136';
+import { lesson137138Questions } from './lesson-137-138';
+import { lesson139140Questions } from './lesson-139-140';
+import { lesson141142Questions } from './lesson-141-142';
+import { lesson143144Questions } from './lesson-143-144';
 import type { Question } from '../../types';
 
 const allQuestionArrays: Question[][] = [
@@ -124,6 +136,18 @@ const allQuestionArrays: Question[][] = [
   lesson115116Questions,
   lesson117118Questions,
   lesson119120Questions,
+  lesson121122Questions,
+  lesson123124Questions,
+  lesson125126Questions,
+  lesson127128Questions,
+  lesson129130Questions,
+  lesson131132Questions,
+  lesson133134Questions,
+  lesson135136Questions,
+  lesson137138Questions,
+  lesson139140Questions,
+  lesson141142Questions,
+  lesson143144Questions,
 ];
 
 export function getAllQuestions(): Question[] {
