@@ -1,6 +1,6 @@
-// 生产用 Railway，开发用本地
+// 生产用 ngrok 隧道，开发用本地
 const API_BASE = import.meta.env.PROD
-  ? (import.meta.env.VITE_API_URL || 'https://nce-api.up.railway.app')
+  ? (import.meta.env.VITE_API_URL || 'https://haven-girdle-chitchat.ngrok-free.dev')
   : 'http://localhost:8000';
 
 async function request(path: string, options: RequestInit = {}): Promise<any> {
