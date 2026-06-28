@@ -101,10 +101,25 @@ def progress_update(data: dict, user: dict = Depends(get_current_user)):
     return {"ok": True}
 
 
-# ── 健康检查 ──
+# ── 健康检查 + 调试 ──
 @app.get("/api/health")
 def health():
     return {"status": "ok", "db": "turso" if os.getenv("TURSO_URL") else "sqlite"}
+
+@app.get("/api/debug")
+def debug():
+    from db import get_db
+    try:
+        conn = get_db()
+        r1 = conn.execute("SELECT 1 as ok").fetchone()
+        select_ok = dict(r1) if r1 else "FAIL"
+        conn.execute("CREATE TABLE IF NOT EXISTS _debug (id INTEGER PRIMARY KEY, msg TEXT)")
+        conn.execute("INSERT INTO _debug (msg) VALUES (?)", ("hello",))
+        r2 = conn.execute("SELECT * FROM _debug").fetchone()
+        insert_ok = dict(r2) if r2 else "FAIL"
+        return {"select": select_ok, "insert": insert_ok, "db_type": "turso" if os.getenv("TURSO_URL") else "sqlite"}
+    except Exception as e:
+        return {"error": str(e)}
 
 
 # ── Vercel Serverless 入口 ──

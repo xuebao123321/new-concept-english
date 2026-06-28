@@ -25,7 +25,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const ep = mode === 'login' ? '/api/auth/login' : '/api/auth/register';
-      const url = `https://haven-girdle-chitchat.ngrok-free.dev${ep}`;
+      const url = `https://new-concept-english-production.up.railway.app${ep}`;
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': '1' },
