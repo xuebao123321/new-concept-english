@@ -5,6 +5,7 @@ import FillInBlank from './FillInBlank';
 import TranslationInput from './TranslationInput';
 import SentenceReorder from './SentenceReorder';
 import ListeningQuestionComp from './ListeningQuestion';
+import { playCorrect, playWrong } from '../common/SoundManager';
 import type { Question, QuestionType } from '../../types';
 
 interface Props {
@@ -30,6 +31,7 @@ export default function QuestionCard({ question, questionNumber, totalQuestions,
   const handleAnswer = (answer: string, correct: boolean, timeSpent: number) => {
     setLastCorrect(correct);
     setShowResult(true);
+    if (correct) playCorrect(); else playWrong();
     setTimeout(() => {
       setShowResult(false);
       setLastCorrect(null);

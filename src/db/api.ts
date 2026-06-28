@@ -3,16 +3,23 @@ const API_BASE = import.meta.env.PROD
   ? (import.meta.env.VITE_API_URL || 'https://new-concept-english-production.up.railway.app')
   : 'http://localhost:8000';
 
-async function request(path: string, options: RequestInit = {}): Promise<any> {
+async function request(path: string, options: RequestInit = {}, retries = 1): Promise<any> {
   const token = localStorage.getItem('nce_token');
   const headers: Record<string, string> = { 'Content-Type': 'application/json', ...((options.headers as any) || {}) };
   if (token) headers['Authorization'] = `Bearer ${token}`;
-  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: 'Network error' }));
-    throw new Error(err.detail || 'Request failed');
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ detail: '网络错误，请稍后重试' }));
+        throw new Error(err.detail || '请求失败');
+      }
+      return res.json();
+    } catch (e: any) {
+      if (i < retries) { await new Promise(r => setTimeout(r, 1000)); continue; }
+      throw new Error(e.message || '网络错误，请检查连接');
+    }
   }
-  return res.json();
 }
 
 export const api = {
