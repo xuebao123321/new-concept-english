@@ -106,43 +106,69 @@ export default function MasteryTestPage() {
   // 结果页
   if (done) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-cream">
+      <div className="min-h-screen flex flex-col bg-cream">
         <Confetti active={passed} />
         <motion.div
-          className="text-center space-y-5"
+          className="flex-1 flex flex-col items-center justify-center px-4 gap-5"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={springs.success}
         >
+          {/* 角色横幅 */}
+          <motion.div
+            className="relative w-48 h-48 rounded-3xl overflow-hidden border-4 border-white shadow-xl"
+            initial={{ scale: 0, rotate: -15 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ ...springs.popIn, delay: 0.15 }}
+          >
+            <img
+              src={passed ? '/assets/characters/new-year.webp' : '/assets/characters/bears-cabin.webp'}
+              alt=""
+              className="w-full h-full object-cover"
+              style={{ objectPosition: passed ? 'center 25%' : 'center 30%' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+          </motion.div>
+
+          {/* 奖杯/emoji */}
           <motion.div
             className="text-7xl"
-            animate={passed ? { scale: [1, 1.2, 1], rotate: [0, -5, 5, 0] } : {}}
-            transition={{ duration: 1.5, repeat: Infinity }}
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.35 }}
           >
-            {passed ? '🌟' : '💪'}
+            {passed ? '🏆' : '💪'}
           </motion.div>
-          <h2 className="text-2xl font-extrabold text-ink">
-            {passed ? '时间跃迁成功！' : '跃迁未完成'}
-          </h2>
-          <p className="text-ink-light font-bold">
-            {passed
-              ? `下一时间点已解锁！ +${calculateTestCompleteXp()}XP 🚀`
-              : `还有 ${wrongList.length} 个信号不稳定，需要全部修复`}
-          </p>
+
+          <div className="text-center space-y-2">
+            <h2 className="text-h1 text-ink">
+              {passed ? '时间跃迁成功!' : '跃迁未完成'}
+            </h2>
+            <p className="text-meta text-ink-light font-medium max-w-xs mx-auto leading-relaxed">
+              {passed
+                ? `第 ${LESSONS.filter(l => l.group === groupId).map(l => l.lessonNumber).join('-')} 课已通关! 下一时间点已解锁 +${calculateTestCompleteXp()}XP 🚀`
+                : `还有 ${wrongList.length} 个信号不稳定,需要全部修复`}
+            </p>
+          </div>
 
           {passed ? (
-            <div className="space-y-3">
+            <motion.div
+              className="space-y-3 w-full max-w-xs mt-2"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
               <button onClick={() => navigate('/star-map')} className="w-full py-3 btn-gold text-base">
                 🌌 查看星图
               </button>
               <button onClick={() => navigate(`/lesson/${groupId}`)} className="w-full py-3 bg-warm-bg text-ink-light font-bold rounded-xl border border-warm-border">
                 📋 返回课程
               </button>
-            </div>
+            </motion.div>
           ) : (
             <button
               onClick={() => { setPhase('review'); setDone(false); }}
-              className="w-full py-3 btn-gold"
+              className="w-full max-w-xs py-3 btn-gold mt-2"
             >
               🔄 补考错题（{wrongList.length}题）
             </button>

@@ -8,6 +8,7 @@ import { LESSON_GROUPS } from '../data/lessons';
 import XpBar from '../components/gamification/XpBar';
 import StreakBadge from '../components/gamification/StreakBadge';
 import AchievementToast from '../components/gamification/AchievementToast';
+import StreakCelebration from '../components/gamification/StreakCelebration';
 import CharacterAvatar from '../components/common/CharacterAvatar';
 import { springs, staggerDelay } from '../utils/motion-tokens';
 
@@ -79,6 +80,7 @@ export default function HomePage() {
   return (
     <div className="px-4 py-4 space-y-4 relative z-10">
       <AchievementToast />
+      <StreakCelebration />
 
       {/* ═══ 新用户引导浮层 ═══ */}
       <AnimatePresence>

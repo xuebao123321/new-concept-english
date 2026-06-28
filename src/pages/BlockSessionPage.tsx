@@ -103,26 +103,54 @@ export default function BlockSessionPage() {
   // 完成页
   if (done) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-cream">
+      <div className="min-h-screen flex flex-col bg-cream">
         <Confetti active={allCorrect} />
         <motion.div
-          className="text-center space-y-5"
+          className="flex-1 flex flex-col items-center justify-center px-4 gap-4"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={springs.success}
         >
-          <div className="text-6xl">{allCorrect ? '🎉' : '💪'}</div>
-          <h2 className="text-2xl font-extrabold text-ink">
-            {allCorrect ? '信号修复完成！' : '还需要修复！'}
-          </h2>
-          <p className="text-ink-light font-bold">
-            {allCorrect
-              ? `${info.name}已恢复正常 ⚡ +${calculateBlockCompleteXp()}XP`
-              : `还有 ${wrongList.length} 个信号不稳定`}
-          </p>
+          {/* 角色横幅 */}
+          <motion.div
+            className="relative w-40 h-40 rounded-3xl overflow-hidden border-4 border-white shadow-xl"
+            initial={{ scale: 0, rotate: -10 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ ...springs.popIn, delay: 0.1 }}
+          >
+            <img
+              src={allCorrect ? '/assets/characters/xionger-laugh.webp' : '/assets/characters/bears-cabin.webp'}
+              alt=""
+              className="w-full h-full object-cover"
+              style={{ objectPosition: allCorrect ? 'left center' : 'center 30%' }}
+            />
+            <div className={allCorrect
+              ? 'absolute inset-0 bg-gradient-to-t from-forest/40 via-transparent to-transparent'
+              : 'absolute inset-0 bg-gradient-to-t from-honey/40 via-transparent to-transparent'}
+            />
+          </motion.div>
+
+          <div className="text-center space-y-2">
+            <motion.div
+              className="text-5xl"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              {allCorrect ? '🎉' : '💪'}
+            </motion.div>
+            <h2 className="text-h1 text-ink">
+              {allCorrect ? '太棒了!' : '还差一点!'}
+            </h2>
+            <p className="text-meta text-ink-light font-medium max-w-xs mx-auto leading-relaxed">
+              {allCorrect
+                ? `${info.name} 已掌握! 熊二为你鼓掌~ 👏 +${calculateBlockCompleteXp()}XP`
+                : `${info.name} 还有 ${wrongList.length} 道题需要再练习`}
+            </p>
+          </div>
 
           {allCorrect ? (
-            <div className="space-y-3">
+            <div className="space-y-3 w-full max-w-xs mt-2">
               <button onClick={() => navigate(`/lesson/${groupId}`)} className="w-full py-3 btn-primary">
                 🚀 继续下一块
               </button>
@@ -131,7 +159,7 @@ export default function BlockSessionPage() {
               </button>
             </div>
           ) : (
-            <button onClick={() => { setRound('review'); setDone(false); }} className="w-full py-3 btn-gold">
+            <button onClick={() => { setRound('review'); setDone(false); }} className="w-full max-w-xs py-3 btn-gold mt-2">
               🔄 补考错题（{wrongList.length}题）
             </button>
           )}
