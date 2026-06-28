@@ -34,7 +34,7 @@ export default function App() {
   return (
     <ErrorBoundary>
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login" element={<div style={{padding:40}}><h2>Login Test</h2><LoginPage /></div>} />
       <Route element={<AppShell />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/star-map" element={<StarMapPage />} />
