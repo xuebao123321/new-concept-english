@@ -8,7 +8,7 @@ import { db } from '../db/database';
 import LessonSelector from '../components/practice/LessonSelector';
 import PracticeSession from '../components/practice/PracticeSession';
 import ResultScreen from '../components/practice/ResultScreen';
-import { getAllQuestions } from '../data/questions';
+import { preloadGroups, getCachedQuestions } from '../hooks/useQuestions';
 import type { QuestionType, Question } from '../types';
 
 type Screen = 'select' | 'practice' | 'result';
@@ -32,9 +32,11 @@ export default function PracticePage() {
   }, []);
 
   const handleStart = useCallback(
-    (lessonGroups: string[], questionCount: number, types: QuestionType[]) => {
-      // 从题库中选题
-      const allQ = getAllQuestions();
+    async (lessonGroups: string[], questionCount: number, types: QuestionType[]) => {
+      // 预加载题库
+      await preloadGroups(lessonGroups);
+      // 从缓存中选题
+      const allQ = lessonGroups.flatMap(g => getCachedQuestions(g));
       const filtered = allQ.filter(
         q => lessonGroups.includes(q.lessonGroup) && types.includes(q.type)
       );

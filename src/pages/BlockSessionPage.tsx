@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getQuestionsByBlock } from '../data/questions';
+import { useQuestions } from '../hooks/useQuestions';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
 import { useUserStore } from '../stores/useUserStore';
 import { calculateBlockCompleteXp } from '../utils/xp-calculator';
@@ -25,17 +26,18 @@ export default function BlockSessionPage() {
   const blockType = (block || 'vocabulary') as BlockType;
   const info = BLOCK_INFO[blockType] || BLOCK_INFO.vocabulary;
 
-  // 从题库中筛选该块的题目
-  const blockQuestions = (() => {
-    if (!groupId) return [];
-    const bq = getQuestionsByBlock(groupId, blockType);
-    // 如果没有通过 block 字段匹配到，回退到按类型筛选
-    if (bq.length > 0) return bq;
-    const all = getQuestionsByBlock(groupId, blockType);
-    return all;
-  })();
+  // 异步加载题目
+  const { questions: blockQuestions, loading } = useQuestions(groupId ? [groupId] : []);
+  const filteredQuestions = blockQuestions.filter(q => {
+    if (blockType === 'vocabulary') return q.type === 'choice' || (q.type === 'fill' && q.tags?.some((t: string) => t.includes('词汇')));
+    if (blockType === 'grammar') return q.type === 'fill' || q.type === 'reorder';
+    if (blockType === 'sentence') return q.type === 'translate';
+    if (blockType === 'listening') return q.type === 'listening';
+    return true;
+  });
 
-  const [sessionQ] = useState(() => [...blockQuestions].sort(() => Math.random() - 0.5));
+  const [sessionQ, setSessionQ] = useState<Question[]>([]);
+  useEffect(() => { if (filteredQuestions.length > 0) setSessionQ([...filteredQuestions].sort(() => Math.random() - 0.5)); }, [filteredQuestions.length]);
   const [idx, setIdx] = useState(0);
   const [wrongList, setWrongList] = useState<Question[]>([]);
   const [round, setRound] = useState<'main' | 'review'>('main');
@@ -133,14 +135,22 @@ export default function BlockSessionPage() {
     );
   }
 
+  // 加载中
+  if (loading || sessionQ.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{background:'#FFFBF5'}}>
+        <div className="text-center"><div className="text-4xl animate-bounce mb-3">🐻</div>
+        <p className="text-[#8B8580] font-bold">正在加载题目...</p></div></div>);
+  }
+
   // 无题目状态
   if (!cur) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-cream">
+      <div className="min-h-screen flex items-center justify-center" style={{background:'#FFFBF5'}}>
         <div className="text-center">
           <div className="text-4xl mb-3">🐻</div>
-          <p className="text-ink-light font-bold">该模块暂无题目</p>
-          <button onClick={() => navigate(-1)} className="mt-4 text-sm text-forest font-bold">← 返回</button>
+          <p className="text-[#8B8580] font-bold">该模块暂无题目</p>
+          <button onClick={() => navigate(-1)} className="mt-4 text-sm text-[#5B9A5A] font-bold">← 返回</button>
         </div>
       </div>
     );

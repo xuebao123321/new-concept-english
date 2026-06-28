@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { LESSONS } from '../data/lessons';
 import { getStageByGroup } from '../data/stages';
-import { getQuestionsByBlock } from '../data/questions';
+import { preloadGroups, getCachedQuestions } from '../hooks/useQuestions';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
 import type { BlockType } from '../types';
 
@@ -18,6 +19,7 @@ export default function LessonDetailPage() {
   const navigate = useNavigate();
   const { isBlockUnlocked, areAllBlocksDone, progressMap } = useLessonProgressStore();
 
+  useEffect(() => { if (groupId) preloadGroups([groupId]); }, [groupId]);
   if (!groupId) return null;
 
   const lessons = LESSONS.filter(l => l.group === groupId);
@@ -81,7 +83,14 @@ export default function LessonDetailPage() {
         {BLOCKS.map((b, i) => {
           const unlocked = isBlockUnlocked(groupId, b.id);
           const done = bp?.[b.id] === true;
-          const questionCount = getQuestionsByBlock(groupId, b.id).length;
+          const cached = getCachedQuestions(groupId);
+          const questionCount = cached.filter(q => (q as any).block === b.id).length || cached.filter(q => {
+            if (b.id === 'vocabulary') return q.type === 'choice';
+            if (b.id === 'grammar') return q.type === 'fill' || q.type === 'reorder';
+            if (b.id === 'sentence') return q.type === 'translate';
+            if (b.id === 'listening') return q.type === 'listening';
+            return true;
+          }).length;
 
           return (
             <motion.button
