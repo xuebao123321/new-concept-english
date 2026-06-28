@@ -15,7 +15,15 @@ def _turso_request(statements: list[tuple]) -> list[list[dict]]:
     headers = {"Authorization": f"Bearer {TURSO_TOKEN}", "Content-Type": "application/json"}
     reqs = []
     for sql, params in statements:
-        reqs.append({"type": "execute", "stmt": {"sql": sql, "args": list(params) if params else []}})
+        args = []
+        for p in (params or ()):
+            if isinstance(p, int):
+                args.append({"type": "integer", "value": str(p)})
+            elif isinstance(p, float):
+                args.append({"type": "real", "value": str(p)})
+            else:
+                args.append({"type": "text", "value": str(p)})
+        reqs.append({"type": "execute", "stmt": {"sql": sql, "args": args}})
     resp = httpx.post(url, json={"requests": reqs}, headers=headers, timeout=30)
     resp.raise_for_status()
     data = resp.json()
