@@ -10,7 +10,8 @@ LOCAL_DB = os.path.join(os.path.dirname(__file__), "..", "data", "nce.db")
 def _turso_request(sql: str, params: tuple = ()) -> list[dict]:
     """通过 Turso HTTP API 执行 SQL"""
     import httpx
-    url = f"{TURSO_URL}/v2/pipeline"
+    http_url = TURSO_URL.replace('libsql://', 'https://')
+    url = f"{http_url}/v2/pipeline"
     headers = {"Authorization": f"Bearer {TURSO_TOKEN}", "Content-Type": "application/json"}
     statements = [{"sql": sql, "args": list(params)}] if params else [{"sql": sql}]
     resp = httpx.post(url, json={"statements": statements}, headers=headers, timeout=15)
