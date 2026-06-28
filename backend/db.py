@@ -118,9 +118,20 @@ def init_db():
 # ── 用户 CRUD ──
 def create_user(username: str, password_hash: str, salt: str, nickname: str = "") -> dict:
     conn = get_db()
-    conn.execute("INSERT INTO users (username, password_hash, salt, nickname) VALUES (?,?,?,?)", (username, password_hash, salt, nickname))
-    if hasattr(conn, 'commit'): conn.commit()
-    return get_user_by_username(username) or {}
+    if TURSO_URL and TURSO_TOKEN:
+        # Turso: INSERT+SELECT in one pipeline to ensure visibility
+        results = _turso_request([
+            ("INSERT INTO users (username, password_hash, salt, nickname) VALUES (?,?,?,?)", (username, password_hash, salt, nickname)),
+            ("SELECT * FROM users WHERE username=?", (username,)),
+        ])
+        if len(results) >= 2 and results[1]:
+            return results[1][0]
+        return {}
+    else:
+        conn.execute("INSERT INTO users (username, password_hash, salt, nickname) VALUES (?,?,?,?)", (username, password_hash, salt, nickname))
+        conn.commit()
+        row = conn.execute("SELECT * FROM users WHERE username=?", (username,)).fetchone()
+        return dict(row) if row else {}
 
 
 def get_user_by_username(username: str) -> Optional[dict]:
