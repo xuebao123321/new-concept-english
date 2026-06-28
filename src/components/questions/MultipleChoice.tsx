@@ -68,7 +68,7 @@ export default function MultipleChoice({ question, onAnswer, startTime }: Multip
               <span
                 className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
                   !showResult && selected === index
-                    ? 'bg-forest text-[#0F172A]'
+                    ? 'bg-forest text-white'
                     : showResult && index === question.correctIndex
                     ? 'bg-forest text-white'
                     : showResult && index === selected && index !== question.correctIndex

@@ -8,6 +8,8 @@ import { useUserStore } from '../stores/useUserStore';
 import { calculateBlockCompleteXp } from '../utils/xp-calculator';
 import QuestionCard from '../components/questions/QuestionCard';
 import Confetti from '../components/common/Confetti';
+import { springs } from '../utils/motion-tokens';
+import { api } from '../db/api';
 import type { Question, BlockType } from '../types';
 
 const BLOCK_INFO: Record<BlockType, { icon: string; name: string; color: string; bg: string }> = {
@@ -21,7 +23,8 @@ export default function BlockSessionPage() {
   const { groupId, block } = useParams<{ groupId: string; block: string }>();
   const navigate = useNavigate();
   const { completeBlock } = useLessonProgressStore();
-  const { addXp } = useUserStore();
+  const { addXp, userState } = useUserStore();
+  const hearts = userState?.hearts ?? 5;
 
   const blockType = (block || 'vocabulary') as BlockType;
   const info = BLOCK_INFO[blockType] || BLOCK_INFO.vocabulary;
@@ -91,6 +94,8 @@ export default function BlockSessionPage() {
       await completeBlock(groupId, blockType);
     }
     await addXp(calculateBlockCompleteXp());
+    // 异步向后端推送进度
+    api.updateProgress(groupId || '', correctCount, sessionQ.length).catch(() => {});
     setAllCorrect(perfect);
     setDone(true);
   };
@@ -104,7 +109,7 @@ export default function BlockSessionPage() {
           className="text-center space-y-5"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+          transition={springs.success}
         >
           <div className="text-6xl">{allCorrect ? '🎉' : '💪'}</div>
           <h2 className="text-2xl font-extrabold text-ink">
@@ -152,6 +157,28 @@ export default function BlockSessionPage() {
           <p className="text-[#8B8580] font-bold">该模块暂无题目</p>
           <button onClick={() => navigate(-1)} className="mt-4 text-sm text-[#5B9A5A] font-bold">← 返回</button>
         </div>
+      </div>
+    );
+  }
+
+  // 心不足
+  if (hearts === 0) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-cream gap-4">
+        <img
+          src="/assets/characters/bears-cabin.webp"
+          alt="心已用完"
+          className="w-32 h-32 rounded-2xl object-cover border-2 border-warm-border shadow-sm"
+          style={{ objectPosition: 'center 30%' }}
+        />
+        <h2 className="text-h2 text-ink">❤️ 心已用完</h2>
+        <p className="text-meta text-ink-light text-center max-w-xs">
+          答错会消耗一颗心,每 30 分钟自动恢复一颗~
+          <br />休息一会儿再来吧!
+        </p>
+        <button onClick={() => navigate(-1)} className="btn-ghost text-base w-40">
+          ← 返回
+        </button>
       </div>
     );
   }

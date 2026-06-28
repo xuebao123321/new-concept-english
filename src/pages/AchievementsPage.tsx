@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useUserStore } from '../stores/useUserStore';
 import { ALL_ACHIEVEMENTS } from '../utils/achievements';
+import { springs, staggerDelay } from '../utils/motion-tokens';
 
 export default function AchievementsPage() {
   const { userState } = useUserStore();
@@ -12,8 +13,8 @@ export default function AchievementsPage() {
 
   const categories = [
     { key: 'milestone' as const, label: '🏅 里程碑', color: '#FBBF24' },
-    { key: 'skill' as const, label: '🎯 技能成就', color: '#22D3EE' },
-    { key: 'special' as const, label: '⭐ 特殊成就', color: '#8B5CF6' },
+    { key: 'skill' as const, label: '🎯 技能成就', color: '#5B9ED4' },
+    { key: 'special' as const, label: '⭐ 特殊成就', color: '#7E57C2' },
   ];
 
   return (
@@ -63,7 +64,7 @@ export default function AchievementsPage() {
                     style={isUnlocked ? { boxShadow: '0 0 20px rgba(251,191,36,0.1)' } : {}}
                     initial={{ y: 20, opacity: 0, rotateY: 90 }}
                     animate={{ y: 0, opacity: 1, rotateY: 0 }}
-                    transition={{ delay: index * 0.05, duration: 0.4 }}
+                    transition={{ delay: staggerDelay(index), ...springs.popIn }}
                   >
                     <div className={`text-3xl mb-2 ${isUnlocked ? '' : 'grayscale opacity-40'}`}>
                       {isUnlocked ? achievement.icon : '🔒'}

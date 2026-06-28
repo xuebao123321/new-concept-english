@@ -67,7 +67,7 @@ export default function FillInBlank({ question, onAnswer, startTime }: FillInBla
                 onKeyDown={handleKeyDown}
                 className="w-28 px-3 py-1 bg-transparent border-b-2 border-forest/50
                            focus:border-honey focus:outline-none text-center
-                           text-forest font-bold placeholder-[#64748B]"
+                           text-forest font-bold placeholder:text-ink-ghost"
                 placeholder="_____"
                 autoFocus
               />

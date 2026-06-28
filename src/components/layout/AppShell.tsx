@@ -1,6 +1,9 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import TopBar from './TopBar';
+import LevelUpModal from '../gamification/LevelUpModal';
+import { useUserStore } from '../../stores/useUserStore';
+import { variants } from '../../utils/motion-tokens';
 
 const TABS = [
   { path: '/', icon: '🏠', label: '首页' },
@@ -26,6 +29,7 @@ export default function AppShell() {
   const nav = useNavigate();
   const isFullScreen = loc.pathname.includes('/block/') || loc.pathname.includes('/test/');
   const pageTitle = getPageTitle(loc.pathname);
+  const { pendingLevelUp, clearLevelUp } = useUserStore();
 
   return (
     <div className="min-h-screen flex flex-col bg-cream text-ink">
@@ -36,10 +40,7 @@ export default function AppShell() {
           <AnimatePresence mode="wait">
             <motion.div
               key={loc.pathname}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.2 }}
+              {...variants.page}
             >
               <Outlet />
             </motion.div>
@@ -95,6 +96,14 @@ export default function AppShell() {
           </div>
         </nav>
       )}
+
+      {/* 全局段位升级弹窗 */}
+      <LevelUpModal
+        isOpen={!!pendingLevelUp}
+        newRank={pendingLevelUp?.newRank ?? { icon: '🌱', name: '时间学徒', color: '#94A3B8', level: 1 }}
+        oldRank={pendingLevelUp?.oldRank}
+        onClose={clearLevelUp}
+      />
     </div>
   );
 }

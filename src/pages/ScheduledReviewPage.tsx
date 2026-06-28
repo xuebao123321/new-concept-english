@@ -43,15 +43,15 @@ export default function ScheduledReviewPage() {
     }, 600);
   };
 
-  if (loading) return <div className="text-center py-20 text-gray-400">加载中...</div>;
+  if (loading) return <div className="text-center py-20 text-ink-light">加载中...</div>;
 
   if (done) {
     const passed = wrongCount === 0;
     return (
       <div className="px-4 py-10 text-center space-y-4">
         <div className="text-6xl">{passed ? '🎉' : '💪'}</div>
-        <h2 className="text-xl font-extrabold text-[#3D3830]">{passed ? '复习通过！' : '复习未通过'}</h2>
-        <p className="text-gray-400">{passed ? '该课时间锚点已稳定' : '该课已降级，需重新综合测试'}</p>
+        <h2 className="text-xl font-extrabold text-ink">{passed ? '复习通过！' : '复习未通过'}</h2>
+        <p className="text-ink-light">{passed ? '该课时间锚点已稳定' : '该课已降级，需重新综合测试'}</p>
         <button onClick={() => nav('/')} className="btn-brand text-base">返回首页</button>
       </div>
     );
@@ -59,11 +59,11 @@ export default function ScheduledReviewPage() {
 
   if (active) {
     return (
-      <div className="min-h-screen px-4 py-4" style={{ background: '#FFFBF5' }}>
+      <div className="min-h-screen px-4 py-4 bg-cream">
         <div className="flex justify-between mb-3">
-          <button onClick={() => setActive(null)} className="text-sm font-bold text-gray-400">← 返回</button>
+          <button onClick={() => setActive(null)} className="text-sm font-bold text-ink-light">← 返回</button>
           <span className="tag-accent">🛡️ 第{active.stage}天巩固</span>
-          <span className="text-xs font-bold text-gray-400">{idx + 1}/{active.questions.length}</span>
+          <span className="text-xs font-bold text-ink-light">{idx + 1}/{active.questions.length}</span>
         </div>
         <div className="progress-track mb-4">
           <div className="progress-fill progress-accent" style={{ width: `${(idx / active.questions.length) * 100}%` }} />
@@ -78,8 +78,8 @@ export default function ScheduledReviewPage() {
     return (
       <div className="px-4 py-10 text-center space-y-4">
         <div className="text-6xl">🧘</div>
-        <h2 className="text-xl font-extrabold text-[#3D3830]">暂无待复习</h2>
-        <p className="text-gray-400">所有时间锚点都很稳定！</p>
+        <h2 className="text-xl font-extrabold text-ink">暂无待复习</h2>
+        <p className="text-ink-light">所有时间锚点都很稳定！</p>
         <button onClick={() => nav('/')} className="btn-brand text-base">返回首页</button>
       </div>
     );
@@ -87,7 +87,7 @@ export default function ScheduledReviewPage() {
 
   return (
     <div className="px-4 py-5 space-y-3">
-      <h2 className="text-lg font-extrabold text-[#3D3830]">🛡️ 今日巩固任务</h2>
+      <h2 className="text-lg font-extrabold text-ink">🛡️ 今日巩固任务</h2>
       {tasks.map(t => {
         const l = LESSONS.filter(x => x.group === t.lessonGroup);
         return (
@@ -95,12 +95,12 @@ export default function ScheduledReviewPage() {
             className="card p-4 w-full text-left flex items-center gap-4">
             <div className="text-2xl">🛡️</div>
             <div className="flex-1">
-              <div className="font-extrabold text-sm text-[#3D3830]">
+              <div className="font-extrabold text-sm text-ink">
                 第{l.map(x => x.lessonNumber).join('-')}课 · 第{t.stage}天巩固
               </div>
-              <div className="text-xs text-gray-400">{t.questionCount}题 · {l[0]?.titleCn}</div>
+              <div className="text-xs text-ink-light">{t.questionCount}题 · {l[0]?.titleCn}</div>
             </div>
-            <span className="text-gray-300">→</span>
+            <span className="text-ink-muted">→</span>
           </button>
         );
       })}

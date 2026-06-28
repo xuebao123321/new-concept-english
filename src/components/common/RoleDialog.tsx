@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { springs } from '../../utils/motion-tokens';
 
 type Role = 'guangtouqiang' | 'xiongda' | 'xionger';
 
@@ -10,9 +11,9 @@ interface DialogConfig {
 }
 
 const ROLE_INFO: Record<Role, { name: string; emoji: string; color: string }> = {
-  guangtouqiang: { name: '光头强', emoji: '🔬', color: 'border-cyan-400 bg-cyan-500/10' },
-  xiongda: { name: '熊大', emoji: '🐻', color: 'border-amber-400 bg-amber-500/10' },
-  xionger: { name: '熊二', emoji: '🐻', color: 'border-orange-400 bg-orange-500/10' },
+  guangtouqiang: { name: '光头强', emoji: '🔬', color: 'border-sky-200 bg-sky-50' },
+  xiongda: { name: '熊大', emoji: '🐻', color: 'border-honey/40 bg-honey-pale' },
+  xionger: { name: '熊二', emoji: '🐻', color: 'border-forest/30 bg-forest-pale' },
 };
 
 // 预设对话库
@@ -50,16 +51,16 @@ export default function RoleDialog({ dialog, className = '' }: RoleDialogProps) 
 
   return (
     <motion.div
-      className={`rounded-2xl p-4 border ${info.color} ${className}`}
+      className={`rounded-2xl p-4 border-2 ${info.color} ${className}`}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+      transition={springs.enter}
     >
       <div className="flex items-start gap-3">
         <div className="text-2xl flex-shrink-0">{info.emoji}</div>
         <div>
-          <div className="text-xs text-gray-400 mb-0.5">{info.name}</div>
-          <p className="text-sm text-gray-200 leading-relaxed">{dialog.text}</p>
+          <div className="text-xs text-ink-light font-bold mb-0.5">{info.name}</div>
+          <p className="text-sm text-ink leading-relaxed font-medium">{dialog.text}</p>
         </div>
       </div>
     </motion.div>

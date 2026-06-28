@@ -9,6 +9,7 @@ import XpBar from '../components/gamification/XpBar';
 import StreakBadge from '../components/gamification/StreakBadge';
 import AchievementToast from '../components/gamification/AchievementToast';
 import CharacterAvatar from '../components/common/CharacterAvatar';
+import { springs, staggerDelay } from '../utils/motion-tokens';
 
 const GREETINGS = [
   { char: 'xionger' as const, name: '熊二', text: '欢迎回来！今天也要开心学英语哦~ 🍯' },
@@ -59,7 +60,14 @@ export default function HomePage() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center pt-32 gap-5">
-        <CharacterAvatar character="xionger" size="lg" animation="bounce" />
+        <img
+          src="/assets/characters/xionger-laugh.webp"
+          alt="加载中"
+          width={96}
+          height={96}
+          className="rounded-2xl object-cover border-2 border-warm-shadow animate-bounce-slight"
+          style={{ objectPosition: 'left center' }}
+        />
         <p className="text-base text-ink-light font-bold animate-pulse">🐻 正在准备学习森林...</p>
       </div>
     );
@@ -87,10 +95,15 @@ export default function HomePage() {
               initial={{ y: 80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+              transition={springs.popIn}
               onClick={e => e.stopPropagation()}
             >
-              <CharacterAvatar character="guangtouqiang" size="lg" animation="bounce" />
+              <CharacterAvatar
+                imageSrc="/assets/characters/guangtouqiang-winter.webp"
+                imagePosition="center 25%"
+                size="lg"
+                animation="bounce"
+              />
               <div>
                 <p className="text-lg font-extrabold text-ink">欢迎来到温暖森林学院！🌳</p>
                 <p className="text-sm text-ink-light mt-1">我是光头强，让我带你快速入门~</p>
@@ -112,52 +125,74 @@ export default function HomePage() {
               <button onClick={dismissOnboarding} className="btn-brand text-base">
                 🚀 开始冒险！
               </button>
+              <p className="text-[9px] text-ink-muted pt-1">角色形象素材来源: 公开网络 · 本地学习使用</p>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ═══ 角色问候 ═══ */}
+      {/* ═══ 1. Hero · 角色问候 (A 级卡片) ═══ */}
       <motion.div
         className="card card-accent overflow-hidden relative"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={springs.enter}
       >
         <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full opacity-5"
           style={{ background: 'radial-gradient(circle, #FF8C42 0%, transparent 70%)' }} />
         <div className="flex items-center gap-4">
-          <CharacterAvatar character={greeting.char} size="lg" animation="float" />
-          <div className="flex-1">
+          <CharacterAvatar
+            imageSrc="/assets/characters/heroes-space.webp"
+            imagePosition={
+              greeting.char === 'xionger' ? 'left center' :
+              greeting.char === 'xiongda' ? 'center' :
+              'right center'
+            }
+            size="lg"
+            animation="float"
+          />
+          <div className="flex-1 min-w-0">
             <p className="text-lg font-extrabold text-ink">
               {greeting.char === 'xionger' ? '🐻 熊二' : greeting.char === 'xiongda' ? '🐻 熊大' : '🔬 光头强'}
             </p>
             <p className="text-sm text-ink-light font-medium mt-0.5 leading-relaxed">{greeting.text}</p>
           </div>
         </div>
+        <p className="text-[9px] text-ink-muted mt-2 text-right">
+          角色形象素材来源: 公开网络 · 版权归原作者 · 本地学习使用
+        </p>
       </motion.div>
 
-      {/* ═══ XP 段位 + 打卡 ═══ */}
+      {/* ═══ 2. Status Bar · 段位 + 打卡 + 心数 (横向条) ═══ */}
       <motion.div
-        className="card p-4"
+        className="card p-3"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.06 }}
+        transition={{ delay: staggerDelay(1), ...springs.enter }}
       >
         <XpBar />
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-warm-border">
+        <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-warm-border gap-2">
           <StreakBadge />
-          <span className="text-xs text-ink-light font-bold">
-            ❤️ {userState?.hearts ?? 5} · ⭐ {userState?.totalXp ?? 0}XP
-          </span>
+          <div className="flex items-center gap-3 text-xs text-ink-light font-bold tabular-nums">
+            <span className="flex items-center gap-0.5">
+              {Array.from({ length: 5 }, (_, i) => (
+                <span key={i} className={i < (userState?.hearts ?? 5) ? '' : 'grayscale opacity-25'}>
+                  ❤️
+                </span>
+              ))}
+            </span>
+            <span className="text-ink-muted">·</span>
+            <span>⭐ {userState?.totalXp ?? 0}</span>
+          </div>
         </div>
       </motion.div>
 
-      {/* ═══ 快捷入口 2x2 ═══ */}
+      {/* ═══ 3. Quick · 快捷入口 2x2 ═══ */}
       <motion.div
         className="grid grid-cols-2 gap-3"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
+        transition={{ delay: staggerDelay(2), ...springs.enter }}
       >
         <QuickCard
           emoji="📚" title="开始学习"
@@ -186,21 +221,26 @@ export default function HomePage() {
         />
       </motion.div>
 
-      {/* ═══ 今日进度 ═══ */}
+      {/* ═══ 4. Divider · 今日学习 分组标题 ═══ */}
+      <div className="flex items-center gap-2 pt-1">
+        <span className="text-xs font-extrabold text-ink-light uppercase tracking-wider">📊 今日学习</span>
+        <div className="flex-1 h-px bg-warm-border" />
+      </div>
+
+      {/* ═══ 5. 今日进度 ═══ */}
       <motion.div
         className="card card-highlight"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.14 }}
+        transition={{ delay: staggerDelay(3), ...springs.enter }}
       >
-        <h3 className="text-sm font-extrabold text-ink mb-3">📊 今日学习</h3>
         <div className="grid grid-cols-3 gap-3 mb-3">
           {[
             { label: '已答题', value: stats.done, color: '#5B9ED4' },
             { label: '正确', value: stats.correct, color: '#5B9A5A' },
             { label: 'XP', value: `+${stats.xp}`, color: '#FF8C42' },
           ].map(s => (
-            <div key={s.label} className="text-center bg-warm-bg rounded-2xl py-2.5">
+            <div key={s.label} className="text-center bg-warm-bg rounded-2xl py-2.5 tabular-nums">
               <div className="text-xl font-extrabold" style={{ color: s.color }}>{s.value}</div>
               <div className="text-[11px] text-ink-light font-bold mt-0.5">{s.label}</div>
             </div>
@@ -209,7 +249,7 @@ export default function HomePage() {
         <div className="space-y-1">
           <div className="flex justify-between text-[11px] font-bold">
             <span className="text-ink-light">🎯 今日目标</span>
-            <span className="text-ink-muted">{Math.min(stats.done, 15)}/15 题</span>
+            <span className="text-ink-muted tabular-nums">{Math.min(stats.done, 15)}/15 题</span>
           </div>
           <div className="progress-track">
             <motion.div

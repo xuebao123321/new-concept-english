@@ -14,8 +14,8 @@ export default function CircularProgress({
   progress,
   size = 80,
   strokeWidth = 6,
-  color = '#22D3EE',
-  bgColor = 'rgba(255, 255, 255, 0.1)',
+  color = '#5B9ED4',
+  bgColor = '#F2EDE4',
   children,
   showPercentage = false,
 }: CircularProgressProps) {

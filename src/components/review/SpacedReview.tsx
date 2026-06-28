@@ -8,14 +8,14 @@ interface SpacedReviewProps {
   refreshTrigger?: number;
 }
 
-// 阶段配置
+// 阶段配置 (主题色板)
 const STAGE_CONFIG = [
-  { stage: 0, emoji: '📍', label: 'Stage 0', desc: '立即复习', color: '#EF4444' },
-  { stage: 1, emoji: '📍', label: 'Stage 1', desc: '1天后', color: '#FBBF24' },
-  { stage: 2, emoji: '📍', label: 'Stage 2', desc: '3天后', color: '#F59E0B' },
-  { stage: 3, emoji: '📍', label: 'Stage 3', desc: '7天后', color: '#22D3EE' },
-  { stage: 4, emoji: '📍', label: 'Stage 4', desc: '30天后', color: '#10B981' },
-  { stage: 5, emoji: '🏆', label: '永久掌握', desc: '已掌握', color: '#8B5CF6' },
+  { stage: 0, emoji: '📍', label: 'Stage 0', desc: '立即复习', color: '#E57373' },
+  { stage: 1, emoji: '📍', label: 'Stage 1', desc: '1天后', color: '#FF8C42' },
+  { stage: 2, emoji: '📍', label: 'Stage 2', desc: '3天后', color: '#FBBF24' },
+  { stage: 3, emoji: '📍', label: 'Stage 3', desc: '7天后', color: '#5B9ED4' },
+  { stage: 4, emoji: '📍', label: 'Stage 4', desc: '30天后', color: '#5B9A5A' },
+  { stage: 5, emoji: '🏆', label: '永久掌握', desc: '已掌握', color: '#7E57C2' },
 ];
 
 // 根据错误次数估算阶段

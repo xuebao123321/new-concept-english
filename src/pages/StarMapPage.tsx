@@ -3,15 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { STAGES } from '../data/stages';
 import { LESSONS } from '../data/lessons';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
+import { springs, staggerDelay } from '../utils/motion-tokens';
 
-// 星球颜色映射
+// 星球颜色映射 (主题色板派生)
 const PLANET_STYLES: Record<number, { gradient: string; glow: string; shadow: string }> = {
-  1: { gradient: 'radial-gradient(circle at 35% 35%, #94A3B8, #475569)', glow: 'rgba(100,116,139,0.4)', shadow: '0 0 30px rgba(100,116,139,0.3)' },
-  2: { gradient: 'radial-gradient(circle at 35% 35%, #FDE68A, #B45309)', glow: 'rgba(251,191,36,0.4)', shadow: '0 0 30px rgba(251,191,36,0.3)' },
-  3: { gradient: 'radial-gradient(circle at 35% 35%, #FCD34D, #92400E)', glow: 'rgba(245,158,11,0.4)', shadow: '0 0 30px rgba(245,158,11,0.3)' },
-  4: { gradient: 'radial-gradient(circle at 35% 35%, #D97706, #78350F)', glow: 'rgba(180,83,9,0.4)', shadow: '0 0 30px rgba(180,83,9,0.3)' },
-  5: { gradient: 'radial-gradient(circle at 35% 35%, #A78BFA, #4C1D95)', glow: 'rgba(139,92,246,0.4)', shadow: '0 0 30px rgba(139,92,246,0.3)' },
-  6: { gradient: 'radial-gradient(circle at 35% 35%, #F9A8D4, #831843)', glow: 'rgba(236,72,153,0.4)', shadow: '0 0 30px rgba(236,72,153,0.3)' },
+  1: { gradient: 'radial-gradient(circle at 35% 35%, #8BC48A, #5B9A5A)', glow: 'rgba(91,154,90,0.4)', shadow: '0 0 30px rgba(91,154,90,0.3)' },
+  2: { gradient: 'radial-gradient(circle at 35% 35%, #FFB380, #FF8C42)', glow: 'rgba(255,140,66,0.4)', shadow: '0 0 30px rgba(255,140,66,0.3)' },
+  3: { gradient: 'radial-gradient(circle at 35% 35%, #8DC5F0, #5B9ED4)', glow: 'rgba(91,158,212,0.4)', shadow: '0 0 30px rgba(91,158,212,0.3)' },
+  4: { gradient: 'radial-gradient(circle at 35% 35%, #FCD34D, #B45309)', glow: 'rgba(251,191,36,0.4)', shadow: '0 0 30px rgba(251,191,36,0.3)' },
+  5: { gradient: 'radial-gradient(circle at 35% 35%, #B39DDB, #7E57C2)', glow: 'rgba(126,87,194,0.4)', shadow: '0 0 30px rgba(126,87,194,0.3)' },
+  6: { gradient: 'radial-gradient(circle at 35% 35%, #F8BBD0, #E57373)', glow: 'rgba(229,115,115,0.4)', shadow: '0 0 30px rgba(229,115,115,0.3)' },
 };
 
 export default function StarMapPage() {
@@ -30,13 +31,21 @@ export default function StarMapPage() {
 
   return (
     <div className="px-4 py-5 space-y-6">
-      {/* 标题 */}
-      <div className="text-center">
-        <div className="text-5xl mb-2">🌌</div>
-        <h2 className="text-xl font-extrabold text-ink">时间星图</h2>
-        <p className="text-sm text-ink-muted font-bold mt-1">
-          修复全部 6 个时间点，重启未来的英语世界！
-        </p>
+      {/* 标题 + 太空场景背景图 */}
+      <div className="relative overflow-hidden rounded-3xl border-2 border-warm-border shadow-sm">
+        <img
+          src="/assets/characters/heroes-space.webp"
+          alt="太空场景"
+          className="w-full h-40 object-cover"
+          style={{ objectPosition: 'center 30%' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute bottom-0 inset-x-0 p-4 text-white">
+          <h2 className="text-xl font-extrabold drop-shadow">🌌 时间星图</h2>
+          <p className="text-xs font-bold drop-shadow mt-0.5 opacity-90">
+            修复全部 6 个时间点，重启未来的英语世界！
+          </p>
+        </div>
       </div>
 
       {/* 星球列表 */}
@@ -57,7 +66,7 @@ export default function StarMapPage() {
             key={stage.id}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: stageIdx * 0.1 }}
+            transition={{ delay: staggerDelay(stageIdx, 'listBig'), ...springs.slideUp }}
           >
             {/* 连接线 */}
             {stageIdx > 0 && (
@@ -69,7 +78,7 @@ export default function StarMapPage() {
             {/* 星球卡片 */}
             <div
               className={`glass-panel p-5 ${!isActive ? 'opacity-50' : ''}`}
-              style={allDone ? { borderColor: 'rgba(16,185,129,0.3)' } : isActive ? { borderColor: 'rgba(34,211,238,0.2)' } : {}}
+              style={allDone ? { borderColor: 'rgba(91,154,90,0.3)' } : isActive ? { borderColor: 'rgba(91,158,212,0.2)' } : {}}
             >
               <div className="flex items-center gap-4 mb-4">
                 {/* CSS 星球 */}

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { springs } from '../../utils/motion-tokens';
 
 interface HeartDisplayProps {
   hearts: number;
@@ -18,18 +19,18 @@ export default function HeartDisplay({ hearts, maxHearts = 5 }: HeartDisplayProp
             opacity: i < hearts ? 1 : 0.25,
             filter: i < hearts ? 'none' : 'grayscale(1)',
           }}
-          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+          transition={springs.hover}
         >
           {i < hearts ? '❤️' : '💔'}
         </motion.span>
       ))}
       {hearts === 0 && (
-        <span className="text-[10px] text-[#EF4444] ml-1 font-bold animate-pulse">
+        <span className="text-[10px] text-berry ml-1 font-bold animate-pulse">
           心已用完
         </span>
       )}
       {hearts > 0 && hearts < maxHearts && (
-        <span className="text-[10px] text-[#64748B] ml-1">
+        <span className="text-[10px] text-ink-ghost ml-1">
           恢复中
         </span>
       )}

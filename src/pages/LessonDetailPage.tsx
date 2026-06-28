@@ -6,6 +6,7 @@ import { getStageByGroup } from '../data/stages';
 import { preloadGroups, getCachedQuestions } from '../hooks/useQuestions';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
 import type { BlockType } from '../types';
+import { springs, staggerDelay } from '../utils/motion-tokens';
 
 const BLOCKS: { id: BlockType; icon: string; name: string; desc: string; color: string; bg: string }[] = [
   { id: 'vocabulary', icon: '📡', name: '单词森林', desc: '认识新单词，打下基础', color: '#5B9ED4', bg: '#E8F2FC' },
@@ -42,6 +43,7 @@ export default function LessonDetailPage() {
         className="glass-panel p-5 border-forest/20"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={springs.enter}
       >
         <div className="flex items-center gap-2 text-xs font-bold text-ink-muted mb-2">
           <span>{stage?.icon} {stage?.name}</span>
@@ -106,7 +108,7 @@ export default function LessonDetailPage() {
               }`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.08 }}
+              transition={{ delay: staggerDelay(i, 'listBig'), ...springs.slideUp }}
               whileTap={unlocked ? { scale: 0.98 } : {}}
             >
               {/* 图标 */}
@@ -148,6 +150,7 @@ export default function LessonDetailPage() {
           className="w-full py-3.5 btn-gold text-base"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
+          transition={springs.popIn}
           whileTap={{ scale: 0.97 }}
         >
           🏁 时间跃迁（综合测试）

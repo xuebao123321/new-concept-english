@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getQuestionsByGroup } from '../data/questions';
 import { db } from '../db/database';
+import { api } from '../db/api';
+import { springs } from '../utils/motion-tokens';
 import { scheduleReview } from '../utils/review-scheduler';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
 import { useUserStore } from '../stores/useUserStore';
@@ -16,7 +18,8 @@ export default function MasteryTestPage() {
   const { groupId } = useParams<{ groupId: string }>();
   const navigate = useNavigate();
   const { markLessonComplete } = useLessonProgressStore();
-  const { addXp } = useUserStore();
+  const { addXp, userState, consumeHeart } = useUserStore();
+  const hearts = userState?.hearts ?? 5;
 
   // 构建综合测试题目：60% 当前课 + 25% 上一课 + 15% 更早旧课
   const testQ = useMemo(() => {
@@ -49,6 +52,12 @@ export default function MasteryTestPage() {
 
   const handleAnswer = useCallback(async (_answer: string, correct: boolean, _timeSpent: number) => {
     if (!cur) return;
+
+    // 综合测试答错扣 2 颗心
+    if (!correct) {
+      consumeHeart().catch(() => {});
+      consumeHeart().catch(() => {});
+    }
 
     if (!correct && phase === 'main') {
       setWrongList(prev => [...prev, cur]);
@@ -86,6 +95,10 @@ export default function MasteryTestPage() {
       await scheduleReview(groupId);
       await addXp(calculateTestCompleteXp());
     }
+    // 异步向后端推送进度
+    const totalQ = testQ.length;
+    const correctInTest = isPassed ? totalQ : 0;
+    api.updateProgress(groupId || '', correctInTest, totalQ).catch(() => {});
     setPassed(isPassed);
     setDone(true);
   };
@@ -99,7 +112,7 @@ export default function MasteryTestPage() {
           className="text-center space-y-5"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+          transition={springs.success}
         >
           <motion.div
             className="text-7xl"
@@ -149,6 +162,28 @@ export default function MasteryTestPage() {
             ← 返回
           </button>
         </div>
+      </div>
+    );
+  }
+
+  // 心不足
+  if (hearts === 0) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-cream gap-4">
+        <img
+          src="/assets/characters/bears-cabin.webp"
+          alt="心已用完"
+          className="w-32 h-32 rounded-2xl object-cover border-2 border-warm-border shadow-sm"
+          style={{ objectPosition: 'center 30%' }}
+        />
+        <h2 className="text-h2 text-ink">❤️ 心已用完</h2>
+        <p className="text-meta text-ink-light text-center max-w-xs">
+          综合测试消耗更大,每道错题扣 2 颗心~
+          <br />休息一会儿再来挑战吧!
+        </p>
+        <button onClick={() => navigate(-1)} className="btn-ghost text-base w-40">
+          ← 返回
+        </button>
       </div>
     );
   }

@@ -206,7 +206,8 @@ export interface Rank {
   level: number;
   name: string;
   minXp: number;
-  color: string;                // tailwind color class
+  color: string;                // tailwind color class 或 hex
+  icon?: string;                // emoji 段位徽章
 }
 
 // ===== 课文元数据 =====

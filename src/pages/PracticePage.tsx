@@ -33,6 +33,11 @@ export default function PracticePage() {
 
   const handleStart = useCallback(
     async (lessonGroups: string[], questionCount: number, types: QuestionType[]) => {
+      // 心不足禁止练习
+      if ((userState?.hearts ?? 5) === 0) {
+        alert('❤️ 心已用完,休息一会儿再来吧!');
+        return;
+      }
       // 预加载题库
       await preloadGroups(lessonGroups);
       // 从缓存中选题

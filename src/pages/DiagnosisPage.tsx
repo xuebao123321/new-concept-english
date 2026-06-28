@@ -20,9 +20,9 @@ const BLOCK_LABELS: Record<BlockType, { name: string; emoji: string }> = {
 
 const LEVEL_INFO: Record<string, { label: string; color: string; icon: string }> = {
   beginner: { label: '初学者', color: '#94A3B8', icon: '🌱' },
-  elementary: { label: '基础级', color: '#22D3EE', icon: '⚡' },
+  elementary: { label: '基础级', color: '#5B9ED4', icon: '⚡' },
   intermediate: { label: '进阶级', color: '#FBBF24', icon: '🌟' },
-  advanced: { label: '高级', color: '#10B981', icon: '🏛️' },
+  advanced: { label: '高级', color: '#5B9A5A', icon: '🏛️' },
 };
 
 export default function DiagnosisPage() {
@@ -193,10 +193,10 @@ export default function DiagnosisPage() {
         >
           <h3 className="text-sm font-bold text-ink mb-2">📊 四维能力</h3>
           {([
-            { key: 'vocabularyAccuracy' as const, ...BLOCK_LABELS.vocabulary, color: '#22D3EE' },
-            { key: 'grammarAccuracy' as const, ...BLOCK_LABELS.grammar, color: '#8B5CF6' },
-            { key: 'sentenceAccuracy' as const, ...BLOCK_LABELS.sentence, color: '#10B981' },
-            { key: 'listeningAccuracy' as const, ...BLOCK_LABELS.listening, color: '#FBBF24' },
+            { key: 'vocabularyAccuracy' as const, ...BLOCK_LABELS.vocabulary, color: '#5B9ED4' },
+            { key: 'grammarAccuracy' as const, ...BLOCK_LABELS.grammar, color: '#7E57C2' },
+            { key: 'sentenceAccuracy' as const, ...BLOCK_LABELS.sentence, color: '#5B9A5A' },
+            { key: 'listeningAccuracy' as const, ...BLOCK_LABELS.listening, color: '#FF8C42' },
           ]).map(item => {
             const pct = result[item.key];
             return (

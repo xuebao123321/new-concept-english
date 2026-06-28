@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
 import { LESSONS, LESSON_GROUPS } from '../data/lessons';
 import { motion } from 'framer-motion';
+import { springs, staggerDelay } from '../utils/motion-tokens';
 
 // 轻量课程选择页 — 点击课组直接进入课程详情（块练习流程）
 export default function LessonSelectPage() {
@@ -74,7 +75,7 @@ export default function LessonSelectPage() {
               }`}
               initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.03 }}
+              transition={{ delay: staggerDelay(index), ...springs.slideUp }}
               whileTap={unlocked ? { scale: 0.98 } : {}}
             >
               <div className="flex items-center gap-4">

@@ -17,9 +17,9 @@ type HumanColors = { skin: string; hair: string; clothes: string; accent: string
 type RobotColors = { body: string; face: string; eye: string; accent: string };
 
 const XIONGER: BearColors = { body: '#C4956A', belly: '#F0D5B0', nose: '#5C3A28', ears: '#9B6F50', goggles: '#FBBF24' };
-const XIONGDA: BearColors = { body: '#8B5E3C', belly: '#D4A574', nose: '#3D2B1F', ears: '#6B3F2A', goggles: '#22D3EE' };
-const GUANGTOUQIANG: HumanColors = { skin: '#FFD5B8', hair: '#2D1B0E', clothes: '#1E40AF', accent: '#3B82F6', goggles: '#22D3EE' };
-const XIAOQIANG: RobotColors = { body: '#94A3B8', face: '#CBD5E1', eye: '#22D3EE', accent: '#7C3AED' };
+const XIONGDA: BearColors = { body: '#8B5E3C', belly: '#D4A574', nose: '#3D2B1F', ears: '#6B3F2A', goggles: '#5B9ED4' };
+const GUANGTOUQIANG: HumanColors = { skin: '#FFD5B8', hair: '#2D1B0E', clothes: '#5B9ED4', accent: '#3B82F6', goggles: '#5B9ED4' };
+const XIAOQIANG: RobotColors = { body: '#94A3B8', face: '#CBD5E1', eye: '#5B9ED4', accent: '#7E57C2' };
 
 export default function CharacterIllustration({ character, scene = 'avatar', size = 80, className = '' }: Props) {
   return (
@@ -92,7 +92,7 @@ function XiongdaSVG({ c, scene }: { c: BearColors; scene: Scene }) {
       <circle cx="40" cy="39" r="3.5" fill="#1A0F08" />
       <circle cx="62" cy="39" r="3.5" fill="#1A0F08" />
       {/* 护目镜 */}
-      <rect x="28" y="30" width="44" height="13" rx="6.5" fill="#22D3EE" opacity="0.5" stroke="#22D3EE" strokeWidth="1.5" />
+      <rect x="28" y="30" width="44" height="13" rx="6.5" fill="#5B9ED4" opacity="0.5" stroke="#5B9ED4" strokeWidth="1.5" />
       <ellipse cx="50" cy="45" rx="5.5" ry="4" fill={c.nose} />
       <path d="M43 51 Q50 56 57 51" fill="none" stroke={c.nose} strokeWidth="1.5" strokeLinecap="round" />
       <ellipse cx="50" cy="78" rx="22" ry="17" fill={c.body} />

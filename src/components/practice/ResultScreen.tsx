@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { springs } from '../../utils/motion-tokens';
 import { usePracticeStore } from '../../stores/usePracticeStore';
 import { useUserStore } from '../../stores/useUserStore';
 import { useLessonProgressStore } from '../../stores/useLessonProgressStore';
@@ -76,7 +77,7 @@ export default function ResultScreen({
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        transition={springs.enter}
       >
         <div className="text-6xl mb-3">{emoji}</div>
         <h2 className="text-2xl font-extrabold text-ink">
@@ -98,7 +99,7 @@ export default function ResultScreen({
           progress={percentValue}
           size={120}
           strokeWidth={8}
-          color={isPerfect ? '#10B981' : '#22D3EE'}
+          color={isPerfect ? '#5B9A5A' : '#5B9ED4'}
           showPercentage
         />
       </motion.div>
@@ -111,12 +112,12 @@ export default function ResultScreen({
         transition={{ delay: 0.3 }}
       >
         {[
-          { label: '总题数', value: totalCount, color: '#F1F5F9' },
-          { label: '✅ 正确', value: correctCount, color: '#10B981' },
-          { label: '❌ 错误', value: wrongCount, color: '#EF4444' },
-          { label: '准确率', value: `${percentValue}%`, color: isPerfect ? '#10B981' : '#22D3EE' },
+          { label: '总题数', value: totalCount, color: '#3D3830' },
+          { label: '✅ 正确', value: correctCount, color: '#5B9A5A' },
+          { label: '❌ 错误', value: wrongCount, color: '#E57373' },
+          { label: '准确率', value: `${percentValue}%`, color: isPerfect ? '#5B9A5A' : '#5B9ED4' },
           { label: '错题数', value: wrongCount, color: '#FBBF24' },
-          { label: '❤️ 心数', value: userState?.hearts ?? 5, color: '#EF4444' },
+          { label: '❤️ 心数', value: userState?.hearts ?? 5, color: '#E57373' },
         ].map(stat => (
           <div key={stat.label} className="glass-panel p-3">
             <div className="text-xl font-extrabold" style={{ color: stat.color }}>

@@ -15,6 +15,9 @@ interface UserStore {
   xpProgress: ReturnType<typeof getXpToNextLevel> | null;
   newAchievements: Achievement[];
 
+  // 升级事件 (rank 在 addXp 时跨级触发)
+  pendingLevelUp: { newRank: ReturnType<typeof getLevelByXp>; oldRank?: ReturnType<typeof getLevelByXp> } | null;
+
   // 操作
   init: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -24,6 +27,7 @@ interface UserStore {
   checkDailyStreak: () => Promise<void>;
   checkAndUnlockAchievements: (extraStats?: Partial<AchievementCheckStats>) => Promise<Achievement[]>;
   clearNewAchievements: () => void;
+  clearLevelUp: () => void;
   updateStats: (params: {
     questionsAnswered: number;
     correctCount: number;
@@ -39,6 +43,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
   currentRank: null,
   xpProgress: null,
   newAchievements: [],
+  pendingLevelUp: null,
 
   init: async () => {
     const userState = await db.initUserState();
@@ -91,6 +96,9 @@ export const useUserStore = create<UserStore>((set, get) => ({
       userState: refreshed,
       currentRank: rank,
       xpProgress: progress,
+      pendingLevelUp: leveledUp
+        ? { newRank: rank, oldRank }
+        : get().pendingLevelUp,
     });
   },
 
@@ -154,6 +162,10 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
   clearNewAchievements: () => {
     set({ newAchievements: [] });
+  },
+
+  clearLevelUp: () => {
+    set({ pendingLevelUp: null });
   },
 
   updateStats: async ({ questionsAnswered, correctCount, xpEarned, minutesSpent }) => {

@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { useEffect, useRef, lazy, Suspense, useState } from 'react';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import RequireAuth from './components/common/RequireAuth';
 import AppShell from './components/layout/AppShell';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -25,8 +26,16 @@ const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
 
 function Loading() {
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="text-3xl animate-bounce">🐻</div>
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
+      <img
+        src="/assets/characters/xionger-laugh.webp"
+        alt="加载中"
+        width={96}
+        height={96}
+        className="rounded-2xl object-cover border-2 border-warm-border animate-float"
+        style={{ objectPosition: 'left center' }}
+      />
+      <div className="text-sm text-ink-light font-bold">🐻 正在准备学习森林...</div>
     </div>
   );
 }
@@ -59,21 +68,23 @@ export default function App() {
     <Suspense fallback={<Loading />}>
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route element={<AppShell />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/star-map" element={<StarMapPage />} />
-        <Route path="/lesson" element={<LessonSelectPage />} />
-        <Route path="/lesson/:groupId" element={<LessonDetailPage />} />
-        <Route path="/lesson/:groupId/block/:block" element={<BlockSessionPage />} />
-        <Route path="/lesson/:groupId/test" element={<MasteryTestPage />} />
-        <Route path="/practice" element={<PracticePage />} />
-        <Route path="/review" element={<ReviewPage />} />
-        <Route path="/review/scheduled" element={<ScheduledReviewPage />} />
-        <Route path="/achievements" element={<AchievementsPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/diagnosis" element={<DiagnosisPage />} />
-        <Route path="/leaderboard" element={<LeaderboardPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+      <Route element={<RequireAuth />}>
+        <Route element={<AppShell />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/star-map" element={<StarMapPage />} />
+          <Route path="/lesson" element={<LessonSelectPage />} />
+          <Route path="/lesson/:groupId" element={<LessonDetailPage />} />
+          <Route path="/lesson/:groupId/block/:block" element={<BlockSessionPage />} />
+          <Route path="/lesson/:groupId/test" element={<MasteryTestPage />} />
+          <Route path="/practice" element={<PracticePage />} />
+          <Route path="/review" element={<ReviewPage />} />
+          <Route path="/review/scheduled" element={<ScheduledReviewPage />} />
+          <Route path="/achievements" element={<AchievementsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/diagnosis" element={<DiagnosisPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
       </Route>
     </Routes>
     </Suspense>

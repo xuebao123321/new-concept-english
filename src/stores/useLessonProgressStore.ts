@@ -165,7 +165,7 @@ export const useLessonProgressStore = create<LessonProgressStore>((set, get) => 
     return result.sort(() => Math.random() - 0.5);
   },
 
-  // 标记课程为已完成（综合测试 100% 通过后调用）
+  // 标记课程为已完成（综合测试 80% 正确率即可通过）
   markLessonComplete: async (lessonGroup: string) => {
     const { progressMap } = get();
     const existing = progressMap.get(lessonGroup);

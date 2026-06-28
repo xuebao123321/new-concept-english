@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useUserStore } from '../../stores/useUserStore';
+import { springs } from '../../utils/motion-tokens';
 
 export default function StreakBadge() {
   const userState = useUserStore(s => s.userState);
@@ -23,14 +24,14 @@ export default function StreakBadge() {
       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-bold ${className}`}
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      transition={springs.enter}
     >
       <motion.span
         className="text-base"
         key={days}
         initial={{ scale: 1.5 }}
         animate={{ scale: 1 }}
-        transition={{ type: 'spring', stiffness: 400 }}
+        transition={springs.hover}
       >
         {icon}
       </motion.span>

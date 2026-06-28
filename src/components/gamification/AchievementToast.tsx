@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUserStore } from '../../stores/useUserStore';
 import type { Achievement } from '../../types';
+import { springs } from '../../utils/motion-tokens';
 
 export default function AchievementToast() {
   const { newAchievements, clearNewAchievements } = useUserStore();
@@ -36,7 +37,7 @@ function AchievementCard({ achievement, index }: { achievement: Achievement; ind
       initial={{ y: -80, opacity: 0, scale: 0.8 }}
       animate={{ y: 0, opacity: 1, scale: 1 }}
       exit={{ y: -80, opacity: 0, scale: 0.8 }}
-      transition={{ delay: index * 0.15, type: 'spring', stiffness: 300, damping: 25 }}
+      transition={{ delay: index * 0.15, ...springs.enter }}
     >
       {/* 成就图标 */}
       <motion.span

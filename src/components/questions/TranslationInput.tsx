@@ -96,7 +96,7 @@ export default function TranslationInput({ question, onAnswer, startTime }: Tran
               value={input}
               onChange={handleChange}
               onKeyDown={handleKeyDown}
-              className="glass-panel w-full p-3 text-ink placeholder-[#64748B]
+              className="glass-panel w-full p-3 text-ink placeholder:text-ink-ghost
                          focus:border-forest/50 focus:outline-none resize-none text-base
                          min-h-[80px]"
               rows={2}

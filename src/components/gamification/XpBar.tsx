@@ -1,24 +1,7 @@
 import { motion } from 'framer-motion';
 import { useUserStore } from '../../stores/useUserStore';
-
-// 温暖森林段位系统
-const RANK_SYSTEM = [
-  { minXp: 0,    icon: '🌱', name: '时间学徒',   color: '#94A3B8' },
-  { minXp: 100,  icon: '⚡', name: '能量学徒',   color: '#FBBF24' },
-  { minXp: 300,  icon: '🔧', name: '时空技师',   color: '#22D3EE' },
-  { minXp: 600,  icon: '🛡️', name: '时间守护者', color: '#10B981' },
-  { minXp: 1000, icon: '🌟', name: '时空大师',   color: '#8B5CF6' },
-  { minXp: 2000, icon: '🏛️', name: '时间领主',   color: '#EC4899' },
-];
-
-function getRank(xp: number) {
-  let current = RANK_SYSTEM[0];
-  for (const rank of RANK_SYSTEM) {
-    if (xp >= rank.minXp) current = rank;
-    else break;
-  }
-  return current;
-}
+import { springs } from '../../utils/motion-tokens';
+import { getLevelByXp, RANKS } from '../../utils/xp-calculator';
 
 interface XpBarProps {
   compact?: boolean;
@@ -29,9 +12,8 @@ export default function XpBar({ compact = false, showLabel = true }: XpBarProps)
   const userState = useUserStore(s => s.userState);
   if (!userState) return null;
 
-  const rank = getRank(userState.totalXp);
-  const nextIdx = RANK_SYSTEM.indexOf(rank) + 1;
-  const nextRank = RANK_SYSTEM[nextIdx] || rank;
+  const rank = getLevelByXp(userState.totalXp);
+  const nextRank = RANKS.find(r => r.level === rank.level + 1) || rank;
   const xpInRank = userState.totalXp - rank.minXp;
   const xpNeeded = nextRank.minXp - rank.minXp || 1;
   const progress = Math.min(xpInRank / xpNeeded, 1);
@@ -39,7 +21,7 @@ export default function XpBar({ compact = false, showLabel = true }: XpBarProps)
   if (compact) {
     return (
       <div className="flex items-center gap-1.5">
-        <span className="text-sm">{rank.icon}</span>
+        <span className="text-sm">{rank.icon ?? '🌱'}</span>
         <div className="w-10 h-1.5 bg-warm-bg rounded-full overflow-hidden border border-warm-border">
           <motion.div
             className="h-full rounded-full progress-shimmer"
@@ -63,11 +45,11 @@ export default function XpBar({ compact = false, showLabel = true }: XpBarProps)
               key={rank.icon}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 400 }}
+              transition={springs.hover}
             >
-              {rank.icon}
+              {rank.icon ?? '⭐'}
             </motion.span>
-            <span className="text-sm font-bold text-[#F1F5F9]" style={{ color: rank.color }}>
+            <span className="text-sm font-extrabold" style={{ color: rank.color }}>
               {rank.name}
             </span>
           </div>

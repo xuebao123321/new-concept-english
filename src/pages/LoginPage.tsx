@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 export default function LoginPage() {
-  const [mode, setMode] = useState<'login' | 'register' | 'forgot'>('register');
+  const [mode, setMode] = useState<'login' | 'register'>('register');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
@@ -26,12 +26,11 @@ export default function LoginPage() {
       if (!res.ok) throw new Error(d.detail || '操作失败');
       localStorage.setItem('nce_token', d.access_token);
       if (mode === 'register') {
-        setMsg('✅ 注册成功！请登录');
-        setMode('login');
-        setPassword('');
+        setMsg('✅ 注册成功！跳转中...');
+        setTimeout(() => { window.location.href = '/'; }, 500);
       } else {
         setMsg('✅ 登录成功！跳转中...');
-        setTimeout(() => { location.href = '/'; }, 500);
+        setTimeout(() => { window.location.href = '/'; }, 500);
       }
     } catch (e: any) {
       setMsg('❌ ' + (e.message || '网络错误'));
@@ -44,11 +43,16 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#FFFBF4' }}>
       <div className="card p-8 w-full max-w-sm">
         <div className="text-center mb-6">
-          <div className="text-5xl mb-2">🐻</div>
+          <img
+            src="/assets/characters/cast-group.webp"
+            alt="温暖森林学院"
+            className="w-20 h-20 mx-auto mb-2 rounded-2xl object-cover border-2 border-warm-border"
+            style={{ objectPosition: 'center 30%' }}
+          />
           <h2 className="text-xl font-extrabold text-[#3D3830]">
-            {mode === 'login' ? '欢迎回来' : mode === 'register' ? '创建账号' : '重置密码'}
+            {mode === 'login' ? '欢迎回来' : '创建账号'}
           </h2>
-          <p className="text-sm text-[#8B8580] mt-1">新概念英语智能练习</p>
+          <p className="text-sm text-[#8B8580] mt-1">新概念英语智能练习 · 本地学习</p>
         </div>
 
         {msg ? (
@@ -64,28 +68,24 @@ export default function LoginPage() {
           <input value={username} onChange={e => setUsername(e.target.value)}
             placeholder="用户名" required minLength={3} className="w-full"
             autoComplete="username" />
-          {mode !== 'forgot' && (
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-              placeholder="密码" required minLength={4} className="w-full"
-              autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
-          )}
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+            placeholder="密码" required minLength={4} className="w-full"
+            autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
           <button type="submit" disabled={loading}
             className="btn-brand w-full text-base">
-            {loading ? '处理中...' : mode === 'login' ? '登录' : mode === 'register' ? '注册' : '提交'}
+            {loading ? '处理中...' : mode === 'login' ? '登录' : '注册'}
           </button>
         </form>
 
         <div className="text-center mt-4 space-y-1">
           <button onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setMsg(''); }}
             className="text-sm font-bold text-[#5B9A5A] block mx-auto">
-            {mode === 'login' ? '→ 创建新账号' : mode === 'register' ? '→ 已有账号？登录' : '→ 返回登录'}
+            {mode === 'login' ? '→ 创建新账号' : '→ 已有账号？登录'}
           </button>
-          {mode !== 'forgot' && (
-            <button onClick={() => { setMode('forgot'); setMsg(''); }}
-              className="text-xs text-[#8B8580] block mx-auto mt-1">
-              忘记密码？
-            </button>
-          )}
+          <button onClick={() => { alert('如需重置密码，请联系管理员'); }}
+            className="text-xs text-[#8B8580] block mx-auto mt-1">
+            忘记密码？
+          </button>
         </div>
       </div>
     </div>

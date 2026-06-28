@@ -1,5 +1,6 @@
 import Dexie, { type Table } from 'dexie';
 import type { UserState, AnswerRecord, WrongQuestion, DailyStats, LessonProgress, ReviewSchedule } from '../types';
+import { api } from './api';
 
 class NCEDatabase extends Dexie {
   userState!: Table<UserState, string>;
@@ -62,7 +63,7 @@ class NCEDatabase extends Dexie {
   ): Promise<LessonProgress> {
     const existing = await this.lessonProgress.get(lessonGroup);
     const accuracy = totalCount > 0 ? correctCount / totalCount : 0;
-    const passed = accuracy >= 1.0; // 100%正确率才能过关解锁下一课
+    const passed = accuracy >= 0.8; // 80%正确率即可过关解锁下一课
 
     const progress: LessonProgress = {
       lessonGroup,
@@ -76,6 +77,8 @@ class NCEDatabase extends Dexie {
     };
 
     await this.lessonProgress.put(progress);
+    // 异步推送到后端 (fire-and-forget,不影响本地体验)
+    api.updateProgress(lessonGroup, correctCount, totalCount).catch(() => {});
     return progress;
   }
 
