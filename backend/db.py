@@ -13,15 +13,21 @@ def _turso_request(sql: str, params: tuple = ()) -> list[dict]:
     http_url = TURSO_URL.replace('libsql://', 'https://')
     url = f"{http_url}/v2/pipeline"
     headers = {"Authorization": f"Bearer {TURSO_TOKEN}", "Content-Type": "application/json"}
-    statements = [{"sql": sql, "args": list(params)}] if params else [{"sql": sql}]
-    resp = httpx.post(url, json={"statements": statements}, headers=headers, timeout=15)
+    req = {"type": "execute", "stmt": {"sql": sql, "args": list(params) if params else []}}
+    body = {"requests": [req]}
+    resp = httpx.post(url, json=body, headers=headers, timeout=15)
     resp.raise_for_status()
     data = resp.json()
-    result = data.get("results", [{}])[0]
-    if "response" in result and "result" in result["response"]:
-        rows = result["response"]["result"].get("rows", [])
-        cols = [c["name"] for c in result["response"]["result"].get("cols", [])]
-        return [dict(zip(cols, row)) for row in rows]
+    results = data.get("results", [])
+    if results:
+        r = results[0]
+        if r.get("type") == "ok" and "response" in r:
+            rr = r["response"]["result"]
+            cols = [c["name"] for c in rr.get("cols", [])]
+            rows = []
+            for row in rr.get("rows", []):
+                rows.append({cols[i]: v.get("value") if isinstance(v, dict) else v for i, v in enumerate(row)})
+            return rows
     return []
 
 
