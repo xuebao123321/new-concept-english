@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getQuestionsByGroup } from '../data/questions';
 import { db } from '../db/database';
+import { scheduleReview } from '../utils/review-scheduler';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
 import { useUserStore } from '../stores/useUserStore';
 import { LESSON_GROUPS, LESSONS } from '../data/lessons';
@@ -82,6 +83,7 @@ export default function MasteryTestPage() {
   const finishTest = async (isPassed: boolean) => {
     if (groupId && isPassed) {
       await markLessonComplete(groupId);
+      await scheduleReview(groupId);
       await addXp(calculateTestCompleteXp());
     }
     setPassed(isPassed);

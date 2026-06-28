@@ -14,6 +14,7 @@ import AchievementsPage from './pages/AchievementsPage';
 import ProfilePage from './pages/ProfilePage';
 import DiagnosisPage from './pages/DiagnosisPage';
 import LoginPage from './pages/LoginPage';
+import ScheduledReviewPage from './pages/ScheduledReviewPage';
 import { useAuthStore } from './stores/useAuthStore';
 import { useUserStore } from './stores/useUserStore';
 import { useLessonProgressStore } from './stores/useLessonProgressStore';
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="/lesson/:groupId/test" element={<MasteryTestPage />} />
         <Route path="/practice" element={<PracticePage />} />
         <Route path="/review" element={<ReviewPage />} />
+        <Route path="/review/scheduled" element={<ScheduledReviewPage />} />
         <Route path="/achievements" element={<AchievementsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/diagnosis" element={<DiagnosisPage />} />

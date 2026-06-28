@@ -129,6 +129,16 @@ export interface AnswerRecord {
   isFirstAttempt?: boolean;     // 是否首次作答（Phase 1.5 新增）
 }
 
+// ===== 间隔复习 =====
+export interface ReviewSchedule {
+  id?: number;
+  lessonGroup: string;
+  stage: number;         // 1, 3, 7, 30
+  dueAt: number;         // 到期时间戳
+  status: 'pending' | 'completed' | 'failed';
+  score?: number;        // 复习得分 0-100
+}
+
 // ===== 错题 =====
 export interface WrongQuestion {
   questionId: string;

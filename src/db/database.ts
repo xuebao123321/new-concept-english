@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { UserState, AnswerRecord, WrongQuestion, DailyStats, LessonProgress } from '../types';
+import type { UserState, AnswerRecord, WrongQuestion, DailyStats, LessonProgress, ReviewSchedule } from '../types';
 
 class NCEDatabase extends Dexie {
   userState!: Table<UserState, string>;
@@ -7,16 +7,18 @@ class NCEDatabase extends Dexie {
   wrongQuestions!: Table<WrongQuestion, string>;
   dailyStats!: Table<DailyStats, string>;
   lessonProgress!: Table<LessonProgress, string>;
+  reviewSchedule!: Table<ReviewSchedule, number>;
 
   constructor() {
     super('NewConceptEnglish');
 
-    this.version(2).stores({
+    this.version(3).stores({
       userState: 'id',
       answerRecords: '++id, questionId, lessonGroup, questionType, correct, timestamp',
       wrongQuestions: 'questionId, nextReviewTime, mastered',
       dailyStats: 'date',
       lessonProgress: 'lessonGroup',
+      reviewSchedule: '++id, lessonGroup, stage, dueAt, status',
     });
   }
 
