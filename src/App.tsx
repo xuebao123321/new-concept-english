@@ -24,8 +24,6 @@ export default function App() {
   useEffect(() => {
     if (done.current) return;
     done.current = true;
-    console.log('[App] init once');
-
     useAuthStore.getState().loadFromStorage();
     useUserStore.getState().init();
     useLessonProgressStore.getState().load();
@@ -34,8 +32,8 @@ export default function App() {
   return (
     <ErrorBoundary>
     <Routes>
-      <Route path="/login" element={<div style={{padding:40}}><h2>Login Test</h2><LoginPage /></div>} />
       <Route element={<AppShell />}>
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/star-map" element={<StarMapPage />} />
         <Route path="/lesson" element={<LessonSelectPage />} />
