@@ -20,7 +20,6 @@ import { useLessonProgressStore } from './stores/useLessonProgressStore';
 
 export default function App() {
   const done = useRef(false);
-
   useEffect(() => {
     if (done.current) return;
     done.current = true;
@@ -32,8 +31,8 @@ export default function App() {
   return (
     <ErrorBoundary>
     <Routes>
+      <Route path="/login" element={<LoginPage />} />
       <Route element={<AppShell />}>
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/star-map" element={<StarMapPage />} />
         <Route path="/lesson" element={<LessonSelectPage />} />
