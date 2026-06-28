@@ -222,13 +222,13 @@ body::before {
 }
 
 /* ═══════════════ 输入框 ═══════════════ */
-input[type="text"], input[type="password"], input[type="email"], textarea {
+input[type="text"], textarea {
   background: #fff; border: 2.5px solid #E8E0D5; color: #3D3830;
   border-radius: 16px; padding: 12px 16px; font-size: 1rem;
   outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease;
   font-family: inherit;
 }
-input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, textarea:focus {
+input[type="text"]:focus, textarea:focus {
   border-color: #5B9A5A;
   box-shadow: 0 0 0 5px rgba(91,154,90,0.08);
 }
