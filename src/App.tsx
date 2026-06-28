@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { useEffect, useRef, lazy, Suspense } from 'react';
+import { useEffect, useRef, lazy, Suspense, useState } from 'react';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import AppShell from './components/layout/AppShell';
 import HomePage from './pages/HomePage';
@@ -32,6 +32,14 @@ function Loading() {
 
 export default function App() {
   const done = useRef(false);
+  const [offline, setOffline] = useState(!navigator.onLine);
+  useEffect(() => {
+    const go = () => setOffline(true);
+    const back = () => setOffline(false);
+    window.addEventListener('offline', go);
+    window.addEventListener('online', back);
+    return () => { window.removeEventListener('offline', go); window.removeEventListener('online', back); };
+  }, []);
   useEffect(() => {
     if (done.current) return;
     done.current = true;
@@ -42,6 +50,11 @@ export default function App() {
 
   return (
     <ErrorBoundary>
+    {offline && (
+      <div className="fixed top-0 left-0 right-0 z-50 bg-[#FFF3CD] text-[#856404] text-center py-2 text-sm font-bold">
+        📡 当前离线，部分功能不可用
+      </div>
+    )}
     <Suspense fallback={<Loading />}>
     <Routes>
       <Route path="/login" element={<LoginPage />} />

@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 
 from models import UserCreate, UserLogin, UserResponse, TokenResponse, AnswerSubmitRequest, AnswerSubmitResponse, UserStatsResponse
 from auth import hash_password, verify_password, create_token, decode_token
-from db import init_db, create_user, get_user_by_username, get_user_by_id, get_user_progress, update_lesson_progress, save_answer, update_daily_stats
+from db import init_db, create_user, get_user_by_username, get_user_by_id, get_user_progress, update_lesson_progress, save_answer, update_daily_stats, get_db
 
 app = FastAPI(title="NCE API", version="1.0")
 
@@ -61,6 +61,37 @@ def login(data: UserLogin):
         raise HTTPException(400, "Invalid username or password")
     token = create_token(user["id"])
     return {"access_token": token, "user": {"id": user["id"], "username": user["username"], "nickname": user.get("nickname", ""), "created_at": user.get("created_at", "")}}
+
+
+# ── 密码重置 ──
+import random as _random, time as _time
+_reset_codes: dict = {}
+
+@app.post("/api/auth/forgot-password")
+def forgot_password(data: dict):
+    username = data.get("username", "")
+    user = get_user_by_username(username)
+    if not user: return {"ok": True, "message": "如果账号存在，验证码已发送"}
+    code = str(_random.randint(100000, 999999))
+    _reset_codes[username] = {"code": code, "expires": _time.time() + 600}
+    print(f"[PWD RESET] user={username} code={code}")
+    return {"ok": True, "message": "验证码已生成", "code": code}
+
+@app.post("/api/auth/reset-password")
+def reset_password(data: dict):
+    username = data.get("username", "")
+    code = data.get("code", "")
+    new_pw = data.get("new_password", "")
+    rec = _reset_codes.get(username)
+    if not rec or rec["code"] != code or _time.time() > rec["expires"]:
+        raise HTTPException(400, "验证码无效或已过期")
+    if len(new_pw) < 4: raise HTTPException(400, "密码至少4位")
+    h, s = hash_password(new_pw)
+    conn = get_db()
+    conn.execute("UPDATE users SET password_hash=?, salt=? WHERE username=?", (h, s, username))
+    if hasattr(conn, 'commit'): conn.commit()
+    del _reset_codes[username]
+    return {"ok": True, "message": "密码已重置"}
 
 
 @app.get("/api/user/profile", response_model=UserResponse)
