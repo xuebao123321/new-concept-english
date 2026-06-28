@@ -1,6 +1,7 @@
 """FastAPI 主入口"""
 import os
 from fastapi import FastAPI, HTTPException, Request, Depends
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -32,18 +33,25 @@ async def get_current_user(request: Request) -> dict:
 
 
 # ── 路由 ──
-@app.post("/api/auth/register", response_model=TokenResponse)
+@app.post("/api/auth/register")
 def register(data: UserCreate):
-    if not data.username or not data.password:
-        raise HTTPException(400, "Username and password required")
-    if len(data.username) < 3:
-        raise HTTPException(400, "Username too short (min 3)")
-    if get_user_by_username(data.username):
-        raise HTTPException(400, "Username already exists")
-    h, s = hash_password(data.password)
-    user = create_user(data.username, h, s, data.nickname or data.username)
-    token = create_token(user["id"])
-    return {"access_token": token, "user": {"id": user["id"], "username": user["username"], "nickname": user.get("nickname", ""), "created_at": user.get("created_at", "")}}
+    try:
+        if not data.username or not data.password:
+            raise HTTPException(400, "Username and password required")
+        if len(data.username) < 3:
+            raise HTTPException(400, "Username too short (min 3)")
+        if get_user_by_username(data.username):
+            raise HTTPException(400, "Username already exists")
+        h, s = hash_password(data.password)
+        user = create_user(data.username, h, s, data.nickname or data.username)
+        if not user:
+            return JSONResponse({"detail": "创建用户失败，数据库写入异常"}, status_code=500)
+        token = create_token(user.get("id", 0))
+        return {"access_token": token, "user": {"id": user["id"], "username": user["username"], "nickname": user.get("nickname", ""), "created_at": user.get("created_at", "")}}
+    except HTTPException:
+        raise
+    except Exception as e:
+        return JSONResponse({"detail": f"服务器错误: {str(e)}"}, status_code=500)
 
 
 @app.post("/api/auth/login", response_model=TokenResponse)
