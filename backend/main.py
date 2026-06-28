@@ -116,6 +116,32 @@ def stats(user: dict = Depends(get_current_user)):
     return {"total_xp": 0, "streak_days": 0, "total_questions": row["total"] if row else 0, "total_correct": row["correct"] if row else 0, "completed_lessons": completed, "total_lessons": 72}
 
 
+# ── 排行榜 ──
+@app.get("/api/leaderboard")
+def leaderboard(sort: str = "completed", limit: int = 50):
+    conn = get_db()
+    cur = conn.execute(
+        "SELECT u.id, u.username, u.nickname, COUNT(CASE WHEN up.completed=1 THEN 1 END) as completed "
+        "FROM users u LEFT JOIN user_progress up ON u.id = up.user_id "
+        "GROUP BY u.id ORDER BY completed DESC LIMIT ?", (limit,))
+    results = []
+    for r in cur.fetchall():
+        d = r.to_dict() if hasattr(r, 'to_dict') else dict(r)
+        results.append({"id": d["id"], "username": d["username"][:1]+"***", "nickname": d.get("nickname",""), "completed": d["completed"]})
+    return {"leaderboard": results}
+
+
+@app.get("/api/user/{user_id}/public")
+def public_profile(user_id: int):
+    conn = get_db()
+    u = conn.execute("SELECT id, username, nickname, created_at FROM users WHERE id=?", (user_id,)).fetchone()
+    if not u: raise HTTPException(404, "User not found")
+    d = u.to_dict() if hasattr(u, 'to_dict') else dict(u)
+    rows = get_user_progress(user_id)
+    completed = sum(1 for r in rows if r["completed"])
+    return {"id": d["id"], "nickname": d.get("nickname",""), "completed": completed, "created_at": d.get("created_at","")}
+
+
 @app.post("/api/practice/submit", response_model=AnswerSubmitResponse)
 def submit_answer(data: AnswerSubmitRequest, user: dict = Depends(get_current_user)):
     save_answer(user["id"], data.model_dump())

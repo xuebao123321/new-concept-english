@@ -1,51 +1,40 @@
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../stores/useUserStore';
+import { useAuthStore } from '../../stores/useAuthStore';
 
-interface TopBarProps {
-  title: string;
-  showBack?: boolean;
-  onBack?: () => void;
-}
-
-export default function TopBar({ title, showBack = false, onBack }: TopBarProps) {
-  const navigate = useNavigate();
+export default function TopBar({ title, showBack = false, onBack }: {
+  title: string; showBack?: boolean; onBack?: () => void;
+}) {
+  const nav = useNavigate();
   const userState = useUserStore(s => s.userState);
-
-  const handleBack = () => {
-    if (onBack) onBack();
-    else navigate(-1);
-  };
+  const { isLoggedIn, logout, user } = useAuthStore();
 
   return (
     <header className="sticky top-0 z-30 safe-top nav-top">
-      <div className="flex items-center justify-between px-4 py-3 max-w-lg mx-auto">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between px-3 py-2.5 max-w-lg mx-auto">
+        <div className="flex items-center gap-1.5 min-w-0">
           {showBack && (
-            <button
-              onClick={handleBack}
-              className="w-9 h-9 flex items-center justify-center rounded-xl bg-warm-bg hover:bg-warm-border/50 transition-colors"
-            >
-              <span className="text-base text-ink-light">←</span>
-            </button>
+            <button onClick={() => (onBack ? onBack() : nav(-1))}
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-warm-bg">
+              <span className="text-sm">←</span></button>
           )}
-          <h1 className="font-extrabold text-[15px] tracking-tight text-ink truncate max-w-[220px]">
-            {title}
-          </h1>
+          <h1 className="font-extrabold text-[14px] truncate text-ink">{title}</h1>
         </div>
 
-        <div className="flex items-center gap-3 text-xs font-bold">
-          <span className="flex items-center gap-1 bg-berry-pale px-2 py-1 rounded-full">
-            <span className="text-sm">❤️</span>
-            <span className="text-berry">{userState?.hearts ?? 5}</span>
-          </span>
-          <span className="flex items-center gap-1 bg-sun-pale px-2 py-1 rounded-full">
-            <span className="text-sm">⭐</span>
-            <span className="text-honey">{userState?.totalXp ?? 0}</span>
-          </span>
-          <span className="flex items-center gap-1 bg-forest-pale px-2 py-1 rounded-full">
-            <span className="text-sm">🔥</span>
-            <span className="text-forest">{userState?.streakDays ?? 0}天</span>
-          </span>
+        <div className="flex items-center gap-2 text-[11px] font-bold">
+          {isLoggedIn ? (
+            <>
+              <span className="text-ink-muted">{user?.nickname || user?.username}</span>
+              <button onClick={() => nav('/profile')}
+                className="px-2.5 py-1 rounded-full bg-warm-bg text-ink-light">👤</button>
+              <button onClick={() => { logout(); nav('/login'); }}
+                className="px-2.5 py-1 rounded-full bg-berry-pale text-berry">退出</button>
+            </>
+          ) : (
+            <button onClick={() => nav('/login')}
+              className="px-3 py-1 rounded-full bg-forest-pale text-forest font-bold">登录</button>
+          )}
+          <span className="bg-sun-pale px-1.5 py-0.5 rounded-full text-honey">⭐{userState?.totalXp ?? 0}</span>
         </div>
       </div>
     </header>

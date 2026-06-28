@@ -21,6 +21,7 @@ const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const DiagnosisPage = lazy(() => import('./pages/DiagnosisPage'));
 const ScheduledReviewPage = lazy(() => import('./pages/ScheduledReviewPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
 
 function Loading() {
   return (
@@ -71,6 +72,7 @@ export default function App() {
         <Route path="/achievements" element={<AchievementsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/diagnosis" element={<DiagnosisPage />} />
+        <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
