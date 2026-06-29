@@ -29,7 +29,8 @@ def _turso_request(statements: list[tuple]) -> list[list[dict]]:
                 args.append({"type": "text", "value": str(p)})
         reqs.append({"type": "execute", "stmt": {"sql": sql, "args": args}})
     resp = httpx.post(url, json={"requests": reqs}, headers=headers, timeout=30)
-    resp.raise_for_status()
+    if not resp.is_success:
+        raise Exception(f"Turso {resp.status_code}: {resp.text[:500]}")
     data = resp.json()
     results = []
     for r in data.get("results", []):
