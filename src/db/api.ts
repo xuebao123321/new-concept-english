@@ -55,6 +55,7 @@ export const api = {
   resetLesson: (childId: number, lessonGroup: string) =>
     request(`/api/parent/child/${childId}/reset-lesson`, { method: 'POST', body: JSON.stringify({ lesson_group: lessonGroup }) }),
   childReport: (childId: number) => request(`/api/parent/child/${childId}/report`),
+  wrongQuestions: (childId: number) => request(`/api/parent/child/${childId}/wrong-questions`),
 
   // 健康检查
   health: () => request('/api/health'),

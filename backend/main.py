@@ -180,6 +180,19 @@ def stats(user: dict = Depends(get_current_user)):
     return {"total_xp": 0, "streak_days": 0, "total_questions": row["total"] if row else 0, "total_correct": row["correct"] if row else 0, "completed_lessons": completed, "total_lessons": 72}
 
 
+# ── 课程常量 ──
+ALL_LESSON_GROUPS = [
+    "lesson-01-02","lesson-03-04","lesson-05-06","lesson-07-08",
+    "lesson-09-10","lesson-11-12","lesson-13-14","lesson-15-16",
+    "lesson-17-18","lesson-19-20","lesson-21-22","lesson-23-24",
+    "lesson-25-26","lesson-27-28","lesson-29-30","lesson-31-32",
+    "lesson-33-34","lesson-35-36","lesson-37-38","lesson-39-40",
+    "lesson-41-42","lesson-43-44","lesson-45-46","lesson-47-48",
+    "lesson-49-50","lesson-51-52","lesson-53-54","lesson-55-56",
+    "lesson-57-58","lesson-59-60","lesson-61-62","lesson-63-64",
+    "lesson-65-66","lesson-67-68","lesson-69-70","lesson-71-72",
+]
+
 # ── 家庭 & 家长 API ──
 
 @app.post("/api/family/bind")
@@ -273,11 +286,79 @@ def child_report(child_id: int, user: dict = Depends(get_current_user)):
         t = rd.get("total") or 0
         c = rd.get("correct") or 0
         type_stats[qt] = {"total": t, "correct": c, "accuracy": round(c / t * 100) if t > 0 else 0}
+
+    # 逐课列表
+    lesson_list = []
+    for lg in ALL_LESSON_GROUPS:
+        found = [r for r in progress_rows if r.get("lesson_group") == lg]
+        if found:
+            f = found[0]
+            lesson_list.append({
+                "lesson_group": lg,
+                "completed": bool(f.get("completed")),
+                "best_accuracy": float(f.get("best_accuracy") or 0),
+                "attempts": int(f.get("attempts") or 0),
+            })
+        else:
+            lesson_list.append({
+                "lesson_group": lg, "completed": False,
+                "best_accuracy": 0, "attempts": 0,
+            })
+
+    # 最近 7 天活跃度
+    from datetime import datetime, timedelta
+    recent_activity = []
+    for i in range(6, -1, -1):
+        d = (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d")
+        row = conn.execute(
+            "SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records "
+            "WHERE user_id=? AND date(created_at)=?", (child_id, d)).fetchone()
+        rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
+        recent_activity.append({
+            "date": d, "total": rd.get("total") or 0,
+            "correct": rd.get("correct") or 0,
+        })
+
     return {
         "student": {"id": cd["id"], "nickname": cd.get("nickname", ""), "username": cd["username"]},
-        "completed_lessons": completed, "total_lessons": 36,
+        "completed_lessons": completed, "total_lessons": len(ALL_LESSON_GROUPS),
         "type_stats": type_stats,
+        "lesson_list": lesson_list,
+        "recent_activity": recent_activity,
     }
+
+
+@app.get("/api/parent/child/{child_id}/wrong-questions")
+def child_wrong_questions(child_id: int, user: dict = Depends(get_current_user)):
+    if user.get("role") != "parent":
+        raise HTTPException(403, "仅家长可访问")
+    conn = get_db()
+    child = conn.execute("SELECT id FROM users WHERE id=? AND parent_id=?",
+                         (child_id, user["id"])).fetchone()
+    if not child:
+        raise HTTPException(404, "学生未找到")
+    rows = conn.execute(
+        "SELECT question_id, lesson_group, question_type, user_answer, created_at "
+        "FROM answer_records WHERE user_id=? AND correct=0 "
+        "ORDER BY created_at DESC LIMIT 100",
+        (child_id,)).fetchall()
+    seen = set()
+    wrong_list = []
+    for r in rows:
+        d = r.to_dict() if hasattr(r, 'to_dict') else dict(r)
+        qid = d["question_id"]
+        if qid not in seen:
+            seen.add(qid)
+            wrong_list.append({
+                "question_id": qid,
+                "lesson_group": d.get("lesson_group", ""),
+                "question_type": d.get("question_type", "choice"),
+                "user_answer": d.get("user_answer", ""),
+                "created_at": d.get("created_at", ""),
+            })
+        if len(wrong_list) >= 30:
+            break
+    return {"wrong_questions": wrong_list}
 
 
 # ── 排行榜 ──
