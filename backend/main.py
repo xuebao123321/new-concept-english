@@ -191,6 +191,13 @@ ALL_LESSON_GROUPS = [
     "lesson-49-50","lesson-51-52","lesson-53-54","lesson-55-56",
     "lesson-57-58","lesson-59-60","lesson-61-62","lesson-63-64",
     "lesson-65-66","lesson-67-68","lesson-69-70","lesson-71-72",
+    # Stage 4-6
+    "lesson-73-74","lesson-75-76","lesson-77-78","lesson-79-80","lesson-81-82","lesson-83-84",
+    "lesson-85-86","lesson-87-88","lesson-89-90","lesson-91-92","lesson-93-94","lesson-95-96",
+    "lesson-97-98","lesson-99-100","lesson-101-102","lesson-103-104","lesson-105-106","lesson-107-108",
+    "lesson-109-110","lesson-111-112","lesson-113-114","lesson-115-116","lesson-117-118","lesson-119-120",
+    "lesson-121-122","lesson-123-124","lesson-125-126","lesson-127-128","lesson-129-130","lesson-131-132",
+    "lesson-133-134","lesson-135-136","lesson-137-138","lesson-139-140","lesson-141-142","lesson-143-144",
 ]
 
 # ── 家庭 & 家长 API ──
