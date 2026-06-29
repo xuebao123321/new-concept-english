@@ -19,6 +19,8 @@ def _turso_request(statements: list[tuple]) -> list[list[dict]]:
         for p in (params or ()):
             if p is None:
                 args.append({"type": "null"})
+            elif isinstance(p, bool):
+                args.append({"type": "integer", "value": "1" if p else "0"})
             elif isinstance(p, int):
                 args.append({"type": "integer", "value": str(p)})
             elif isinstance(p, float):
