@@ -10,7 +10,10 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
       workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
         maximumFileSizeToCacheInBytes: 500 * 1024, // 500KB，跳过音频
         globIgnores: ['**/audio/*'], // 不预缓存音频文件
         runtimeCaching: [{
