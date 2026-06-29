@@ -86,6 +86,9 @@ export default function LoginPage() {
             className="text-xs text-[#8B8580] block mx-auto mt-1">
             忘记密码？
           </button>
+          <a href="/welcome" className="text-xs text-ink-muted block text-center mt-3 hover:text-ink-light">
+            ← 了解温暖森林学院
+          </a>
         </div>
       </div>
     </div>

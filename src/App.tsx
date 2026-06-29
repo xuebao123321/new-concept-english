@@ -23,6 +23,7 @@ const DiagnosisPage = lazy(() => import('./pages/DiagnosisPage'));
 const ScheduledReviewPage = lazy(() => import('./pages/ScheduledReviewPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
+const WelcomePage = lazy(() => import('./pages/WelcomePage'));
 
 function Loading() {
   return (
@@ -67,6 +68,7 @@ export default function App() {
     )}
     <Suspense fallback={<Loading />}>
     <Routes>
+      <Route path="/welcome" element={<WelcomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route element={<RequireAuth />}>
         <Route element={<AppShell />}>
