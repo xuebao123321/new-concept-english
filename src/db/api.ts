@@ -1,6 +1,6 @@
-// 生产用 Railway，开发用本地
+// 生产环境与后端同域，开发用本地
 export const API_BASE = import.meta.env.PROD
-  ? (import.meta.env.VITE_API_URL || 'https://new-concept-english-production.up.railway.app')
+  ? (import.meta.env.VITE_API_URL || '')
   : 'http://localhost:8000';
 
 async function request(path: string, options: RequestInit = {}, retries = 1): Promise<any> {

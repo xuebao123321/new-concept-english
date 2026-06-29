@@ -1,9 +1,10 @@
 """FastAPI 主入口"""
 import os
 from fastapi import FastAPI, HTTPException, Request, Depends
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
 from models import UserCreate, UserLogin, UserResponse, TokenResponse, AnswerSubmitRequest, AnswerSubmitResponse, UserStatsResponse, FamilyBindRequest, ChildUnlockRequest, ChildResetRequest
 import random as _random, time as _time
@@ -17,6 +18,44 @@ CORS_ORIGIN = os.getenv("CORS_ORIGIN", "*")
 app.add_middleware(CORSMiddleware, allow_origins=[CORS_ORIGIN], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 init_db()
+
+# ── 静态文件服务（生产环境前端 SPA）──
+DIST_DIR = Path(__file__).parent.parent / "dist"
+if DIST_DIR.exists():
+    app.mount("/assets", StaticFiles(directory=DIST_DIR / "assets"), name="assets")
+    app.mount("/audio", StaticFiles(directory=DIST_DIR / "audio"), name="audio")
+    app.mount("/icons", StaticFiles(directory=DIST_DIR / "icons"), name="icons")
+    # manifest, sw.js, workbox 等根目录文件
+    for _f in DIST_DIR.glob("*"):
+        if _f.is_file():
+
+            @app.get(f"/{_f.name}", include_in_schema=False)
+            def _serve_root_file(request: Request, fname: str = _f.name):
+                fp = DIST_DIR / fname
+                if fp.exists():
+                    return FileResponse(fp)
+                return JSONResponse({"detail": "Not found"}, status_code=404)
+
+            # hack: bind with default to capture fname
+            _serve_root_file.__name__ = f"_serve_{_f.name.replace('.','_')}"
+
+    # SPA fallback: 所有非 API 路由返回 index.html
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def spa_fallback(request: Request, full_path: str):
+        # API 路径不走 fallback
+        if full_path.startswith("api/"):
+            raise HTTPException(404)
+        fp = DIST_DIR / "index.html"
+        if fp.exists():
+            return FileResponse(fp)
+        return JSONResponse({"detail": "Not found"}, status_code=404)
+
+    @app.get("/", include_in_schema=False)
+    async def root():
+        fp = DIST_DIR / "index.html"
+        if fp.exists():
+            return FileResponse(fp)
+        return JSONResponse({"status": "ok"})
 
 
 # ── 认证依赖 ──
