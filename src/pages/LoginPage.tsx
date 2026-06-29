@@ -7,6 +7,14 @@ export default function LoginPage() {
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // 忘记密码子状态
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotUsername, setForgotUsername] = useState('');
+  const [resetCode, setResetCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [resetCodeSent, setResetCodeSent] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
+
   const API = import.meta.env.PROD
     ? 'https://new-concept-english-production.up.railway.app'
     : 'http://localhost:8000';
@@ -25,12 +33,33 @@ export default function LoginPage() {
       const d = await res.json();
       if (!res.ok) throw new Error(d.detail || '操作失败');
       localStorage.setItem('nce_token', d.access_token);
-      if (mode === 'register') {
-        setMsg('✅ 注册成功！跳转中...');
-        setTimeout(() => { window.location.href = '/'; }, 500);
+      setMsg('✅ 登录成功！跳转中...');
+      setTimeout(() => { window.location.href = '/'; }, 500);
+    } catch (e: any) {
+      setMsg('❌ ' + (e.message || '网络错误'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 发送重置码
+  const handleForgot = async () => {
+    setMsg('');
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/api/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: forgotUsername }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.detail || '操作失败');
+      if (d.code) {
+        setResetCode(d.code);
+        setResetCodeSent(true);
+        setMsg('💡 重置码已生成,有效期 10 分钟');
       } else {
-        setMsg('✅ 登录成功！跳转中...');
-        setTimeout(() => { window.location.href = '/'; }, 500);
+        setMsg('💡 如果账号存在,重置码已生成');
       }
     } catch (e: any) {
       setMsg('❌ ' + (e.message || '网络错误'));
@@ -38,6 +67,89 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  // 执行重置密码
+  const handleReset = async () => {
+    setMsg('');
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/api/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: forgotUsername, code: resetCode, new_password: newPassword }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.detail || '操作失败');
+      setResetDone(true);
+      setMsg('✅ 密码已重置! 请用新密码登录');
+      setTimeout(() => {
+        setShowForgot(false);
+        setResetCodeSent(false);
+        setResetDone(false);
+        setUsername(forgotUsername);
+        setPassword('');
+        setMode('login');
+      }, 2000);
+    } catch (e: any) {
+      setMsg('❌ ' + (e.message || '网络错误'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 忘记密码面板
+  if (showForgot) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#FFFBF4' }}>
+        <div className="card p-8 w-full max-w-sm">
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-extrabold text-[#3D3830]">🔑 重置密码</h2>
+            <p className="text-sm text-[#8B8580] mt-1">输入用户名获取重置码</p>
+          </div>
+
+          {msg ? (
+            <div className={`mb-4 p-3 rounded-xl text-center text-sm font-bold ${
+              msg.startsWith('❌') ? 'bg-[#FFEBEE] text-[#E57373] border border-[#FFCDD2]' :
+              'bg-[#E8F5E9] text-[#4CAF50] border border-[#B9DFBA]'
+            }`}>
+              {msg}
+            </div>
+          ) : null}
+
+          {!resetDone ? (
+            <div className="space-y-3">
+              <input value={forgotUsername} onChange={e => setForgotUsername(e.target.value)}
+                placeholder="用户名" required minLength={3} className="w-full"
+                disabled={resetCodeSent} />
+
+              {!resetCodeSent ? (
+                <button onClick={handleForgot} disabled={loading || !forgotUsername}
+                  className="btn-brand w-full text-base">
+                  {loading ? '发送中...' : '发送重置码'}
+                </button>
+              ) : (
+                <>
+                  <input value={resetCode} onChange={e => setResetCode(e.target.value)}
+                    placeholder="输入 6 位重置码" maxLength={6} className="w-full" />
+                  <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)}
+                    placeholder="新密码 (至少 4 位)" minLength={4} className="w-full" />
+                  <button onClick={handleReset} disabled={loading || !resetCode || !newPassword}
+                    className="btn-brand w-full text-base">
+                    {loading ? '重置中...' : '重置密码'}
+                  </button>
+                </>
+              )}
+
+              <button onClick={() => { setShowForgot(false); setResetCodeSent(false); setResetDone(false); setMsg(''); }}
+                className="text-sm text-[#8B8580] block mx-auto">
+                ← 返回登录
+              </button>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#FFFBF4' }}>
@@ -82,7 +194,7 @@ export default function LoginPage() {
             className="text-sm font-bold text-[#5B9A5A] block mx-auto">
             {mode === 'login' ? '→ 创建新账号' : '→ 已有账号？登录'}
           </button>
-          <button onClick={() => { alert('如需重置密码，请联系管理员'); }}
+          <button onClick={() => { setShowForgot(true); setMsg(''); setResetCodeSent(false); setResetDone(false); }}
             className="text-xs text-[#8B8580] block mx-auto mt-1">
             忘记密码？
           </button>

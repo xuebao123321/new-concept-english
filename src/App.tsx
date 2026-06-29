@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import { useAuthStore } from './stores/useAuthStore';
 import { useUserStore } from './stores/useUserStore';
 import { useLessonProgressStore } from './stores/useLessonProgressStore';
+import { api } from './db/api';
 
 // 按需加载
 const StarMapPage = lazy(() => import('./pages/StarMapPage'));
@@ -44,6 +45,12 @@ function Loading() {
 export default function App() {
   const done = useRef(false);
   const [offline, setOffline] = useState(!navigator.onLine);
+  const [backendOff, setBackendOff] = useState(false);
+
+  useEffect(() => {
+    api.health().catch(() => setBackendOff(true));
+    api.health().then(() => setBackendOff(false)).catch(() => {});
+  }, []);
   useEffect(() => {
     const go = () => setOffline(true);
     const back = () => setOffline(false);
@@ -64,6 +71,11 @@ export default function App() {
     {offline && (
       <div className="fixed top-0 left-0 right-0 z-50 bg-[#FFF3CD] text-[#856404] text-center py-2 text-sm font-bold">
         📡 当前离线，部分功能不可用
+      </div>
+    )}
+    {backendOff && !offline && (
+      <div className="fixed top-0 left-0 right-0 z-50 bg-[#FFF3CD] text-[#856404] text-center py-2 text-sm font-bold">
+        ⚠️ 后端暂不可用，学习数据保存在本地
       </div>
     )}
     <Suspense fallback={<Loading />}>

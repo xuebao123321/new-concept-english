@@ -40,6 +40,12 @@ export const api = {
   updateProgress: (lesson_group: string, correct: number, total: number) =>
     request('/api/progress/update', { method: 'POST', body: JSON.stringify({ lesson_group, correct, total }) }),
 
+  // 密码与账户
+  changePassword: (oldPassword: string, newPassword: string) =>
+    request('/api/user/password', { method: 'PUT', body: JSON.stringify({ old_password: oldPassword, new_password: newPassword }) }),
+  deleteAccount: () =>
+    request('/api/user/account', { method: 'DELETE' }),
+
   // 健康检查
   health: () => request('/api/health'),
 };

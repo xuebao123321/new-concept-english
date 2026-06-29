@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from models import UserCreate, UserLogin, UserResponse, TokenResponse, AnswerSubmitRequest, AnswerSubmitResponse, UserStatsResponse
+import random as _random, time as _time
 from auth import hash_password, verify_password, create_token, decode_token
 from db import init_db, create_user, get_user_by_username, get_user_by_id, get_user_progress, update_lesson_progress, save_answer, update_daily_stats, get_db
 
@@ -64,7 +65,6 @@ def login(data: UserLogin):
 
 
 # ── 密码重置 ──
-import random as _random, time as _time
 _reset_codes: dict = {}
 
 @app.post("/api/auth/forgot-password")
@@ -92,6 +92,39 @@ def reset_password(data: dict):
     if hasattr(conn, 'commit'): conn.commit()
     del _reset_codes[username]
     return {"ok": True, "message": "密码已重置"}
+
+
+# ── 账户管理 ──
+
+@app.put("/api/user/password")
+def change_password(data: dict, user: dict = Depends(get_current_user)):
+    old_pw = data.get("old_password", "")
+    new_pw = data.get("new_password", "")
+    if not old_pw or not new_pw:
+        raise HTTPException(400, "请填写原密码和新密码")
+    if not verify_password(old_pw, user["password_hash"], user["salt"]):
+        raise HTTPException(400, "原密码错误")
+    if len(new_pw) < 4:
+        raise HTTPException(400, "新密码至少4位")
+    h, s = hash_password(new_pw)
+    conn = get_db()
+    conn.execute("UPDATE users SET password_hash=?, salt=? WHERE id=?",
+                 (h, s, user["id"]))
+    if hasattr(conn, 'commit'):
+        conn.commit()
+    return {"ok": True, "message": "密码已修改"}
+
+
+@app.delete("/api/user/account")
+def delete_account(user: dict = Depends(get_current_user)):
+    uid = user["id"]
+    conn = get_db()
+    for table in ["answer_records", "daily_stats", "user_progress"]:
+        conn.execute(f"DELETE FROM {table} WHERE user_id=?", (uid,))
+    conn.execute("DELETE FROM users WHERE id=?", (uid,))
+    if hasattr(conn, 'commit'):
+        conn.commit()
+    return {"ok": True, "message": "账号已删除"}
 
 
 @app.get("/api/user/profile", response_model=UserResponse)

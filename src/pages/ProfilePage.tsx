@@ -8,6 +8,8 @@ import XpBar from '../components/gamification/XpBar';
 import CircularProgress from '../components/common/CircularProgress';
 import type { DailyStats } from '../types';
 import { springs } from '../utils/motion-tokens';
+import { useAuthStore } from '../stores/useAuthStore';
+import { api } from '../db/api';
 
 export default function ProfilePage() {
   const { userState, init } = useUserStore();
@@ -157,14 +159,21 @@ export default function ProfilePage() {
 
       {/* ═══ 5. 分组: 设置 ═══ */}
       <SectionTitle emoji="⚙️" label="设置" />
-      <div className="glass-panel p-4 text-center">
+      <div className="glass-panel p-4 space-y-3">
+        {/* 修改密码 */}
+        <ChangePasswordForm />
+        <div className="h-px bg-warm-border" />
+        {/* 重置学习数据 */}
         <button
           onClick={handleReset}
-          className="text-meta text-berry/70 hover:text-berry transition-colors font-bold"
+          className="text-meta text-berry/70 hover:text-berry transition-colors font-bold w-full"
         >
           ⚠️ 重置学习数据
         </button>
-        <p className="text-caption text-ink-muted mt-2">英语重启号 v1.0 · 熊出没·重启未来</p>
+        <div className="h-px bg-warm-border" />
+        {/* 删除账号 */}
+        <DeleteAccountButton />
+        <p className="text-caption text-ink-muted text-center pt-1">英语重启号 v1.0 · 温暖森林学院</p>
       </div>
     </div>
   );
@@ -177,5 +186,88 @@ function SectionTitle({ emoji, label }: { emoji: string; label: string }) {
       <span className="text-caption text-ink-light uppercase tracking-wider font-extrabold">{emoji} {label}</span>
       <div className="flex-1 h-px bg-warm-border" />
     </div>
+  );
+}
+
+/* ─── 修改密码表单 ─── */
+function ChangePasswordForm() {
+  const [show, setShow] = useState(false);
+  const [oldPw, setOldPw] = useState('');
+  const [newPw, setNewPw] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [msg, setMsg] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = async () => {
+    if (newPw !== confirm) { setMsg('❌ 两次输入的新密码不一致'); return; }
+    if (newPw.length < 4) { setMsg('❌ 新密码至少 4 位'); return; }
+    setLoading(true);
+    setMsg('');
+    try {
+      await api.changePassword(oldPw, newPw);
+      setMsg('✅ 密码已修改');
+      setOldPw(''); setNewPw(''); setConfirm('');
+      setTimeout(() => setShow(false), 1500);
+    } catch (e: any) {
+      setMsg('❌ ' + (e.message || '修改失败'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!show) {
+    return (
+      <button onClick={() => setShow(true)}
+        className="text-meta text-ink-light hover:text-ink font-bold w-full text-left">
+        🔑 修改密码
+      </button>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="text-meta font-bold text-ink">🔑 修改密码</div>
+      {msg && <div className={`text-xs font-bold ${msg.startsWith('✅') ? 'text-forest' : 'text-berry'}`}>{msg}</div>}
+      <input type="password" value={oldPw} onChange={e => setOldPw(e.target.value)}
+        placeholder="原密码" className="w-full text-sm" />
+      <input type="password" value={newPw} onChange={e => setNewPw(e.target.value)}
+        placeholder="新密码 (至少 4 位)" className="w-full text-sm" />
+      <input type="password" value={confirm} onChange={e => setConfirm(e.target.value)}
+        placeholder="确认新密码" className="w-full text-sm" />
+      <div className="flex gap-2">
+        <button onClick={handleChange} disabled={loading || !oldPw || !newPw || !confirm}
+          className="flex-1 py-2 text-sm btn-brand">
+          {loading ? '保存中...' : '保存'}
+        </button>
+        <button onClick={() => { setShow(false); setMsg(''); }}
+          className="flex-1 py-2 text-sm btn-ghost">取消</button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── 删除账号按钮 ─── */
+function DeleteAccountButton() {
+  const { logout } = useAuthStore();
+  const [confirming, setConfirming] = useState(false);
+
+  const handleDelete = async () => {
+    if (!window.confirm('确定要删除账号吗?所有学习数据将被永久删除,不可恢复。')) return;
+    try {
+      await api.deleteAccount();
+      logout();
+      window.location.href = '/welcome';
+    } catch (e: any) {
+      alert('删除失败: ' + (e.message || '网络错误'));
+    }
+  };
+
+  return (
+    <button
+      onClick={handleDelete}
+      className="text-meta text-berry/60 hover:text-berry transition-colors font-bold w-full text-left"
+    >
+      🗑️ 删除账号
+    </button>
   );
 }
