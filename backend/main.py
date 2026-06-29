@@ -183,19 +183,21 @@ def stats(user: dict = Depends(get_current_user)):
     row = cur.fetchone()
     total_q = (row["total"] if row else None) or 0
     total_c = (row["correct"] if row else None) or 0
-    return {"total_xp": user.get("total_xp", 0) or 0, "streak_days": 0, "total_questions": total_q, "total_correct": total_c, "completed_lessons": completed, "total_lessons": 72}
+    return {"total_xp": int(user.get("total_xp", 0) or 0), "streak_days": 0, "total_questions": int(total_q or 0), "total_correct": int(total_c or 0), "completed_lessons": completed, "total_lessons": 72}
 
 
 # ── XP 同步 ──
 @app.post("/api/user/sync-xp")
 def sync_xp(data: dict, user: dict = Depends(get_current_user)):
     """同步客户端 totalXp 到服务端（取最大值）"""
-    xp = data.get("total_xp", 0)
-    if xp > (user.get("total_xp", 0) or 0):
+    xp = int(data.get("total_xp", 0) or 0)
+    current_xp = int(user.get("total_xp", 0) or 0)
+    if xp > current_xp:
         conn = get_db()
         conn.execute("UPDATE users SET total_xp=? WHERE id=?", (xp, user["id"]))
         if hasattr(conn, 'commit'): conn.commit()
-    return {"ok": True, "total_xp": max(xp, user.get("total_xp", 0) or 0)}
+        current_xp = xp
+    return {"ok": True, "total_xp": current_xp}
 
 # ── 个人资料更新 ──
 
@@ -810,8 +812,8 @@ def leaderboard(sort: str = "xp", limit: int = 50):
             "username": d["username"][:1] + "***",
             "nickname": d.get("nickname", ""),
             "grade": d.get("grade", ""),
-            "completed": d.get("completed", 0) or 0,
-            "xp": d.get("total_xp", 0) or 0,
+            "completed": int(d.get("completed", 0) or 0),
+            "xp": int(d.get("total_xp", 0) or 0),
         })
     return {"leaderboard": results}
 
