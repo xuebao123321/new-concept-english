@@ -19,45 +19,6 @@ app.add_middleware(CORSMiddleware, allow_origins=[CORS_ORIGIN], allow_credential
 
 init_db()
 
-# ── 静态文件服务（生产环境前端 SPA）──
-# 搜索顺序: 当前目录 dist → 父目录 dist → 环境变量
-_candidates = [
-    Path(__file__).resolve().parent / "dist",
-    Path(__file__).resolve().parent.parent / "dist",
-    Path(os.getenv("DIST_DIR", ".")) / "dist",
-]
-DIST_DIR = None
-for _c in _candidates:
-    if (_c / "index.html").exists():
-        DIST_DIR = _c.resolve()
-        break
-
-if DIST_DIR and DIST_DIR.exists():
-    print(f"[init] Serving static files from {DIST_DIR}")
-    for _sub in ["assets", "audio", "icons"]:
-        _p = DIST_DIR / _sub
-        if _p.exists():
-            app.mount(f"/{_sub}", StaticFiles(directory=str(_p)), name=_sub)
-
-    @app.get("/", include_in_schema=False)
-    async def _root():
-        return FileResponse(str(DIST_DIR / "index.html"))
-
-    @app.get("/{full_path:path}", include_in_schema=False)
-    async def _spa(request: Request, full_path: str):
-        if full_path.startswith("api/"):
-            raise HTTPException(404, "Not found")
-        fp = DIST_DIR / full_path
-        if fp.is_file():
-            return FileResponse(str(fp))
-        fp = DIST_DIR / "index.html"
-        if fp.exists():
-            return FileResponse(str(fp))
-        raise HTTPException(404, "Not found")
-else:
-    print(f"[init] DIST_DIR not found, API only mode")
-
-
 # ── 认证依赖 ──
 async def get_current_user(request: Request) -> dict:
     auth = request.headers.get("Authorization", "")
@@ -902,6 +863,42 @@ def debug():
     except Exception as e:
         return {"error": str(e)}
 
+
+# ── 静态文件服务（在所有 API 路由之后注册，避免拦截）──
+_candidates = [
+    Path(__file__).resolve().parent / "dist",
+    Path(__file__).resolve().parent.parent / "dist",
+]
+DIST_DIR = None
+for _c in _candidates:
+    if (_c / "index.html").exists():
+        DIST_DIR = _c.resolve()
+        break
+
+if DIST_DIR and DIST_DIR.exists():
+    print(f"[init] Serving static files from {DIST_DIR}")
+    for _sub in ["assets", "audio", "icons"]:
+        _p = DIST_DIR / _sub
+        if _p.exists():
+            app.mount(f"/{_sub}", StaticFiles(directory=str(_p)), name=_sub)
+
+    @app.get("/", include_in_schema=False)
+    async def _root():
+        return FileResponse(str(DIST_DIR / "index.html"))
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def _spa(request: Request, full_path: str):
+        if full_path.startswith("api/"):
+            raise HTTPException(404)
+        fp = DIST_DIR / full_path
+        if fp.is_file():
+            return FileResponse(str(fp))
+        fp = DIST_DIR / "index.html"
+        if fp.exists():
+            return FileResponse(str(fp))
+        raise HTTPException(404)
+else:
+    print(f"[init] DIST_DIR not found, API only mode")
 
 # ── Vercel Serverless 入口 ──
 if __name__ == "__main__":
