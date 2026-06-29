@@ -3,14 +3,14 @@ import { useEffect, useRef, lazy, Suspense, useState } from 'react';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import RequireAuth from './components/common/RequireAuth';
 import AppShell from './components/layout/AppShell';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
 import { useAuthStore } from './stores/useAuthStore';
 import { useUserStore } from './stores/useUserStore';
 import { useLessonProgressStore } from './stores/useLessonProgressStore';
 import { api } from './db/api';
 
 // 按需加载
+const HomePage = lazy(() => import('./pages/HomePage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
 const StarMapPage = lazy(() => import('./pages/StarMapPage'));
 const LessonDetailPage = lazy(() => import('./pages/LessonDetailPage'));
 const BlockSessionPage = lazy(() => import('./pages/BlockSessionPage'));
