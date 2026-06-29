@@ -20,42 +20,42 @@ app.add_middleware(CORSMiddleware, allow_origins=[CORS_ORIGIN], allow_credential
 init_db()
 
 # ── 静态文件服务（生产环境前端 SPA）──
-DIST_DIR = Path(__file__).parent.parent / "dist"
+DIST_DIR = Path(__file__).resolve().parent.parent / "dist"
+
+# 挂载静态资源目录
+for _sub in ["assets", "audio", "icons"]:
+    _p = DIST_DIR / _sub
+    if _p.exists():
+        app.mount(f"/{_sub}", StaticFiles(directory=str(_p)), name=_sub)
+
+# 根目录静态文件（sw.js, manifest 等）
 if DIST_DIR.exists():
-    app.mount("/assets", StaticFiles(directory=DIST_DIR / "assets"), name="assets")
-    app.mount("/audio", StaticFiles(directory=DIST_DIR / "audio"), name="audio")
-    app.mount("/icons", StaticFiles(directory=DIST_DIR / "icons"), name="icons")
-    # manifest, sw.js, workbox 等根目录文件
-    for _f in DIST_DIR.glob("*"):
-        if _f.is_file():
+    for _f in DIST_DIR.iterdir():
+        if _f.is_file() and _f.suffix != ".html":
+            _name = _f.name
 
-            @app.get(f"/{_f.name}", include_in_schema=False)
-            def _serve_root_file(request: Request, fname: str = _f.name):
-                fp = DIST_DIR / fname
-                if fp.exists():
-                    return FileResponse(fp)
-                return JSONResponse({"detail": "Not found"}, status_code=404)
+            def _make_handler(fname: str):
+                async def _handler():
+                    fp = DIST_DIR / fname
+                    return FileResponse(str(fp)) if fp.exists() else JSONResponse({"detail": "N/A"}, 404)
+                return _handler
 
-            # hack: bind with default to capture fname
-            _serve_root_file.__name__ = f"_serve_{_f.name.replace('.','_')}"
+            app.add_api_route(f"/{_name}", _make_handler(_name), methods=["GET"], include_in_schema=False)
 
-    # SPA fallback: 所有非 API 路由返回 index.html
-    @app.get("/{full_path:path}", include_in_schema=False)
-    async def spa_fallback(request: Request, full_path: str):
-        # API 路径不走 fallback
+    # SPA: / 和所有非 api 路径 → index.html
+    async def _index():
+        fp = DIST_DIR / "index.html"
+        return FileResponse(str(fp)) if fp.exists() else JSONResponse({"status": "ok"})
+
+    app.add_api_route("/", _index, methods=["GET"], include_in_schema=False)
+
+    async def _spa(full_path: str):
         if full_path.startswith("api/"):
             raise HTTPException(404)
         fp = DIST_DIR / "index.html"
-        if fp.exists():
-            return FileResponse(fp)
-        return JSONResponse({"detail": "Not found"}, status_code=404)
+        return FileResponse(str(fp)) if fp.exists() else JSONResponse({"detail": "N/A"}, 404)
 
-    @app.get("/", include_in_schema=False)
-    async def root():
-        fp = DIST_DIR / "index.html"
-        if fp.exists():
-            return FileResponse(fp)
-        return JSONResponse({"status": "ok"})
+    app.add_api_route("/{full_path:path}", _spa, methods=["GET"], include_in_schema=False)
 
 
 # ── 认证依赖 ──
