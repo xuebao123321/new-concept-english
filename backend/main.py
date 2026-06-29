@@ -20,7 +20,8 @@ app.add_middleware(CORSMiddleware, allow_origins=[CORS_ORIGIN], allow_credential
 init_db()
 
 # ── 静态文件服务（生产环境前端 SPA）──
-DIST_DIR = Path(__file__).resolve().parent.parent / "dist"
+DIST_DIR = (Path(__file__).resolve().parent.parent / "dist").resolve()
+print(f"[init] DIST_DIR={DIST_DIR} exists={DIST_DIR.exists()} files={len(list(DIST_DIR.rglob('*'))) if DIST_DIR.exists() else 0}")
 
 # 挂载静态资源目录
 for _sub in ["assets", "audio", "icons"]:
