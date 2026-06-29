@@ -22,12 +22,16 @@ export default function LeaderboardPage() {
   const { user } = useAuthStore();
   const myId = user?.id;
   const myRankIndex = data.findIndex(e => e.id === myId);
+  const isParent = user?.role === 'parent';
+  const [familyOnly, setFamilyOnly] = useState(false);
 
   useEffect(() => {
-    fetch(`${API}/api/leaderboard?limit=50`)
+    let url = `${API}/api/leaderboard?limit=50`;
+    if (familyOnly && myId) url += `&family_user_id=${myId}`;
+    fetch(url)
       .then(r => r.json()).then(d => { setData(d.leaderboard || []); setLoading(false); })
       .catch(() => setLoading(false));
-  }, []);
+  }, [familyOnly, myId]);
 
   if (loading) return <div className="text-center py-20 text-ink-light">加载中...</div>;
 
@@ -43,6 +47,14 @@ export default function LeaderboardPage() {
           看看谁修复了最多的课程!
           {myId && <span className="ml-1 text-forest font-bold">· 你在第 {myRankIndex >= 0 ? myRankIndex + 1 : '?'} 名</span>}
         </p>
+        {isParent && (
+          <button onClick={() => setFamilyOnly(!familyOnly)}
+            className={`mt-2 text-xs px-3 py-1 rounded-full font-bold transition-all ${
+              familyOnly ? 'bg-forest-pale text-forest border border-forest/30' : 'bg-warm-bg text-ink-light'
+            }`}>
+            {familyOnly ? '🏠 只看家庭' : '🌍 全局排行'}
+          </button>
+        )}
       </div>
 
       {data.length === 0 ? (

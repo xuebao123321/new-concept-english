@@ -14,6 +14,7 @@ import { api } from '../db/api';
 export default function ProfilePage() {
   const { userState, init } = useUserStore();
   const { progressMap, load: loadProgress } = useLessonProgressStore();
+  const { user } = useAuthStore();
   const [recentStats, setRecentStats] = useState<DailyStats[]>([]);
   const [totalWrong, setTotalWrong] = useState(0);
   const [nickname, setNickname] = useState(() => {
@@ -89,6 +90,12 @@ export default function ProfilePage() {
           >
             {nickname} ✏️
           </h2>
+        )}
+        {user?.role === 'parent' && user?.family_code && (
+          <p className="text-meta text-honey font-bold mt-1">👨‍👩‍👧 家长 · 邀请码: {user.family_code}</p>
+        )}
+        {user?.parent_id && (
+          <p className="text-meta text-forest font-bold mt-1">📚 学生 · 已加入家庭</p>
         )}
         <div className="mt-4"><XpBar /></div>
       </motion.div>

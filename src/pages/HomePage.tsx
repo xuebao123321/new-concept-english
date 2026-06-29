@@ -11,6 +11,7 @@ import AchievementToast from '../components/gamification/AchievementToast';
 import StreakCelebration from '../components/gamification/StreakCelebration';
 import CharacterAvatar from '../components/common/CharacterAvatar';
 import { springs, staggerDelay } from '../utils/motion-tokens';
+import { useAuthStore } from '../stores/useAuthStore';
 
 const GREETINGS = [
   { char: 'xionger' as const, name: '熊二', text: '欢迎回来！今天也要开心学英语哦~ 🍯' },
@@ -24,6 +25,7 @@ const GREETINGS = [
 export default function HomePage() {
   const nav = useNavigate();
   const { userState, init, isLoading } = useUserStore();
+  const { user } = useAuthStore();
   const { load, isCompleted, getNextUnlocked } = useLessonProgressStore();
   const [stats, setStats] = useState({ done: 0, correct: 0, xp: 0 });
   const [dueReview, setDueReview] = useState(0);
@@ -158,6 +160,9 @@ export default function HomePage() {
               {greeting.char === 'xionger' ? '🐻 熊二' : greeting.char === 'xiongda' ? '🐻 熊大' : '🔬 光头强'}
             </p>
             <p className="text-sm text-ink-light font-medium mt-0.5 leading-relaxed">{greeting.text}</p>
+            {user?.parent_id && (
+              <p className="text-[10px] text-forest font-bold mt-1">👨‍👩‍👧 已加入家庭学习小组</p>
+            )}
           </div>
         </div>
         <p className="text-[9px] text-ink-muted mt-2 text-right">
