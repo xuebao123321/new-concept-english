@@ -37,6 +37,48 @@ export default function ProfilePage() {
 
   if (!userState) return null;
 
+  // ═══ 家长视图: 简洁卡片,不展示学习数据 ═══
+  if (user?.role === 'parent') {
+    return (
+      <div className="px-4 py-4 space-y-5">
+        <motion.div className="glass-panel p-6 text-center border-forest/20"
+          initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={springs.enter}>
+          <div className="text-5xl mb-2">👨‍👩‍👧</div>
+          {editingName ? (
+            <input type="text" value={nickname} onChange={e => setNickname(e.target.value)}
+              onBlur={() => { saveNickname(nickname); setEditingName(false); }}
+              onKeyDown={e => { if (e.key === 'Enter') { saveNickname(nickname); setEditingName(false); } }}
+              className="text-h2 font-bold text-center bg-transparent border-b border-forest text-ink outline-none" autoFocus />
+          ) : (
+            <h2 className="text-h2 font-bold text-ink cursor-pointer hover:text-forest"
+              onClick={() => setEditingName(true)}>{nickname} ✏️</h2>
+          )}
+          <p className="text-meta text-ink-light mt-1">家长账号</p>
+          {user?.family_code && (
+            <div className="mt-3 flex items-center justify-center gap-2">
+              <span className="text-sm text-ink-light">家庭码</span>
+              <span className="text-h2 font-extrabold text-ink tracking-widest">{user.family_code}</span>
+              <button onClick={() => { navigator.clipboard.writeText(user.family_code || ''); }}
+                className="text-xs px-2 py-0.5 rounded-full bg-forest-pale text-forest font-bold">📋</button>
+            </div>
+          )}
+          <a href="/parent" className="inline-block mt-3 text-sm font-bold text-forest hover:underline">
+            👨‍👩‍👧 进入家长面板 →
+          </a>
+        </motion.div>
+
+        <SectionTitle emoji="⚙️" label="设置" />
+        <div className="glass-panel p-4 space-y-3">
+          <ChangePasswordForm />
+          <div className="h-px bg-warm-border" />
+          <DeleteAccountButton />
+          <p className="text-caption text-ink-muted text-center pt-1">英语重启号 v1.0 · 温暖森林学院</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ═══ 学生视图: 完整学习数据 ═══
   const totalQuestions = userState.totalQuestionsAnswered;
   const overallAccuracy = totalQuestions > 0
     ? Math.round((userState.totalCorrect / totalQuestions) * 100)

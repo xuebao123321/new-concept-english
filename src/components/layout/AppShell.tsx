@@ -18,7 +18,6 @@ const STUDENT_TABS = [
 
 const PARENT_TABS = [
   { path: '/parent', icon: '🏠', label: '首页' },
-  { path: '/star-map', icon: '🌟', label: '星图' },
   { path: '/leaderboard', icon: '🏆', label: '排行' },
   { path: '/profile', icon: '👤', label: '我的' },
 ];
