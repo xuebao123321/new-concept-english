@@ -20,43 +20,42 @@ app.add_middleware(CORSMiddleware, allow_origins=[CORS_ORIGIN], allow_credential
 init_db()
 
 # ── 静态文件服务（生产环境前端 SPA）──
-DIST_DIR = (Path(__file__).resolve().parent.parent / "dist").resolve()
-print(f"[init] DIST_DIR={DIST_DIR} exists={DIST_DIR.exists()} files={len(list(DIST_DIR.rglob('*'))) if DIST_DIR.exists() else 0}")
+# 搜索顺序: 当前目录 dist → 父目录 dist → 环境变量
+_candidates = [
+    Path(__file__).resolve().parent / "dist",
+    Path(__file__).resolve().parent.parent / "dist",
+    Path(os.getenv("DIST_DIR", ".")) / "dist",
+]
+DIST_DIR = None
+for _c in _candidates:
+    if (_c / "index.html").exists():
+        DIST_DIR = _c.resolve()
+        break
 
-# 挂载静态资源目录
-for _sub in ["assets", "audio", "icons"]:
-    _p = DIST_DIR / _sub
-    if _p.exists():
-        app.mount(f"/{_sub}", StaticFiles(directory=str(_p)), name=_sub)
+if DIST_DIR and DIST_DIR.exists():
+    print(f"[init] Serving static files from {DIST_DIR}")
+    for _sub in ["assets", "audio", "icons"]:
+        _p = DIST_DIR / _sub
+        if _p.exists():
+            app.mount(f"/{_sub}", StaticFiles(directory=str(_p)), name=_sub)
 
-# 根目录静态文件（sw.js, manifest 等）
-if DIST_DIR.exists():
-    for _f in DIST_DIR.iterdir():
-        if _f.is_file() and _f.suffix != ".html":
-            _name = _f.name
+    @app.get("/", include_in_schema=False)
+    async def _root():
+        return FileResponse(str(DIST_DIR / "index.html"))
 
-            def _make_handler(fname: str):
-                async def _handler():
-                    fp = DIST_DIR / fname
-                    return FileResponse(str(fp)) if fp.exists() else JSONResponse({"detail": "N/A"}, 404)
-                return _handler
-
-            app.add_api_route(f"/{_name}", _make_handler(_name), methods=["GET"], include_in_schema=False)
-
-    # SPA: / 和所有非 api 路径 → index.html
-    async def _index():
-        fp = DIST_DIR / "index.html"
-        return FileResponse(str(fp)) if fp.exists() else JSONResponse({"status": "ok"})
-
-    app.add_api_route("/", _index, methods=["GET"], include_in_schema=False)
-
-    async def _spa(full_path: str):
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def _spa(request: Request, full_path: str):
         if full_path.startswith("api/"):
-            raise HTTPException(404)
+            raise HTTPException(404, "Not found")
+        fp = DIST_DIR / full_path
+        if fp.is_file():
+            return FileResponse(str(fp))
         fp = DIST_DIR / "index.html"
-        return FileResponse(str(fp)) if fp.exists() else JSONResponse({"detail": "N/A"}, 404)
-
-    app.add_api_route("/{full_path:path}", _spa, methods=["GET"], include_in_schema=False)
+        if fp.exists():
+            return FileResponse(str(fp))
+        raise HTTPException(404, "Not found")
+else:
+    print(f"[init] DIST_DIR not found, API only mode")
 
 
 # ── 认证依赖 ──
