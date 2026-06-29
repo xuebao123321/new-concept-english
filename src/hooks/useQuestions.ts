@@ -4,13 +4,12 @@ import type { Question } from '../types';
 // 动态导入缓存
 const cache = new Map<string, Question[]>();
 
-const GROUP_PATH_MAP: Record<string, string> = {};
-for (let i = 1; i <= 143; i += 2) {
-  const group = `lesson-${String(i).padStart(2, '0')}-${String(i + 1).padStart(2, '0')}`;
-  GROUP_PATH_MAP[group] = `../data/questions/${group}.ts`;
-}
+// Vite import.meta.glob — 每个文件独立 chunk，按需加载
+const questionModules = import.meta.glob<Record<string, Question[]>>(
+  '../data/questions/lesson-*.ts',
+);
 
-// 口语题按课组分组的懒加载缓存
+// 口语题懒加载
 let _speakByGroup: Map<string, Question[]> | null = null;
 async function getSpeakByGroup(): Promise<Map<string, Question[]>> {
   if (_speakByGroup) return _speakByGroup;
@@ -30,16 +29,18 @@ async function getSpeakByGroup(): Promise<Map<string, Question[]>> {
 
 async function loadGroup(group: string): Promise<Question[]> {
   if (cache.has(group)) return cache.get(group)!;
-  const path = GROUP_PATH_MAP[group];
+
   const questions: Question[] = [];
 
-  // 加载课组题目文件
-  if (path) {
+  // 用静态路径匹配 glob 模块
+  const filename = `../data/questions/${group}.ts`;
+  const loader = questionModules[filename];
+  if (loader) {
     try {
-      const mod = await import(/* @vite-ignore */ path);
+      const mod = await loader();
       const key = Object.keys(mod).find(k => k.endsWith('Questions'));
       if (key) questions.push(...mod[key]);
-    } catch { /* 文件不存在时忽略 */ }
+    } catch { /* 加载失败忽略 */ }
   }
 
   // 加载口语题
