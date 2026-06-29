@@ -342,6 +342,17 @@ export default function ParentDashboardPage() {
                                       {engTitle && (
                                         <div className="text-xs text-ink-muted truncate mt-0.5">{engTitle}</div>
                                       )}
+                                      {/* 课文内容预览: 词汇 + 语法 */}
+                                      {(lessonData[0]?.vocabulary?.length > 0 || lessonData[0]?.grammarTopics?.length > 0) && (
+                                        <div className="flex flex-wrap gap-1 mt-1">
+                                          {lessonData[0]?.vocabulary?.slice(0, 4).map((w: string) => (
+                                            <span key={w} className="text-[10px] px-1.5 py-0.5 rounded-full bg-forest/10 text-forest font-medium">{w}</span>
+                                          ))}
+                                          {lessonData[0]?.grammarTopics?.slice(0, 2).map((g: string) => (
+                                            <span key={g} className="text-[10px] px-1.5 py-0.5 rounded-full bg-plum/10 text-plum font-medium">{g}</span>
+                                          ))}
+                                        </div>
+                                      )}
                                       <div className={`text-[11px] mt-0.5 font-medium ${
                                         lesson.completed
                                           ? 'text-forest'

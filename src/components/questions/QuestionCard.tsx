@@ -10,6 +10,7 @@ import ComboToast from './ComboToast';
 import { playCorrect, playWrong } from '../common/SoundManager';
 import { springs } from '../../utils/motion-tokens';
 import { useUserStore } from '../../stores/useUserStore';
+import { api } from '../../db/api';
 import type { Question, QuestionType } from '../../types';
 
 interface Props {
@@ -40,6 +41,15 @@ export default function QuestionCard({ question, questionNumber, totalQuestions,
   const handleAnswer = (answer: string, correct: boolean, timeSpent: number) => {
     setLastCorrect(correct);
     setShowResult(true);
+    // 异步推送答题记录到后端 (家长面板依赖此数据)
+    api.submitAnswer({
+      question_id: question.id,
+      correct,
+      user_answer: answer,
+      time_spent: timeSpent,
+      lesson_group: question.lessonGroup,
+      question_type: question.type,
+    }).catch(() => {});
     if (correct) {
       playCorrect();
       const newCombo = combo + 1;
