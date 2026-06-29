@@ -181,7 +181,9 @@ def stats(user: dict = Depends(get_current_user)):
     conn = get_db()
     cur = conn.execute("SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records WHERE user_id=?", (user["id"],))
     row = cur.fetchone()
-    return {"total_xp": user.get("total_xp", 0) or 0, "streak_days": 0, "total_questions": row["total"] if row else 0, "total_correct": row["correct"] if row else 0, "completed_lessons": completed, "total_lessons": 72}
+    total_q = (row["total"] if row else None) or 0
+    total_c = (row["correct"] if row else None) or 0
+    return {"total_xp": user.get("total_xp", 0) or 0, "streak_days": 0, "total_questions": total_q, "total_correct": total_c, "completed_lessons": completed, "total_lessons": 72}
 
 
 # ── XP 同步 ──
