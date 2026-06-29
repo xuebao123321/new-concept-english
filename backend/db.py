@@ -97,8 +97,29 @@ class _TursoCursor:
 
 class _TursoRow:
     def __init__(self, data: dict): self._data = data
-    def to_dict(self): return dict(self._data)
-    def __getitem__(self, key): return self._data.get(key)
+
+    @staticmethod
+    def _parse(v):
+        """Turso 返回所有值为字符串，自动转为 Python 类型"""
+        if v is None or v == "None" or v == "null":
+            return None
+        if isinstance(v, str):
+            if v.isdigit() or (v.startswith('-') and v[1:].isdigit()):
+                return int(v)
+            try: return float(v)
+            except: pass
+        return v
+
+    def to_dict(self):
+        return {k: self._parse(v) for k, v in self._data.items()}
+
+    def __getitem__(self, key):
+        return self._parse(self._data.get(key))
+
+    def get(self, key, default=None):
+        val = self._data.get(key, default)
+        return self._parse(val) if val is not default else default
+
     def keys(self): return self._data.keys()
     def __repr__(self): return str(self._data)
 
