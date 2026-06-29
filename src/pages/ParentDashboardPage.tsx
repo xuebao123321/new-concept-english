@@ -40,6 +40,12 @@ export default function ParentDashboardPage() {
   const [reportLoading, setReportLoading] = useState(false);
   const [lessonLoading, setLessonLoading] = useState<string | null>(null);
   const [msg, setMsg] = useState('');
+  const [showWrongQs, setShowWrongQs] = useState(false);
+  const [wrongQuestions, setWrongQuestions] = useState<Array<{
+    question_id: string; lesson_group: string; question_type: string;
+    user_answer: string; created_at: string;
+  }>>([]);
+  const [wrongQsLoading, setWrongQsLoading] = useState(false);
 
   const familyCode = user?.family_code || '';
 
@@ -130,6 +136,21 @@ export default function ParentDashboardPage() {
       await loadReport(childId);
     } catch (e: any) {
       setMsg('❌ ' + (e.message || '操作失败'));
+    }
+  };
+
+  const loadWrongQuestions = async (childId: number) => {
+    if (showWrongQs) { setShowWrongQs(false); return; }
+    setShowWrongQs(true);
+    if (wrongQuestions.length > 0) return;
+    setWrongQsLoading(true);
+    try {
+      const res = await api.wrongQuestions(childId);
+      setWrongQuestions(res.wrong_questions || []);
+    } catch (e: any) {
+      setMsg('❌ ' + (e.message || '加载失败'));
+    } finally {
+      setWrongQsLoading(false);
     }
   };
 
@@ -243,6 +264,48 @@ export default function ParentDashboardPage() {
                           ))}
                         </div>
 
+                        {/* 本周趋势 */}
+                        {report?.recent_activity && report.recent_activity.length > 0 && (() => {
+                          const thisWeek = report.recent_activity;
+                          const thisWeekTotal = thisWeek.reduce((s, d) => s + d.total, 0);
+                          const thisWeekCorrect = thisWeek.reduce((s, d) => s + d.correct, 0);
+                          const accuracy = thisWeekTotal > 0 ? Math.round(thisWeekCorrect / thisWeekTotal * 100) : 0;
+                          return (
+                            <div className="flex items-center justify-center gap-4 text-xs bg-warm-bg rounded-xl py-2">
+                              <span className="text-ink-light">本周答题 <b className="text-ink">{thisWeekTotal}</b> 题</span>
+                              <span className="text-ink-light">正确率 <b className={accuracy >= 70 ? 'text-forest' : accuracy >= 50 ? 'text-honey' : 'text-berry'}>{accuracy}%</b></span>
+                            </div>
+                          );
+                        })()}
+
+                        {/* 📅 7 天活跃度 */}
+                        {report?.recent_activity && report.recent_activity.length > 0 && (
+                          <div>
+                            <div className="text-caption text-ink-light font-bold">📅 7 天活跃度</div>
+                            <div className="flex items-end gap-1 h-16 mt-1">
+                              {report.recent_activity.map((day) => {
+                                const maxTotal = Math.max(...report.recent_activity!.map(d => d.total), 1);
+                                const height = day.total > 0 ? Math.max((day.total / maxTotal) * 100, 8) : 3;
+                                const isToday = day.date === new Date().toISOString().slice(0, 10);
+                                return (
+                                  <div key={day.date} className="flex-1 flex flex-col items-center gap-0.5">
+                                    <span className="text-[10px] font-bold text-ink-light tabular-nums">
+                                      {day.total || ''}
+                                    </span>
+                                    <div
+                                      className={`w-full rounded-t-sm ${isToday ? 'bg-forest' : day.total > 0 ? 'bg-forest/40' : 'bg-warm-bg'}`}
+                                      style={{ height: `${height}%` }}
+                                    />
+                                    <span className={`text-[10px] ${isToday ? 'font-bold text-forest' : 'text-ink-muted'}`}>
+                                      {['日','一','二','三','四','五','六'][new Date(day.date + 'T00:00:00').getDay()]}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
                         {/* 全部解锁/重置 快捷按钮 */}
                         <div className="flex gap-2">
                           <button onClick={(e) => { e.stopPropagation(); handleUnlockAll(c.id); }}
@@ -317,6 +380,36 @@ export default function ParentDashboardPage() {
                             })}
                           </div>
                         </div>
+
+                        {/* ── 📕 错题本 (可折叠) ── */}
+                        <button onClick={(e) => { e.stopPropagation(); loadWrongQuestions(c.id); }}
+                          className="w-full text-left text-sm font-bold text-ink-light hover:text-ink pt-1">
+                          {showWrongQs ? '📕 收起错题本' : '📕 查看错题本'}
+                        </button>
+
+                        {showWrongQs && (
+                          <div className="max-h-48 overflow-y-auto space-y-1.5">
+                            {wrongQsLoading ? (
+                              <p className="text-xs text-ink-muted text-center py-2">加载中...</p>
+                            ) : wrongQuestions.length === 0 ? (
+                              <p className="text-xs text-ink-muted text-center py-2">暂无错题 🎉</p>
+                            ) : (
+                              wrongQuestions.map((wq, i) => (
+                                <div key={wq.question_id + i} className="bg-warm-bg rounded-lg p-2 text-xs">
+                                  <div className="flex items-center justify-between mb-0.5">
+                                    <span className="font-bold text-ink-light">
+                                      {wq.lesson_group} · {{choice:'选择',fill:'填空',translate:'翻译',reorder:'连词',listening:'听力'}[wq.question_type] || wq.question_type}
+                                    </span>
+                                    <span className="text-ink-muted">{wq.created_at?.slice(0,10)}</span>
+                                  </div>
+                                  <div className="text-berry">
+                                    学生答案: <span className="font-bold">{wq.user_answer || '(未填写)'}</span>
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        )}
                       </>
                     ) : null}
                   </motion.div>
