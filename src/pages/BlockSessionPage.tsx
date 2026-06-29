@@ -86,14 +86,14 @@ export default function BlockSessionPage() {
 
     if (!correct && round === 'main') {
       setWrongList(newWrongList);
-      // 保存错题到本地 Dexie + 后端
-      db.wrongQuestions.put({
+      // 保存错题到本地 Dexie（同步等待）+ 后端（异步不阻塞）
+      await db.wrongQuestions.put({
         questionId: cur.id,
         nextReviewTime: Date.now(),
         mastered: false,
         lastWrongTime: Date.now(),
         wrongCount: 1,
-      }).catch(() => {});
+      });
       api.submitAnswer({
         question_id: cur.id,
         correct: false,
@@ -104,7 +104,7 @@ export default function BlockSessionPage() {
         question_text: 'prompt' in cur ? (cur as any).prompt : '',
         correct_answer: '',
         difficulty: cur.difficulty || 'medium',
-      }).catch(() => {});
+      }).catch(e => console.warn('submitAnswer failed:', e));
     }
 
     setTimeout(() => {

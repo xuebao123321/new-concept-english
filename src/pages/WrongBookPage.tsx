@@ -42,12 +42,42 @@ export default function WrongBookPage() {
   const loadData = async () => {
     setLoading(true);
     try {
+      // 1. 从服务器 API 获取
       const data = await api.myWrongQuestions();
-      // 排除已订正的题（localStorage + Dexie mastered）
+      let items = data.wrong_questions || [];
+      let sum = data.summary || null;
+
+      // 2. 如果服务器为空，降级到本地 Dexie
+      if (items.length === 0) {
+        const localWrongs = await db.wrongQuestions.filter(w => !w.mastered).toArray();
+        if (localWrongs.length > 0) {
+          // 从 answerRecords 补全题目文本
+          const enriched: WrongQuestionItem[] = [];
+          for (const w of localWrongs) {
+            const recs = await db.answerRecords.where('questionId').equals(w.questionId).toArray();
+            const latest = recs[recs.length - 1];
+            enriched.push({
+              question_id: w.questionId,
+              lesson_group: (latest as any)?.lesson_group || '',
+              question_type: (latest as any)?.question_type || 'choice',
+              user_answer: (latest as any)?.user_answer || '',
+              question_text: (latest as any)?.question_text || '',
+              correct_answer: (latest as any)?.correct_answer || '',
+              difficulty: (latest as any)?.difficulty || 'medium',
+              wrong_count: w.wrongCount || 1,
+              created_at: new Date(w.lastWrongTime).toISOString(),
+              has_corrected: false,
+            });
+          }
+          items = enriched;
+          sum = { total_wrong: items.length, corrected: 0, by_type: {}, by_lesson: {}, most_missed_type: '', most_missed_lesson: '' };
+        }
+      }
+
       const saved: Record<string, boolean> = correctedIds;
-      const filtered = (data.wrong_questions || []).filter((q: WrongQuestionItem) => !saved[q.question_id]);
+      const filtered = items.filter((q: WrongQuestionItem) => !saved[q.question_id]);
       setQuestions(filtered);
-      setSummary(data.summary || null);
+      setSummary(sum);
     } catch { /* 静默 */ }
     finally { setLoading(false); }
   };
