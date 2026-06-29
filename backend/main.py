@@ -882,9 +882,14 @@ if DIST_DIR and DIST_DIR.exists():
         if _p.exists():
             app.mount(f"/{_sub}", StaticFiles(directory=str(_p)), name=_sub)
 
+    from fastapi.responses import HTMLResponse
+
     @app.get("/", include_in_schema=False)
     async def _root():
-        return FileResponse(str(DIST_DIR / "index.html"))
+        return HTMLResponse(
+            (DIST_DIR / "index.html").read_text(encoding="utf-8"),
+            headers={"Cache-Control": "no-cache, no-store, must-revalidate"},
+        )
 
     @app.get("/{full_path:path}", include_in_schema=False)
     async def _spa(request: Request, full_path: str):
@@ -892,10 +897,13 @@ if DIST_DIR and DIST_DIR.exists():
             raise HTTPException(404)
         fp = DIST_DIR / full_path
         if fp.is_file():
-            return FileResponse(str(fp))
+            return FileResponse(str(fp), headers={"Cache-Control": "no-cache, max-age=0"})
         fp = DIST_DIR / "index.html"
         if fp.exists():
-            return FileResponse(str(fp))
+            return HTMLResponse(
+                fp.read_text(encoding="utf-8"),
+                headers={"Cache-Control": "no-cache, no-store, must-revalidate"},
+            )
         raise HTTPException(404)
 else:
     print(f"[init] DIST_DIR not found, API only mode")
