@@ -272,9 +272,19 @@ def update_lesson_progress(user_id: int, lesson_group: str, correct: int, total:
 
 def save_answer(user_id: int, data: dict):
     conn = get_db()
-    conn.execute("INSERT INTO answer_records (user_id, question_id, lesson_group, question_type, correct, user_answer, time_spent, question_text, correct_answer, difficulty) VALUES (?,?,?,?,?,?,?,?,?,?)",
-        (user_id, data['question_id'], data.get('lesson_group', ''), data.get('question_type', 'choice'), int(data.get('correct', False)), data.get('user_answer', ''), data.get('time_spent', 0), data.get('question_text', ''), data.get('correct_answer', ''), data.get('difficulty', 'medium')))
-    if hasattr(conn, 'commit'): conn.commit()
+    if TURSO_URL and TURSO_TOKEN:
+        # Turso 直接批量请求，避免惰性游标问题
+        _turso_request([(
+            "INSERT INTO answer_records (user_id, question_id, lesson_group, question_type, correct, user_answer, time_spent, question_text, correct_answer, difficulty) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            (user_id, str(data.get('question_id','')), str(data.get('lesson_group','')), str(data.get('question_type','choice')),
+             int(data.get('correct', False)), str(data.get('user_answer','')),
+             float(data.get('time_spent', 0)), str(data.get('question_text','')),
+             str(data.get('correct_answer','')), str(data.get('difficulty','medium')))
+        )])
+    else:
+        conn.execute("INSERT INTO answer_records (user_id, question_id, lesson_group, question_type, correct, user_answer, time_spent, question_text, correct_answer, difficulty) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            (user_id, data['question_id'], data.get('lesson_group', ''), data.get('question_type', 'choice'), int(data.get('correct', False)), data.get('user_answer', ''), data.get('time_spent', 0), data.get('question_text', ''), data.get('correct_answer', ''), data.get('difficulty', 'medium')))
+        if hasattr(conn, 'commit'): conn.commit()
 
 
 def update_daily_stats(user_id: int, correct: int, total: int, xp: int, minutes: float):
