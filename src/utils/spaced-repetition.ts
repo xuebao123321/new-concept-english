@@ -80,13 +80,19 @@ export const SPACED_STAGES = [
 // 计算下一次复习（阶段式）
 export function calculateNextReview(
   stage: number,
-  passed: boolean
+  passed: boolean,
+  wrongCount?: number
 ): { nextStage: number; nextReviewTime: number } {
+  // 如果提供了 wrongCount,用它校准当前阶段
+  const effectiveStage = wrongCount !== undefined
+    ? (wrongCount >= 5 ? 4 : Math.max(0, wrongCount))
+    : stage;
+
   if (!passed) {
     // 任何阶段失败 → 回炉 stage 0
     return { nextStage: 0, nextReviewTime: Date.now() };
   }
-  const nextStage = Math.min(stage + 1, 5);
+  const nextStage = Math.min(effectiveStage + 1, 5);
   const stageInfo = SPACED_STAGES[nextStage];
   const intervalMs = stageInfo.intervalDays === Infinity
     ? Number.MAX_SAFE_INTEGER  // 永久掌握，设为遥远的未来

@@ -59,6 +59,12 @@ export default function LessonSelectPage() {
           const lessonNums = lessons.map(l => l.lessonNumber);
           const main = lessons[0];
 
+          // 未解锁课的提示
+          const prevGroup = index > 0 ? LESSON_GROUPS[index - 1] : null;
+          const prevCompleted = prevGroup ? isCompleted(prevGroup) : false;
+          const prevLessons = prevGroup ? LESSONS.filter(l => l.group === prevGroup) : [];
+          const prevTitle = prevLessons[0]?.titleCn || '';
+
           return (
             <motion.button
               key={group}
@@ -66,7 +72,7 @@ export default function LessonSelectPage() {
               disabled={!unlocked}
               className={`w-full text-left rounded-2xl border-2 p-4 transition-all ${
                 !unlocked
-                  ? 'bg-warm-bg border-warm-border opacity-50 cursor-not-allowed'
+                  ? 'bg-warm-bg border-warm-border opacity-70 cursor-not-allowed'
                   : completed
                   ? 'card-success'
                   : isRecommended
@@ -99,6 +105,13 @@ export default function LessonSelectPage() {
                     )}
                   </div>
                   <p className="text-xs text-ink-light mt-0.5">{main?.titleCn} · {main?.title}</p>
+                  {!unlocked && (
+                    <p className="text-[10px] text-ink-muted mt-0.5">
+                      {prevCompleted
+                        ? `🔒 先完成「${prevTitle}」即可解锁`
+                        : '🔒 完成前面课程后解锁'}
+                    </p>
+                  )}
                 </div>
                 <span className="text-ink-muted text-lg">→</span>
               </div>

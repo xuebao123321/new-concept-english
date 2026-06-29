@@ -4,7 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useUserStore } from '../stores/useUserStore';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
 import { db } from '../db/database';
-import { LESSON_GROUPS } from '../data/lessons';
+import { getReviewReminder } from '../utils/review-priority';
+import { checkAndUpdateStreak } from '../utils/streak';
+import { LESSONS, LESSON_GROUPS } from '../data/lessons';
 import XpBar from '../components/gamification/XpBar';
 import StreakBadge from '../components/gamification/StreakBadge';
 import AchievementToast from '../components/gamification/AchievementToast';
@@ -26,11 +28,16 @@ export default function HomePage() {
   const nav = useNavigate();
   const { userState, init, isLoading } = useUserStore();
   const { user } = useAuthStore();
-  const { load, isCompleted, getNextUnlocked } = useLessonProgressStore();
+  const { load, isCompleted, getNextUnlocked, progressMap } = useLessonProgressStore();
   const [stats, setStats] = useState({ done: 0, correct: 0, xp: 0 });
   const [dueReview, setDueReview] = useState(0);
   const [greeting] = useState(() => GREETINGS[Math.floor(Math.random() * GREETINGS.length)]);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showStreakToast, setShowStreakToast] = useState(false);
+  const [nickname] = useState(() => {
+    try { return localStorage.getItem('nce_nickname') || ''; }
+    catch { return ''; }
+  });
 
   useEffect(() => { init(); load(); }, [init, load]);
 
@@ -39,8 +46,14 @@ export default function HomePage() {
     (async () => {
       const t = await db.getTodayStats();
       if (t) setStats({ done: t.questionsAnswered, correct: t.correctCount, xp: t.xpEarned });
-      const due = await db.getDueReviewQuestions();
-      setDueReview(due.length);
+      const due = await getReviewReminder();
+      setDueReview(due);
+      // 每日打卡检测
+      const streakResult = await checkAndUpdateStreak();
+      if (streakResult.isNewDay && streakResult.streakDays >= 1) {
+        setShowStreakToast(true);
+        setTimeout(() => setShowStreakToast(false), 2500);
+      }
     })();
   }, [userState]);
 
@@ -54,6 +67,38 @@ export default function HomePage() {
       }
     }
   }, [isLoading]);
+
+  // ── 进行中课程 + 推荐课程 ──
+  const nextLesson = getNextUnlocked();
+  const doneCount = LESSON_GROUPS.filter(g => isCompleted(g)).length;
+
+  // 查找进行中的课程 (有块完成但未全部完成)
+  const inProgressGroup = LESSON_GROUPS.find(g => {
+    const bp = progressMap.get(g)?.blockProgress;
+    if (!bp) return false;
+    const done = [bp.vocabulary, bp.grammar, bp.sentence, bp.listening].filter(Boolean).length;
+    return done > 0 && done < 4;
+  });
+
+  const displayGroup = inProgressGroup || nextLesson;
+  const isInProgress = !!inProgressGroup;
+  const allDone = !nextLesson && !inProgressGroup;
+
+  const groupLessons = LESSONS.filter(l => l.group === displayGroup);
+  const totalTitle = groupLessons[0]?.titleCn || '';
+  const bp = displayGroup ? progressMap.get(displayGroup)?.blockProgress : undefined;
+  const blocksDone = bp
+    ? [bp.vocabulary, bp.grammar, bp.sentence, bp.listening].filter(Boolean).length
+    : 0;
+  const groupIndex = displayGroup ? LESSON_GROUPS.indexOf(displayGroup) + 1 : 0;
+
+  // 时间问候
+  function getTimeGreeting(): string {
+    const h = new Date().getHours();
+    if (h < 12) return '上午好';
+    if (h < 18) return '下午好';
+    return '晚上好';
+  }
 
   const dismissOnboarding = () => {
     setShowOnboarding(false);
@@ -76,13 +121,29 @@ export default function HomePage() {
     );
   }
 
-  const nextLesson = getNextUnlocked();
-  const doneCount = LESSON_GROUPS.filter(g => isCompleted(g)).length;
-
   return (
     <div className="px-4 py-4 space-y-4 relative z-10">
       <AchievementToast />
       <StreakCelebration />
+
+      {/* ═══ 每日打卡 Toast ═══ */}
+      <AnimatePresence>
+        {showStreakToast && (
+          <motion.div
+            className="fixed top-20 inset-x-0 z-40 flex justify-center pointer-events-none px-4"
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={springs.popIn}
+          >
+            <div className="bg-white/95 backdrop-blur rounded-2xl px-5 py-3 shadow-lg border-2 border-sun">
+              <p className="text-base font-extrabold text-center text-ink">
+                🔥 连续第 {userState?.streakDays} 天打卡! 今天也要加油哦~
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ═══ 新用户引导浮层 ═══ */}
       <AnimatePresence>
@@ -135,7 +196,7 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
-      {/* ═══ 1. Hero · 角色问候 (A 级卡片) ═══ */}
+      {/* ═══ 1. Hero · 角色问候 + 今日推荐 (A 级卡片) ═══ */}
       <motion.div
         className="card card-accent overflow-hidden relative"
         initial={{ opacity: 0, y: -10 }}
@@ -144,7 +205,9 @@ export default function HomePage() {
       >
         <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full opacity-5"
           style={{ background: 'radial-gradient(circle, #FF8C42 0%, transparent 70%)' }} />
-        <div className="flex items-center gap-4">
+
+        {/* 顶部: 角色头像 + 问候 */}
+        <div className="flex items-center gap-3 mb-3">
           <CharacterAvatar
             imageSrc="/assets/characters/heroes-space.webp"
             imagePosition={
@@ -156,15 +219,107 @@ export default function HomePage() {
             animation="float"
           />
           <div className="flex-1 min-w-0">
-            <p className="text-lg font-extrabold text-ink">
-              {greeting.char === 'xionger' ? '🐻 熊二' : greeting.char === 'xiongda' ? '🐻 熊大' : '🔬 光头强'}
+            <p className="text-base font-extrabold text-ink">
+              {getTimeGreeting()}{nickname ? `, ${nickname}` : ''}!
             </p>
-            <p className="text-sm text-ink-light font-medium mt-0.5 leading-relaxed">{greeting.text}</p>
-            {user?.parent_id && (
-              <p className="text-[10px] text-forest font-bold mt-1">👨‍👩‍👧 已加入家庭学习小组</p>
-            )}
+            <p className="text-xs text-ink-light mt-0.5">
+              连续 <b className="text-honey">{userState?.streakDays ?? 0}</b> 天打卡
+              {user?.parent_id && (
+                <span className="text-forest ml-2">👨‍👩‍👧 家庭成员</span>
+              )}
+            </p>
           </div>
         </div>
+
+        {/* 中部: 今日推荐卡片 */}
+        {!allDone && displayGroup && (
+          <motion.div
+            className="bg-cream/80 rounded-2xl p-3.5 border border-warm-border"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            <div className="flex items-center gap-1.5 mb-2">
+              <span className="text-sm">📖</span>
+              <span className="text-xs font-bold text-ink">
+                {isInProgress ? '继续学习' : '今日推荐'}
+              </span>
+            </div>
+            <p className="text-sm font-extrabold text-ink mb-1">
+              第 {groupIndex} 课 · {totalTitle}
+            </p>
+            {isInProgress ? (
+              <>
+                <div className="flex justify-between text-[10px] font-bold mb-1">
+                  <span className="text-ink-muted">已完成 {blocksDone}/4 块</span>
+                  <span className="text-forest">{Math.round(blocksDone / 4 * 100)}%</span>
+                </div>
+                <div className="h-1.5 bg-warm-bg rounded-full overflow-hidden mb-2.5">
+                  <motion.div
+                    className="h-full rounded-full bg-forest"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.round(blocksDone / 4 * 100)}%` }}
+                    transition={{ duration: 0.6 }}
+                  />
+                </div>
+              </>
+            ) : (
+              <p className="text-xs text-ink-muted mb-2.5">全新课程,准备好了吗?</p>
+            )}
+            <button
+              onClick={() => {
+                localStorage.setItem('nce_last_lesson', displayGroup);
+                nav(`/lesson/${displayGroup}`);
+              }}
+              className="w-full py-2 text-sm font-bold rounded-xl
+                         bg-forest text-cream hover:bg-forest/90
+                         active:scale-[0.98] transition-all shadow-sm"
+            >
+              🚀 {isInProgress ? '继续学习' : '开始学习'}
+            </button>
+          </motion.div>
+        )}
+
+        {/* 全部完成 */}
+        {allDone && (
+          <motion.div
+            className="bg-cream/80 rounded-2xl p-4 text-center border border-warm-border"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            <p className="text-2xl mb-1">🎉</p>
+            <p className="text-sm font-extrabold text-ink mb-1">全部课程已完成!</p>
+            <p className="text-xs text-ink-muted mb-3">太厉害了,你是温暖森林的骄傲!</p>
+            <button
+              onClick={() => nav('/lesson')}
+              className="px-6 py-2 text-sm font-bold rounded-xl
+                         bg-forest text-cream hover:bg-forest/90
+                         active:scale-[0.98] transition-all shadow-sm"
+            >
+              🔄 自由练习
+            </button>
+          </motion.div>
+        )}
+
+        {/* 复习提醒 */}
+        {dueReview > 0 && (
+          <motion.div
+            className="flex items-center gap-2 mt-3 bg-berry-pale rounded-xl px-3 py-1.5"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <span className="text-sm">🔴</span>
+            <span className="text-xs font-bold text-berry">
+              {dueReview} 道错题该复习了
+            </span>
+            <a href="/review" className="text-xs font-bold text-forest ml-auto hover:underline">
+              去复习 →
+            </a>
+          </motion.div>
+        )}
+
         <p className="text-[9px] text-ink-muted mt-2 text-right">
           角色形象素材来源: 公开网络 · 版权归原作者 · 本地学习使用
         </p>
