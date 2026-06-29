@@ -18,6 +18,7 @@ interface UserStore {
 
   // 升级事件 (rank 在 addXp 时跨级触发)
   pendingLevelUp: { newRank: ReturnType<typeof getLevelByXp>; oldRank?: ReturnType<typeof getLevelByXp> } | null;
+  lastXpGain: { amount: number; time: number } | null;
 
   // 操作
   init: () => Promise<void>;
@@ -45,6 +46,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
   xpProgress: null,
   newAchievements: [],
   pendingLevelUp: null,
+  lastXpGain: null,
 
   init: async () => {
     const userState = await db.initUserState();
@@ -90,6 +92,10 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
     // 异步同步到服务端
     api.syncXp(newXp).catch(() => {});
+
+    // 显示 XP 获得提示
+    set({ lastXpGain: { amount, time: Date.now() } });
+    setTimeout(() => set({ lastXpGain: null }), 2500);
 
     const refreshed = (await db.userState.get('me'))!;
     const rank = getLevelByXp(newXp);

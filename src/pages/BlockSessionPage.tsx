@@ -87,12 +87,20 @@ export default function BlockSessionPage() {
     if (!correct && round === 'main') {
       setWrongList(newWrongList);
       // 保存错题到本地 Dexie（同步等待）+ 后端（异步不阻塞）
+      const qText = 'prompt' in cur ? (cur as any).prompt : '';
+      const qCorrect = 'options' in cur ? (cur as any).options[(cur as any).correctIndex] || '' :
+                       'answer' in cur ? (cur as any).answer : '';
       await db.wrongQuestions.put({
         questionId: cur.id,
         nextReviewTime: Date.now(),
         mastered: false,
         lastWrongTime: Date.now(),
         wrongCount: 1,
+        questionText: qText,
+        correctAnswer: qCorrect,
+        userAnswer: _answer,
+        lessonGroup: groupId || '',
+        questionType: cur.type,
       });
       api.submitAnswer({
         question_id: cur.id,
@@ -101,10 +109,10 @@ export default function BlockSessionPage() {
         time_spent: _timeSpent,
         lesson_group: groupId || '',
         question_type: cur.type,
-        question_text: 'prompt' in cur ? (cur as any).prompt : '',
-        correct_answer: '',
+        question_text: qText,
+        correct_answer: qCorrect,
         difficulty: cur.difficulty || 'medium',
-      }).catch(e => console.warn('submitAnswer failed:', e));
+      }).catch(() => {});
     }
 
     setTimeout(() => {

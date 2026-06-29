@@ -63,12 +63,20 @@ export default function MasteryTestPage() {
     if (!correct && phase === 'main') {
       setWrongList(prev => [...prev, cur]);
       // 保存错题到本地 Dexie + 后端
+      const qText = 'prompt' in cur ? (cur as any).prompt : '';
+      const qCorrect = 'options' in cur ? (cur as any).options[(cur as any).correctIndex] || '' :
+                       'answer' in cur ? (cur as any).answer : '';
       db.wrongQuestions.put({
         questionId: cur.id,
         nextReviewTime: Date.now(),
         mastered: false,
         lastWrongTime: Date.now(),
         wrongCount: 1,
+        questionText: qText,
+        correctAnswer: qCorrect,
+        userAnswer: _answer,
+        lessonGroup: groupId || '',
+        questionType: cur.type,
       }).catch(() => {});
       api.submitAnswer({
         question_id: cur.id,
@@ -77,8 +85,8 @@ export default function MasteryTestPage() {
         time_spent: _timeSpent,
         lesson_group: groupId || '',
         question_type: cur.type,
-        question_text: 'prompt' in cur ? (cur as any).prompt : '',
-        correct_answer: '',
+        question_text: qText,
+        correct_answer: qCorrect,
         difficulty: cur.difficulty || 'medium',
       }).catch(() => {});
     }

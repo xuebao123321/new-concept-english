@@ -51,25 +51,18 @@ export default function WrongBookPage() {
       if (items.length === 0) {
         const localWrongs = await db.wrongQuestions.filter(w => !w.mastered).toArray();
         if (localWrongs.length > 0) {
-          // 从 answerRecords 补全题目文本
-          const enriched: WrongQuestionItem[] = [];
-          for (const w of localWrongs) {
-            const recs = await db.answerRecords.where('questionId').equals(w.questionId).toArray();
-            const latest = recs[recs.length - 1];
-            enriched.push({
-              question_id: w.questionId,
-              lesson_group: (latest as any)?.lesson_group || '',
-              question_type: (latest as any)?.question_type || 'choice',
-              user_answer: (latest as any)?.user_answer || '',
-              question_text: (latest as any)?.question_text || '',
-              correct_answer: (latest as any)?.correct_answer || '',
-              difficulty: (latest as any)?.difficulty || 'medium',
-              wrong_count: w.wrongCount || 1,
-              created_at: new Date(w.lastWrongTime).toISOString(),
-              has_corrected: false,
-            });
-          }
-          items = enriched;
+          items = localWrongs.map(w => ({
+            question_id: w.questionId,
+            lesson_group: w.lessonGroup || '',
+            question_type: w.questionType || 'choice',
+            user_answer: w.userAnswer || '',
+            question_text: w.questionText || '',
+            correct_answer: w.correctAnswer || '',
+            difficulty: 'medium' as string,
+            wrong_count: w.wrongCount || 1,
+            created_at: new Date(w.lastWrongTime).toISOString(),
+            has_corrected: false,
+          }));
           sum = { total_wrong: items.length, corrected: 0, by_type: {}, by_lesson: {}, most_missed_type: '', most_missed_lesson: '' };
         }
       }

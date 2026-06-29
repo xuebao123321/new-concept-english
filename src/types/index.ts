@@ -163,6 +163,11 @@ export interface WrongQuestion {
   lastWrongTime: number;
   nextReviewTime: number;       // 下次复习时间戳
   mastered: boolean;
+  questionText?: string;
+  correctAnswer?: string;
+  userAnswer?: string;
+  lessonGroup?: string;
+  questionType?: string;
 }
 
 // 错题分析 API 返回类型 (V7)

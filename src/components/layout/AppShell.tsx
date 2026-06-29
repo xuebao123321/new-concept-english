@@ -38,7 +38,7 @@ export default function AppShell() {
   const nav = useNavigate();
   const isFullScreen = loc.pathname.includes('/block/') || loc.pathname.includes('/test/');
   const pageTitle = getPageTitle(loc.pathname);
-  const { pendingLevelUp, clearLevelUp } = useUserStore();
+  const { pendingLevelUp, clearLevelUp, lastXpGain } = useUserStore();
   const { user } = useAuthStore();
   const isParent = user?.role === 'parent';
   const TABS = isParent ? PARENT_TABS : STUDENT_TABS;
@@ -95,6 +95,13 @@ export default function AppShell() {
 
       {/* 家庭绑定守卫 (学生未绑定家庭时显示) */}
       <FamilyBindGate />
+
+      {/* XP 获得提示 */}
+      {lastXpGain && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-honey text-white font-extrabold text-sm shadow-lg animate-bounce">
+          +{lastXpGain.amount} XP ⚡
+        </div>
+      )}
 
       {/* 全局段位升级弹窗 */}
       <LevelUpModal
