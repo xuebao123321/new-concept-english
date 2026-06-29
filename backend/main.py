@@ -538,8 +538,10 @@ def child_report(child_id: int, user: dict = Depends(get_current_user)):
             "SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records "
             "WHERE user_id=? AND question_type=?", (child_id, qt)).fetchone()
         rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
-        t = rd.get("total") or 0
-        c = rd.get("correct") or 0
+        try: t = int(rd.get("total") or "0")
+        except: t = 0
+        try: c = int(rd.get("correct") or "0")
+        except: c = 0
         type_stats[qt] = {"total": t, "correct": c, "accuracy": round(c / t * 100) if t > 0 else 0}
 
     # 逐课列表
@@ -554,7 +556,7 @@ def child_report(child_id: int, user: dict = Depends(get_current_user)):
             except: att = 0
             lesson_list.append({
                 "lesson_group": lg,
-                "completed": bool(int(f.get("completed") or 0)),
+                "completed": bool(int(f.get("completed") or "0")),
                 "best_accuracy": acc,
                 "attempts": att,
                 "status": f.get("status", "locked"),
@@ -577,9 +579,13 @@ def child_report(child_id: int, user: dict = Depends(get_current_user)):
             "SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records "
             "WHERE user_id=? AND date(created_at)=?", (child_id, d)).fetchone()
         rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
+        try: rtotal = int(rd.get("total") or "0")
+        except: rtotal = 0
+        try: rcorrect = int(rd.get("correct") or "0")
+        except: rcorrect = 0
         recent_activity.append({
-            "date": d, "total": rd.get("total") or 0,
-            "correct": rd.get("correct") or 0,
+            "date": d, "total": rtotal,
+            "correct": rcorrect,
         })
 
     return {
@@ -604,8 +610,10 @@ def my_report(user: dict = Depends(get_current_user)):
             "SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records "
             "WHERE user_id=? AND question_type=?", (uid, qt)).fetchone()
         rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
-        t = rd.get("total") or 0
-        c = rd.get("correct") or 0
+        try: t = int(rd.get("total") or "0")
+        except: t = 0
+        try: c = int(rd.get("correct") or "0")
+        except: c = 0
         type_stats[qt] = {"total": t, "correct": c, "accuracy": round(c / t * 100) if t > 0 else 0}
 
     # 逐课列表
@@ -620,7 +628,7 @@ def my_report(user: dict = Depends(get_current_user)):
             except: att = 0
             lesson_list.append({
                 "lesson_group": lg,
-                "completed": bool(int(f.get("completed") or 0)),
+                "completed": bool(int(f.get("completed") or "0")),
                 "best_accuracy": acc,
                 "attempts": att,
                 "status": f.get("status", "locked"),
@@ -643,9 +651,13 @@ def my_report(user: dict = Depends(get_current_user)):
             "SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records "
             "WHERE user_id=? AND date(created_at)=?", (uid, d)).fetchone()
         rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
+        try: rtotal = int(rd.get("total") or "0")
+        except: rtotal = 0
+        try: rcorrect = int(rd.get("correct") or "0")
+        except: rcorrect = 0
         recent_activity.append({
-            "date": d, "total": rd.get("total") or 0,
-            "correct": rd.get("correct") or 0,
+            "date": d, "total": rtotal,
+            "correct": rcorrect,
         })
 
     return {
