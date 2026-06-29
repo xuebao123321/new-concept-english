@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import TopBar from './TopBar';
 import LevelUpModal from '../gamification/LevelUpModal';
+import FamilyBindGate from '../common/FamilyBindGate';
 import { useUserStore } from '../../stores/useUserStore';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { variants } from '../../utils/motion-tokens';
@@ -113,6 +114,9 @@ export default function AppShell() {
           </div>
         </nav>
       )}
+
+      {/* 家庭绑定守卫 (学生未绑定家庭时显示) */}
+      <FamilyBindGate />
 
       {/* 全局段位升级弹窗 */}
       <LevelUpModal
