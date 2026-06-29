@@ -46,6 +46,16 @@ export const api = {
   deleteAccount: () =>
     request('/api/user/account', { method: 'DELETE' }),
 
+  // 家庭 & 家长
+  bindFamily: (family_code: string) =>
+    request('/api/family/bind', { method: 'POST', body: JSON.stringify({ family_code }) }),
+  getChildren: () => request('/api/parent/children'),
+  unlockLesson: (childId: number, lessonGroup: string) =>
+    request(`/api/parent/child/${childId}/unlock-lesson`, { method: 'POST', body: JSON.stringify({ lesson_group: lessonGroup }) }),
+  resetLesson: (childId: number, lessonGroup: string) =>
+    request(`/api/parent/child/${childId}/reset-lesson`, { method: 'POST', body: JSON.stringify({ lesson_group: lessonGroup }) }),
+  childReport: (childId: number) => request(`/api/parent/child/${childId}/report`),
+
   // 健康检查
   health: () => request('/api/health'),
 };

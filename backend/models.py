@@ -6,6 +6,8 @@ class UserCreate(BaseModel):
     username: str
     password: str
     nickname: str = ""
+    role: str = "student"
+    family_code: str = ""
 
 class UserLogin(BaseModel):
     username: str
@@ -15,11 +17,23 @@ class UserResponse(BaseModel):
     id: int
     username: str
     nickname: str
+    role: str = "student"
+    family_code: str = ""
+    parent_id: Optional[int] = None
     created_at: str
 
 class TokenResponse(BaseModel):
     access_token: str
     user: UserResponse
+
+class FamilyBindRequest(BaseModel):
+    family_code: str
+
+class ChildUnlockRequest(BaseModel):
+    lesson_group: str
+
+class ChildResetRequest(BaseModel):
+    lesson_group: str
 
 # ── 学习进度 ──
 class LessonProgressResponse(BaseModel):

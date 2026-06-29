@@ -7,6 +7,9 @@ interface User {
   id: number;
   username: string;
   nickname: string;
+  role?: string;
+  family_code?: string;
+  parent_id?: number | null;
   created_at: string;
 }
 

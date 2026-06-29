@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from models import UserCreate, UserLogin, UserResponse, TokenResponse, AnswerSubmitRequest, AnswerSubmitResponse, UserStatsResponse
+from models import UserCreate, UserLogin, UserResponse, TokenResponse, AnswerSubmitRequest, AnswerSubmitResponse, UserStatsResponse, FamilyBindRequest, ChildUnlockRequest, ChildResetRequest
 import random as _random, time as _time
 from auth import hash_password, verify_password, create_token, decode_token
 from db import init_db, create_user, get_user_by_username, get_user_by_id, get_user_progress, update_lesson_progress, save_answer, update_daily_stats, get_db
@@ -43,12 +43,38 @@ def register(data: UserCreate):
             raise HTTPException(400, "Username too short (min 3)")
         if get_user_by_username(data.username):
             raise HTTPException(400, "Username already exists")
+
+        # 家长: 生成 6 位家庭码
+        family_code = ""
+        if data.role == "parent":
+            family_code = ''.join(_random.choice('ABCDEFGHJKMNPQRSTUVWXYZ23456789') for _ in range(6))
+
+        # 学生: 验证家庭码
+        parent_id = None
+        if data.role == "student" and data.family_code:
+            conn = get_db()
+            parent = conn.execute(
+                "SELECT id FROM users WHERE family_code=? AND role='parent'",
+                (data.family_code,)).fetchone()
+            if not parent:
+                raise HTTPException(400, "家庭码无效，请检查后重试")
+            pd = dict(parent) if not isinstance(parent, dict) else parent
+            parent_id = pd.get("id") if pd else None
+
         h, s = hash_password(data.password)
-        user = create_user(data.username, h, s, data.nickname or data.username)
+        user = create_user(data.username, h, s, data.nickname or data.username,
+                          data.role, family_code, parent_id)
         if not user:
             return JSONResponse({"detail": "创建用户失败，数据库写入异常"}, status_code=500)
         token = create_token(user.get("id", 0))
-        return {"access_token": token, "user": {"id": user["id"], "username": user["username"], "nickname": user.get("nickname", ""), "created_at": user.get("created_at", "")}}
+        return {"access_token": token, "user": {
+            "id": user["id"], "username": user["username"],
+            "nickname": user.get("nickname", ""),
+            "role": user.get("role", "student"),
+            "family_code": user.get("family_code", family_code),
+            "parent_id": user.get("parent_id"),
+            "created_at": user.get("created_at", ""),
+        }}
     except HTTPException:
         raise
     except Exception as e:
@@ -129,7 +155,12 @@ def delete_account(user: dict = Depends(get_current_user)):
 
 @app.get("/api/user/profile", response_model=UserResponse)
 def profile(user: dict = Depends(get_current_user)):
-    return {"id": user["id"], "username": user["username"], "nickname": user.get("nickname", ""), "created_at": user.get("created_at", "")}
+    return {"id": user["id"], "username": user["username"],
+            "nickname": user.get("nickname", ""),
+            "role": user.get("role", "student"),
+            "family_code": user.get("family_code", ""),
+            "parent_id": user.get("parent_id"),
+            "created_at": user.get("created_at", "")}
 
 
 @app.get("/api/user/progress")
@@ -147,6 +178,106 @@ def stats(user: dict = Depends(get_current_user)):
     cur = conn.execute("SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records WHERE user_id=?", (user["id"],))
     row = cur.fetchone()
     return {"total_xp": 0, "streak_days": 0, "total_questions": row["total"] if row else 0, "total_correct": row["correct"] if row else 0, "completed_lessons": completed, "total_lessons": 72}
+
+
+# ── 家庭 & 家长 API ──
+
+@app.post("/api/family/bind")
+def bind_family(data: FamilyBindRequest, user: dict = Depends(get_current_user)):
+    conn = get_db()
+    parent = conn.execute(
+        "SELECT id FROM users WHERE family_code=? AND role='parent'",
+        (data.family_code,)).fetchone()
+    if not parent:
+        raise HTTPException(400, "家庭码无效")
+    pd = dict(parent) if not isinstance(parent, dict) else parent
+    parent_id = pd["id"]
+    conn.execute("UPDATE users SET parent_id=? WHERE id=?", (parent_id, user["id"]))
+    if hasattr(conn, 'commit'): conn.commit()
+    return {"ok": True, "parent_id": parent_id}
+
+
+@app.get("/api/parent/children")
+def get_children(user: dict = Depends(get_current_user)):
+    if user.get("role") != "parent":
+        raise HTTPException(403, "仅家长可访问")
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT id, username, nickname, created_at FROM users WHERE parent_id=?",
+        (user["id"],)).fetchall()
+    children = []
+    for r in rows:
+        d = r.to_dict() if hasattr(r, 'to_dict') else dict(r)
+        prog = conn.execute(
+            "SELECT COUNT(*) as total, SUM(completed) as done FROM user_progress WHERE user_id=?",
+            (d["id"],)).fetchone()
+        pd = prog.to_dict() if hasattr(prog, 'to_dict') else dict(prog)
+        children.append({
+            "id": d["id"], "username": d["username"], "nickname": d.get("nickname", ""),
+            "total_lessons": pd.get("total") or 0,
+            "completed_lessons": pd.get("done") or 0,
+        })
+    return {"children": children, "family_code": user.get("family_code", "")}
+
+
+@app.post("/api/parent/child/{child_id}/unlock-lesson")
+def unlock_lesson(child_id: int, data: ChildUnlockRequest, user: dict = Depends(get_current_user)):
+    if user.get("role") != "parent":
+        raise HTTPException(403, "仅家长可操作")
+    conn = get_db()
+    child = conn.execute("SELECT id FROM users WHERE id=? AND parent_id=?",
+                         (child_id, user["id"])).fetchone()
+    if not child:
+        raise HTTPException(404, "学生未找到")
+    conn.execute(
+        "INSERT OR REPLACE INTO user_progress (user_id, lesson_group, completed, best_accuracy, attempts) "
+        "VALUES (?, ?, 1, 1.0, 0)",
+        (child_id, data.lesson_group))
+    if hasattr(conn, 'commit'): conn.commit()
+    return {"ok": True}
+
+
+@app.post("/api/parent/child/{child_id}/reset-lesson")
+def reset_lesson(child_id: int, data: ChildResetRequest, user: dict = Depends(get_current_user)):
+    if user.get("role") != "parent":
+        raise HTTPException(403, "仅家长可操作")
+    conn = get_db()
+    child = conn.execute("SELECT id FROM users WHERE id=? AND parent_id=?",
+                         (child_id, user["id"])).fetchone()
+    if not child:
+        raise HTTPException(404, "学生未找到")
+    conn.execute("DELETE FROM user_progress WHERE user_id=? AND lesson_group=?",
+                 (child_id, data.lesson_group))
+    if hasattr(conn, 'commit'): conn.commit()
+    return {"ok": True}
+
+
+@app.get("/api/parent/child/{child_id}/report")
+def child_report(child_id: int, user: dict = Depends(get_current_user)):
+    if user.get("role") != "parent":
+        raise HTTPException(403, "仅家长可访问")
+    conn = get_db()
+    child = conn.execute("SELECT id, username, nickname FROM users WHERE id=? AND parent_id=?",
+                         (child_id, user["id"])).fetchone()
+    if not child:
+        raise HTTPException(404, "学生未找到")
+    cd = child.to_dict() if hasattr(child, 'to_dict') else dict(child)
+    progress_rows = get_user_progress(child_id)
+    completed = sum(1 for r in progress_rows if r.get("completed"))
+    type_stats = {}
+    for qt in ["choice", "fill", "translate", "reorder", "listening"]:
+        row = conn.execute(
+            "SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records "
+            "WHERE user_id=? AND question_type=?", (child_id, qt)).fetchone()
+        rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
+        t = rd.get("total") or 0
+        c = rd.get("correct") or 0
+        type_stats[qt] = {"total": t, "correct": c, "accuracy": round(c / t * 100) if t > 0 else 0}
+    return {
+        "student": {"id": cd["id"], "nickname": cd.get("nickname", ""), "username": cd["username"]},
+        "completed_lessons": completed, "total_lessons": 36,
+        "type_stats": type_stats,
+    }
 
 
 # ── 排行榜 ──

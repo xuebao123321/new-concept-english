@@ -103,32 +103,43 @@ def init_db():
     conn = get_db()
     if TURSO_URL and TURSO_TOKEN:
         _turso_request([
-            ("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, salt TEXT NOT NULL, nickname TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')))", ()),
+            ("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, salt TEXT NOT NULL, nickname TEXT DEFAULT '', role TEXT DEFAULT 'student', family_code TEXT DEFAULT '', parent_id INTEGER DEFAULT NULL, created_at TEXT DEFAULT (datetime('now')))", ()),
             ("CREATE TABLE IF NOT EXISTS user_progress (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, lesson_group TEXT NOT NULL, completed INTEGER DEFAULT 0, best_accuracy REAL DEFAULT 0, attempts INTEGER DEFAULT 0, last_attempt_at TEXT, completed_at TEXT, UNIQUE(user_id, lesson_group), FOREIGN KEY(user_id) REFERENCES users(id))", ()),
             ("CREATE TABLE IF NOT EXISTS answer_records (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, question_id TEXT NOT NULL, lesson_group TEXT DEFAULT '', question_type TEXT DEFAULT 'choice', correct INTEGER DEFAULT 0, user_answer TEXT DEFAULT '', time_spent REAL DEFAULT 0, created_at TEXT DEFAULT (datetime('now')), FOREIGN KEY(user_id) REFERENCES users(id))", ()),
             ("CREATE TABLE IF NOT EXISTS daily_stats (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, date TEXT NOT NULL, questions_done INTEGER DEFAULT 0, correct_count INTEGER DEFAULT 0, xp_earned INTEGER DEFAULT 0, minutes_spent REAL DEFAULT 0, UNIQUE(user_id, date), FOREIGN KEY(user_id) REFERENCES users(id))", ()),
         ])
     else:
-        conn.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, salt TEXT NOT NULL, nickname TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now')))")
+        conn.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, salt TEXT NOT NULL, nickname TEXT DEFAULT '', role TEXT DEFAULT 'student', family_code TEXT DEFAULT '', parent_id INTEGER DEFAULT NULL, created_at TEXT DEFAULT (datetime('now')))")
         conn.execute("CREATE TABLE IF NOT EXISTS user_progress (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, lesson_group TEXT NOT NULL, completed INTEGER DEFAULT 0, best_accuracy REAL DEFAULT 0, attempts INTEGER DEFAULT 0, last_attempt_at TEXT, completed_at TEXT, UNIQUE(user_id, lesson_group), FOREIGN KEY(user_id) REFERENCES users(id))")
         conn.execute("CREATE TABLE IF NOT EXISTS answer_records (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, question_id TEXT NOT NULL, lesson_group TEXT DEFAULT '', question_type TEXT DEFAULT 'choice', correct INTEGER DEFAULT 0, user_answer TEXT DEFAULT '', time_spent REAL DEFAULT 0, created_at TEXT DEFAULT (datetime('now')), FOREIGN KEY(user_id) REFERENCES users(id))")
         conn.execute("CREATE TABLE IF NOT EXISTS daily_stats (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, date TEXT NOT NULL, questions_done INTEGER DEFAULT 0, correct_count INTEGER DEFAULT 0, xp_earned INTEGER DEFAULT 0, minutes_spent REAL DEFAULT 0, UNIQUE(user_id, date), FOREIGN KEY(user_id) REFERENCES users(id))")
+    # 迁移旧表: 补加 SaaS 字段
+    _migrations = [
+        "ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'student'",
+        "ALTER TABLE users ADD COLUMN family_code TEXT DEFAULT ''",
+        "ALTER TABLE users ADD COLUMN parent_id INTEGER DEFAULT NULL",
+    ]
+    for _m in _migrations:
+        try: conn.execute(_m)
+        except: pass
 
 
 # ── 用户 CRUD ──
-def create_user(username: str, password_hash: str, salt: str, nickname: str = "") -> dict:
+def create_user(username: str, password_hash: str, salt: str, nickname: str = "",
+                role: str = "student", family_code: str = "", parent_id: int = None) -> dict:
     conn = get_db()
     if TURSO_URL and TURSO_TOKEN:
-        # Turso: INSERT+SELECT in one pipeline to ensure visibility
         results = _turso_request([
-            ("INSERT INTO users (username, password_hash, salt, nickname) VALUES (?,?,?,?)", (username, password_hash, salt, nickname)),
+            ("INSERT INTO users (username, password_hash, salt, nickname, role, family_code, parent_id) VALUES (?,?,?,?,?,?,?)",
+             (username, password_hash, salt, nickname, role, family_code, parent_id)),
             ("SELECT * FROM users WHERE username=?", (username,)),
         ])
         if len(results) >= 2 and results[1]:
             return results[1][0]
         return {}
     else:
-        conn.execute("INSERT INTO users (username, password_hash, salt, nickname) VALUES (?,?,?,?)", (username, password_hash, salt, nickname))
+        conn.execute("INSERT INTO users (username, password_hash, salt, nickname, role, family_code, parent_id) VALUES (?,?,?,?,?,?,?)",
+                     (username, password_hash, salt, nickname, role, family_code, parent_id))
         conn.commit()
         row = conn.execute("SELECT * FROM users WHERE username=?", (username,)).fetchone()
         return dict(row) if row else {}
