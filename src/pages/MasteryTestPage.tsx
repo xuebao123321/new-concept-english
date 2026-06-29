@@ -62,6 +62,25 @@ export default function MasteryTestPage() {
 
     if (!correct && phase === 'main') {
       setWrongList(prev => [...prev, cur]);
+      // 保存错题到本地 Dexie + 后端
+      db.wrongQuestions.put({
+        questionId: cur.id,
+        nextReviewTime: Date.now(),
+        mastered: false,
+        lastWrongTime: Date.now(),
+        wrongCount: 1,
+      }).catch(() => {});
+      api.submitAnswer({
+        question_id: cur.id,
+        correct: false,
+        user_answer: _answer,
+        time_spent: _timeSpent,
+        lesson_group: groupId || '',
+        question_type: cur.type,
+        question_text: 'prompt' in cur ? (cur as any).prompt : '',
+        correct_answer: '',
+        difficulty: cur.difficulty || 'medium',
+      }).catch(() => {});
     }
 
     setTimeout(async () => {

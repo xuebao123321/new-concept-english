@@ -3,13 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getQuestionsByBlock } from '../data/questions';
 import { useQuestions } from '../hooks/useQuestions';
+import { db } from '../db/database';
+import { api } from '../db/api';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
 import { useUserStore } from '../stores/useUserStore';
 import { calculateBlockCompleteXp } from '../utils/xp-calculator';
 import QuestionCard from '../components/questions/QuestionCard';
 import Confetti from '../components/common/Confetti';
 import { springs } from '../utils/motion-tokens';
-import { api } from '../db/api';
 import type { Question, BlockType } from '../types';
 
 const BLOCK_INFO: Record<BlockType, { icon: string; name: string; color: string; bg: string }> = {
@@ -85,6 +86,25 @@ export default function BlockSessionPage() {
 
     if (!correct && round === 'main') {
       setWrongList(newWrongList);
+      // 保存错题到本地 Dexie + 后端
+      db.wrongQuestions.put({
+        questionId: cur.id,
+        nextReviewTime: Date.now(),
+        mastered: false,
+        lastWrongTime: Date.now(),
+        wrongCount: 1,
+      }).catch(() => {});
+      api.submitAnswer({
+        question_id: cur.id,
+        correct: false,
+        user_answer: _answer,
+        time_spent: _timeSpent,
+        lesson_group: groupId || '',
+        question_type: cur.type,
+        question_text: 'prompt' in cur ? (cur as any).prompt : '',
+        correct_answer: '',
+        difficulty: cur.difficulty || 'medium',
+      }).catch(() => {});
     }
 
     setTimeout(() => {
