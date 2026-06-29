@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { STAGES } from '../data/stages';
 import { LESSONS } from '../data/lessons';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
 import { useUserStore } from '../stores/useUserStore';
 import { api } from '../db/api';
-import { springs, staggerDelay } from '../utils/motion-tokens';
 
 // 星球颜色映射 (主题色板派生)
 const PLANET_STYLES: Record<number, { gradient: string; glow: string; shadow: string }> = {
@@ -26,6 +25,16 @@ export default function StarMapPage() {
   const { userState } = useUserStore();
   const [typeStats, setTypeStats] = useState<Record<string, { accuracy: number }>>({});
   const [statsLoading, setStatsLoading] = useState(true);
+
+  // 预建课组→课程映射，避免每次渲染做 O(n²) 的 filter
+  const lessonByGroup = useMemo(() => {
+    const map: Record<string, typeof LESSONS> = {};
+    for (const l of LESSONS) {
+      if (!map[l.group]) map[l.group] = [];
+      map[l.group].push(l);
+    }
+    return map;
+  }, []);
 
   useEffect(() => {
     api.myReport().then(r => {
@@ -217,7 +226,7 @@ export default function StarMapPage() {
               {isActive && (
                 <div className="grid grid-cols-3 gap-2">
                   {groups.map(g => {
-                    const ls = LESSONS.filter(x => x.group === g);
+                    const ls = lessonByGroup[g] || [];
                     const unlocked = isUnlocked(g);
                     const done = isCompleted(g);
                     return (

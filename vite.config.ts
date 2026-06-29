@@ -10,8 +10,15 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['audio/*.mp3'],
-      workbox: { maximumFileSizeToCacheInBytes: 6 * 1024 * 1024 },
+      workbox: {
+        maximumFileSizeToCacheInBytes: 500 * 1024, // 500KB，跳过音频
+        globIgnores: ['**/audio/*'], // 不预缓存音频文件
+        runtimeCaching: [{
+          urlPattern: /\.(?:mp3|m4a)$/,
+          handler: 'CacheFirst',
+          options: { cacheName: 'audio-cache', expiration: { maxEntries: 20 } },
+        }],
+      },
       manifest: {
         name: '英语重启号 - 新概念英语智能练习',
         short_name: 'NCE',
