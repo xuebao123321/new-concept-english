@@ -12,7 +12,7 @@ const BLOCKS: { id: BlockType; icon: string; name: string; desc: string; color: 
   { id: 'vocabulary', icon: '📡', name: '单词森林', desc: '认识新单词，打下基础', color: '#5B9ED4', bg: '#E8F2FC' },
   { id: 'grammar', icon: '🔧', name: '语法工坊', desc: '学习语法规则和句型', color: '#7E57C2', bg: '#EDE7F6' },
   { id: 'sentence', icon: '🗣️', name: '句子城堡', desc: '练习中英互译，提升表达', color: '#5B9A5A', bg: '#E8F5E8' },
-  { id: 'listening', icon: '📻', name: '听力花园', desc: '听音频选答案，磨耳朵', color: '#FF8C42', bg: '#FFF2E8' },
+  { id: 'listening', icon: '🎤', name: '听说花园', desc: '听音频选答案 + 口语朗读', color: '#FF8C42', bg: '#FFF2E8' },
 ];
 
 export default function LessonDetailPage() {
@@ -90,7 +90,7 @@ export default function LessonDetailPage() {
             if (b.id === 'vocabulary') return q.type === 'choice';
             if (b.id === 'grammar') return q.type === 'fill' || q.type === 'reorder';
             if (b.id === 'sentence') return q.type === 'translate';
-            if (b.id === 'listening') return q.type === 'listening';
+            if (b.id === 'listening') return q.type === 'listening' || q.type === 'speak';
             return true;
           }).length;
 
@@ -133,6 +133,7 @@ export default function LessonDetailPage() {
                 {unlocked && (
                   <div className="text-[10px] text-ink-light mt-1">
                     {questionCount > 0 ? `${questionCount} 题` : ''}
+                    <span className="ml-1.5 text-forest font-bold">+30 XP</span>
                   </div>
                 )}
               </div>
@@ -145,16 +146,19 @@ export default function LessonDetailPage() {
 
       {/* 综合测试按钮 */}
       {allDone ? (
-        <motion.button
-          onClick={() => navigate(`/lesson/${groupId}/test`)}
-          className="w-full py-3.5 btn-gold text-base"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={springs.popIn}
-          whileTap={{ scale: 0.97 }}
-        >
-          🏁 时间跃迁（综合测试）
-        </motion.button>
+        <div className="text-center space-y-1">
+          <motion.button
+            onClick={() => navigate(`/lesson/${groupId}/test`)}
+            className="w-full py-3.5 btn-gold text-base"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={springs.popIn}
+            whileTap={{ scale: 0.97 }}
+          >
+            🏁 时间跃迁（综合测试）
+          </motion.button>
+          <p className="text-xs text-forest font-bold">通过可获得 +50 XP</p>
+        </div>
       ) : (
         <div className="w-full py-3.5 text-center text-sm font-bold text-ink-muted bg-warm-bg rounded-xl border border-warm-border">
           🔒 请先完成全部 4 个学习块

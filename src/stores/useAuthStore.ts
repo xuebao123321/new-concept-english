@@ -67,7 +67,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const token = localStorage.getItem('nce_token');
     if (token) {
       set({ token, isLoggedIn: true });
-      api.getProfile().then(user => set({ user })).catch(() => set({ token: null, isLoggedIn: false }));
+      api.getProfile().then(user => {
+        set({ user });
+        get().syncProgressFromServer().catch(() => {});
+      }).catch(() => set({ token: null, isLoggedIn: false }));
     }
   },
 
@@ -79,18 +82,21 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const serverProgress = res.progress || [];
       for (const p of serverProgress) {
         const existing = await db.lessonProgress.get(p.lesson_group);
-        if (!existing || (p.completed && !existing.completed)) {
-          await db.lessonProgress.put({
-            lessonGroup: p.lesson_group,
-            completed: p.completed,
-            bestAccuracy: Math.max(existing?.bestAccuracy || 0, p.best_accuracy || 0),
-            attempts: Math.max(existing?.attempts || 0, p.attempts || 0),
-            lastAttemptAt: Date.now(),
-            completedAt: p.completed
-              ? (existing?.completedAt || Date.now())
-              : (existing?.completedAt || 0),
-          });
-        }
+        // 始终以服务端数据为准：status/unlocked_by 由家长端控制
+        const serverStatus = (p as any).status || (p.completed ? 'completed' : 'locked');
+        const serverUnlockedBy = (p as any).unlocked_by || '';
+        await db.lessonProgress.put({
+          lessonGroup: p.lesson_group,
+          completed: p.completed,
+          bestAccuracy: Math.max(existing?.bestAccuracy || 0, p.best_accuracy || 0),
+          attempts: Math.max(existing?.attempts || 0, p.attempts || 0),
+          lastAttemptAt: Date.now(),
+          completedAt: p.completed
+            ? (existing?.completedAt || Date.now())
+            : (existing?.completedAt || 0),
+          status: serverStatus,
+          unlocked_by: serverUnlockedBy,
+        });
       }
       await useLessonProgressStore.getState().refresh();
     } catch (e) {

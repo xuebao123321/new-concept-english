@@ -10,17 +10,45 @@ for (let i = 1; i <= 143; i += 2) {
   GROUP_PATH_MAP[group] = `../data/questions/${group}.ts`;
 }
 
+// 口语题按课组分组的懒加载缓存
+let _speakByGroup: Map<string, Question[]> | null = null;
+async function getSpeakByGroup(): Promise<Map<string, Question[]>> {
+  if (_speakByGroup) return _speakByGroup;
+  const map = new Map<string, Question[]>();
+  try {
+    const mod = await import('../data/questions/speaking');
+    const list: Question[] = mod.speakingQuestions || [];
+    for (const q of list) {
+      const g = q.lessonGroup;
+      if (!map.has(g)) map.set(g, []);
+      map.get(g)!.push(q);
+    }
+  } catch { /* speaking.ts 不存在时忽略 */ }
+  _speakByGroup = map;
+  return map;
+}
+
 async function loadGroup(group: string): Promise<Question[]> {
   if (cache.has(group)) return cache.get(group)!;
   const path = GROUP_PATH_MAP[group];
-  if (!path) return [];
-  try {
-    const mod = await import(/* @vite-ignore */ path);
-    const key = Object.keys(mod).find(k => k.endsWith('Questions'));
-    const questions: Question[] = key ? mod[key] : [];
-    cache.set(group, questions);
-    return questions;
-  } catch { return []; }
+  const questions: Question[] = [];
+
+  // 加载课组题目文件
+  if (path) {
+    try {
+      const mod = await import(/* @vite-ignore */ path);
+      const key = Object.keys(mod).find(k => k.endsWith('Questions'));
+      if (key) questions.push(...mod[key]);
+    } catch { /* 文件不存在时忽略 */ }
+  }
+
+  // 加载口语题
+  const speakMap = await getSpeakByGroup();
+  const speakQs = speakMap.get(group) || [];
+  questions.push(...speakQs);
+
+  cache.set(group, questions);
+  return questions;
 }
 
 // 预加载多个课组
@@ -62,4 +90,9 @@ export function getCachedQuestions(group: string): Question[] {
 // 预加载首页需要的课组
 export function preloadFirstLesson() {
   loadGroup('lesson-01-02');
+}
+
+// 确保单个课组已加载（供外部工具使用）
+export async function ensureGroupLoaded(group: string): Promise<void> {
+  await loadGroup(group);
 }

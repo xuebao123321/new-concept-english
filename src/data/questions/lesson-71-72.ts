@@ -304,7 +304,7 @@ export const lesson7172Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '电话基本'],
     block: 'listening',
     prompt: '听音频电话对话，选出谁打了电话：',
-    audioSrc: '/audio/lesson-71-72.mp3', transcript: "A: Hello, this is Paul speaking. Is that Mary? B: Yes, speaking. What's the matter, Paul? A: I telephoned you three times yesterday. Where were you? B: I went to my mother's. I was there all day.",
+    audioSrc: '/audio/lesson-71-72.m4a', transcript: "A: Hello, this is Paul speaking. Is that Mary? B: Yes, speaking. What's the matter, Paul? A: I telephoned you three times yesterday. Where were you? B: I went to my mother's. I was there all day.",
     question: '谁打了电话？',
     options: ['Paul', 'Mary', "Mary's mother", '没有人'],
     correctIndex: 0,
@@ -315,7 +315,7 @@ export const lesson7172Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '电话内容细节'],
     block: 'listening',
     prompt: '听音频对话，选出正确的对话内容：',
-    audioSrc: '/audio/lesson-71-72.mp3', transcript: "A: Did you telephone me yesterday? B: Yes, I did. I telephoned you at six. But you didn't answer. A: I was in the kitchen. I didn't hear the phone. What did you want? B: I wanted to tell you about the meeting.",
+    audioSrc: '/audio/lesson-71-72.m4a', transcript: "A: Did you telephone me yesterday? B: Yes, I did. I telephoned you at six. But you didn't answer. A: I was in the kitchen. I didn't hear the phone. What did you want? B: I wanted to tell you about the meeting.",
     question: 'B为什么打电话？',
     options: [
       '为了告诉A关于会议的事（to tell about the meeting）',
@@ -331,7 +331,7 @@ export const lesson7172Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'Who did 问句'],
     block: 'listening',
     prompt: '听音频，选出B跟谁说了话：',
-    audioSrc: '/audio/lesson-71-72.mp3', transcript: "A: When did you go to the office yesterday? B: I went at 9 in the morning. A: Who did you speak to there? B: First I spoke to the secretary. Then I spoke to the manager. He was very helpful. A: What did he say? B: He said the documents were ready. A: And who did you speak to after that? B: Nobody. I went home after the meeting.",
+    audioSrc: '/audio/lesson-71-72.m4a', transcript: "A: When did you go to the office yesterday? B: I went at 9 in the morning. A: Who did you speak to there? B: First I spoke to the secretary. Then I spoke to the manager. He was very helpful. A: What did he say? B: He said the documents were ready. A: And who did you speak to after that? B: Nobody. I went home after the meeting.",
     question: 'B在办公室跟谁说了话？',
     options: [
       '秘书和经理（the secretary and the manager）',
@@ -347,7 +347,7 @@ export const lesson7172Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '电话场景综合'],
     block: 'listening',
     prompt: '听音频，选出秘书回答了什么：',
-    audioSrc: '/audio/lesson-71-72.mp3', transcript: "Caller: Good morning. This is John Smith from ABC Company. Can I speak to Mr. Brown, please? Secretary: I'm sorry, Mr. Brown isn't in the office today. He went to a meeting in London. Caller: Really? I spoke to him yesterday and he didn't mention it. Secretary: He left early this morning. Did you try his mobile phone? Caller: Yes, I called him three times but he didn't answer. Secretary: That's strange. He usually answers his phone. What did you want to tell him? Caller: I wanted to ask him about the report. Secretary: I can take a message and ask him to call you back. Caller: Thank you. That would be great.",
+    audioSrc: '/audio/lesson-71-72.m4a', transcript: "Caller: Good morning. This is John Smith from ABC Company. Can I speak to Mr. Brown, please? Secretary: I'm sorry, Mr. Brown isn't in the office today. He went to a meeting in London. Caller: Really? I spoke to him yesterday and he didn't mention it. Secretary: He left early this morning. Did you try his mobile phone? Caller: Yes, I called him three times but he didn't answer. Secretary: That's strange. He usually answers his phone. What did you want to tell him? Caller: I wanted to ask him about the report. Secretary: I can take a message and ask him to call you back. Caller: Thank you. That would be great.",
     question: '秘书主动问了什么？',
     options: [
       '你想告诉他什么？(What did you want to tell him?)',
@@ -363,7 +363,7 @@ export const lesson7172Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '电话综合理解'],
     block: 'listening',
     prompt: '听音频，选出正确的事件描述：',
-    audioSrc: '/audio/lesson-71-72.mp3', transcript: "Paul: Hi Tom. You look tired. What happened? Tom: Oh, Paul. Yesterday was the worst day of the week. First, I got a telephone call at 6 in the morning. Paul: At 6? Who called you so early? Tom: It was my boss. He said he needed me at the office immediately. Paul: What did you do? Tom: I got up, got dressed and went to the office. When I arrived, nobody was there! I waited for an hour. Then I called my boss. Paul: What did he say? Tom: He said, \"Oh, I'm sorry Tom. I called the wrong number. I was trying to telephone Tom Wilson, not you.\" Can you believe it? I got up so early for nothing! Paul: That's terrible! What did you do then? Tom: I went home. But I couldn't sleep any more. I was too angry. Paul: Did you tell him how you felt? Tom: I didn't say anything at the time. I was too surprised. But I spoke to him later in the day and told him how I felt. He apologised and said he would make it up to me. Paul: I hope he will. What an awful start to the day! Tom: It was. But the rest of the day was actually OK.",
+    audioSrc: '/audio/lesson-71-72.m4a', transcript: "Paul: Hi Tom. You look tired. What happened? Tom: Oh, Paul. Yesterday was the worst day of the week. First, I got a telephone call at 6 in the morning. Paul: At 6? Who called you so early? Tom: It was my boss. He said he needed me at the office immediately. Paul: What did you do? Tom: I got up, got dressed and went to the office. When I arrived, nobody was there! I waited for an hour. Then I called my boss. Paul: What did he say? Tom: He said, \"Oh, I'm sorry Tom. I called the wrong number. I was trying to telephone Tom Wilson, not you.\" Can you believe it? I got up so early for nothing! Paul: That's terrible! What did you do then? Tom: I went home. But I couldn't sleep any more. I was too angry. Paul: Did you tell him how you felt? Tom: I didn't say anything at the time. I was too surprised. But I spoke to him later in the day and told him how I felt. He apologised and said he would make it up to me. Paul: I hope he will. What an awful start to the day! Tom: It was. But the rest of the day was actually OK.",
     question: '为什么Tom的老板那么早打电话给他？',
     options: [
       '老板打错了电话——他本来想打给另一个叫Tom Wilson的人（wrong number—wrong Tom）',

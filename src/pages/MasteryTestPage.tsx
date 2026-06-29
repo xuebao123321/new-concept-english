@@ -6,6 +6,7 @@ import { db } from '../db/database';
 import { api } from '../db/api';
 import { springs } from '../utils/motion-tokens';
 import { scheduleReview } from '../utils/review-scheduler';
+import { STAGES } from '../data/stages';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
 import { useUserStore } from '../stores/useUserStore';
 import { LESSON_GROUPS, LESSONS } from '../data/lessons';
@@ -93,7 +94,20 @@ export default function MasteryTestPage() {
     if (groupId && isPassed) {
       await markLessonComplete(groupId);
       await scheduleReview(groupId);
-      await addXp(calculateTestCompleteXp());
+      await addXp(calculateTestCompleteXp()); // +50 XP 测试通过
+      // 检查是否完成整个阶段 → +50 XP
+      const stage = STAGES.find(s => s.groups.includes(groupId));
+      if (stage) {
+        const { progressMap } = useLessonProgressStore.getState();
+        const allDone = stage.groups.every(g => progressMap.get(g)?.completed || g === groupId);
+        if (allDone) {
+          const key = `nce_stage_${stage.id}_done`;
+          if (!localStorage.getItem(key)) {
+            localStorage.setItem(key, '1');
+            await addXp(50);
+          }
+        }
+      }
     }
     // 异步向后端推送进度
     const totalQ = testQ.length;
@@ -192,27 +206,6 @@ export default function MasteryTestPage() {
     );
   }
 
-  // 心不足
-  if (hearts === 0) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-cream gap-4">
-        <img
-          src="/assets/characters/bears-cabin.webp"
-          alt="心已用完"
-          className="w-32 h-32 rounded-2xl object-cover border-2 border-warm-border shadow-sm"
-          style={{ objectPosition: 'center 30%' }}
-        />
-        <h2 className="text-h2 text-ink">❤️ 心已用完</h2>
-        <p className="text-meta text-ink-light text-center max-w-xs">
-          综合测试消耗更大,每道错题扣 2 颗心~
-          <br />休息一会儿再来挑战吧!
-        </p>
-        <button onClick={() => navigate(-1)} className="btn-ghost text-base w-40">
-          ← 返回
-        </button>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen px-4 py-4 bg-cream">

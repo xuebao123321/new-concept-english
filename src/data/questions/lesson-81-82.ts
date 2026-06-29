@@ -306,7 +306,7 @@ export const lesson8182Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '现在完成时 问状态'],
     block: 'listening',
     prompt: '听音频，选出正确信息：',
-    audioSrc: '/audio/lesson-81-82.mp3', transcript: "A: Have you had dinner yet? B: Yes, I have. I have just finished. A: What did you have? B: I had roast beef and potatoes. It was delicious. A: Where did you eat? B: I went to that new restaurant on King Street. A: Oh, I have heard about that place. Is it good? B: It's wonderful. I have already been there three times!",
+    audioSrc: '/audio/lesson-81-82.m4a', transcript: "A: Have you had dinner yet? B: Yes, I have. I have just finished. A: What did you have? B: I had roast beef and potatoes. It was delicious. A: Where did you eat? B: I went to that new restaurant on King Street. A: Oh, I have heard about that place. Is it good? B: It's wonderful. I have already been there three times!",
     question: 'B说他已经去过那家餐厅几次了？',
     options: [
       '三次（three times — I have already been there three times）',
@@ -322,7 +322,7 @@ export const lesson8182Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '现在完成时 日常生活'],
     block: 'listening',
     prompt: '听音频，选出Tom已经做了和还没做的事：',
-    audioSrc: '/audio/lesson-81-82.mp3', transcript: "Mum: Tom, have you done your homework? Tom: Yes, Mum. I have already finished it. Mum: Good. Have you tidied your room? Tom: Not yet. I'll do it later. Mum: And have you walked the dog? Tom: I have just come back from walking him. We went to the park. Mum: Great. What about your piano practice? Have you practised yet? Tom: No, I haven't. I have been too busy. But I'll practise before dinner. Mum: You have said that three times this week, Tom. Tom: I know, I know. I really will do it this time!",
+    audioSrc: '/audio/lesson-81-82.m4a', transcript: "Mum: Tom, have you done your homework? Tom: Yes, Mum. I have already finished it. Mum: Good. Have you tidied your room? Tom: Not yet. I'll do it later. Mum: And have you walked the dog? Tom: I have just come back from walking him. We went to the park. Mum: Great. What about your piano practice? Have you practised yet? Tom: No, I haven't. I have been too busy. But I'll practise before dinner. Mum: You have said that three times this week, Tom. Tom: I know, I know. I really will do it this time!",
     question: 'Tom已经做了什么？还没做什么？',
     options: [
       '已做：作业和遛狗 / 还没做：整理房间和练钢琴（homework and walking dog done, room and piano not yet）',
@@ -338,7 +338,7 @@ export const lesson8182Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '现在完成时 vs 一般过去时'],
     block: 'listening',
     prompt: '听音频，选出正确的叙述：',
-    audioSrc: '/audio/lesson-81-82.mp3', transcript: "I have been to many restaurants in this city, but the best meal I have ever had was at a small place near the river. I went there with my wife last month. We had roast beef and drank a bottle of red wine. The food was perfect. The owner came to our table and talked to us. He said the restaurant has been open for over thirty years. I have already recommended it to all my friends. In fact, my boss went there last week because of my recommendation. He told me yesterday that he loved it too. I think I have found my favourite restaurant!",
+    audioSrc: '/audio/lesson-81-82.m4a', transcript: "I have been to many restaurants in this city, but the best meal I have ever had was at a small place near the river. I went there with my wife last month. We had roast beef and drank a bottle of red wine. The food was perfect. The owner came to our table and talked to us. He said the restaurant has been open for over thirty years. I have already recommended it to all my friends. In fact, my boss went there last week because of my recommendation. He told me yesterday that he loved it too. I think I have found my favourite restaurant!",
     question: '讲述者为什么推荐这家餐厅？',
     options: [
       '因为那是他吃过的最好的一顿饭 — 食物完美且老板热情（best meal ever, food perfect, friendly owner）',
@@ -354,7 +354,7 @@ export const lesson8182Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '现在完成时 日常生活'],
     block: 'listening',
     prompt: '听音频，选出Marco还没做的事情：',
-    audioSrc: '/audio/lesson-81-82.mp3', transcript: "Marco is an exchange student from Italy. He has been in London for three months. He says he has already visited most of the famous places — he has been to the British Museum three times, he has seen the Tower of London, and he has taken many photos of Big Ben. He has already tried fish and chips and he says it's not as bad as people say. But there is one thing he hasn't done yet — he hasn't been to an English pub! His friends keep telling him he must go to one. 'You haven't really been to London until you have been to a pub,' they say. Marco says he will go this weekend. He has already looked up the best pubs online and has made a list.",
+    audioSrc: '/audio/lesson-81-82.m4a', transcript: "Marco is an exchange student from Italy. He has been in London for three months. He says he has already visited most of the famous places — he has been to the British Museum three times, he has seen the Tower of London, and he has taken many photos of Big Ben. He has already tried fish and chips and he says it's not as bad as people say. But there is one thing he hasn't done yet — he hasn't been to an English pub! His friends keep telling him he must go to one. 'You haven't really been to London until you have been to a pub,' they say. Marco says he will go this weekend. He has already looked up the best pubs online and has made a list.",
     question: 'Marco在伦敦还没做什么？',
     options: [
       '还没去过英式酒吧（hasn\'t been to an English pub）',
@@ -370,7 +370,7 @@ export const lesson8182Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '现在完成时 vs 过去时 综合故事'],
     block: 'listening',
     prompt: '听音频故事，选出为什么这对夫妇感到失望：',
-    audioSrc: '/audio/lesson-81-82.mp3', transcript: "My wife and I have just come back from a restaurant, and we are both very disappointed. We had booked a table at a famous French restaurant — we had heard so many good things about it. We arrived at 7 o'clock, exactly on time. The restaurant looked beautiful. But then things started to go wrong. First, the waiter brought us the wrong wine. My wife had ordered a glass of white wine, but he brought red. 'That's OK,' she said. 'I don't mind.' Then we waited for forty minutes for our main course. When it finally arrived, my roast beef was cold and my wife's fish was dry. She had nearly finished her water and nobody came to refill her glass. 'I have never had such bad service,' she said. The manager came over and apologised. He said they have had a problem in the kitchen tonight. But we have already decided — we are not going back. We have been to many restaurants in this city, and we have never been so disappointed. The funny thing is, we have just found out that the restaurant is closing down next month. Perhaps that explains everything!",
+    audioSrc: '/audio/lesson-81-82.m4a', transcript: "My wife and I have just come back from a restaurant, and we are both very disappointed. We had booked a table at a famous French restaurant — we had heard so many good things about it. We arrived at 7 o'clock, exactly on time. The restaurant looked beautiful. But then things started to go wrong. First, the waiter brought us the wrong wine. My wife had ordered a glass of white wine, but he brought red. 'That's OK,' she said. 'I don't mind.' Then we waited for forty minutes for our main course. When it finally arrived, my roast beef was cold and my wife's fish was dry. She had nearly finished her water and nobody came to refill her glass. 'I have never had such bad service,' she said. The manager came over and apologised. He said they have had a problem in the kitchen tonight. But we have already decided — we are not going back. We have been to many restaurants in this city, and we have never been so disappointed. The funny thing is, we have just found out that the restaurant is closing down next month. Perhaps that explains everything!",
     question: '为什么这对夫妇对餐厅感到失望？',
     options: [
       '上错酒、等了四十分钟、烤牛肉凉了、鱼太干、服务差（wrong wine, 40-min wait, cold beef, dry fish, bad service）',

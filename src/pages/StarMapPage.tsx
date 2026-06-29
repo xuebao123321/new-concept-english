@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { STAGES } from '../data/stages';
 import { LESSONS } from '../data/lessons';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
+import { useUserStore } from '../stores/useUserStore';
+import { api } from '../db/api';
 import { springs, staggerDelay } from '../utils/motion-tokens';
 
 // 星球颜色映射 (主题色板派生)
@@ -15,9 +18,24 @@ const PLANET_STYLES: Record<number, { gradient: string; glow: string; shadow: st
   6: { gradient: 'radial-gradient(circle at 35% 35%, #F8BBD0, #E57373)', glow: 'rgba(229,115,115,0.4)', shadow: '0 0 30px rgba(229,115,115,0.3)' },
 };
 
+const TYPE_LABELS: Record<string, string> = { choice: '选择', fill: '填空', translate: '翻译', reorder: '连词', listening: '听力' };
+
 export default function StarMapPage() {
   const navigate = useNavigate();
-  const { isUnlocked, isCompleted, isLoading } = useLessonProgressStore();
+  const { isUnlocked, isCompleted, isLoading, getCompletedLessons } = useLessonProgressStore();
+  const { userState } = useUserStore();
+  const [typeStats, setTypeStats] = useState<Record<string, { accuracy: number }>>({});
+  const [statsLoading, setStatsLoading] = useState(true);
+
+  useEffect(() => {
+    api.myReport().then(r => {
+      const ts: Record<string, { accuracy: number }> = {};
+      for (const [qt, s] of Object.entries(r.type_stats || {})) {
+        ts[qt] = { accuracy: (s as any).accuracy || 0 };
+      }
+      setTypeStats(ts);
+    }).catch(() => {}).finally(() => setStatsLoading(false));
+  }, []);
 
   if (isLoading) {
     return (
@@ -30,7 +48,53 @@ export default function StarMapPage() {
   }
 
   return (
-    <div className="px-4 py-5 space-y-6">
+    <div className="px-4 py-5 space-y-4">
+      {/* ── 学习概览 ── */}
+      <div className="card p-4">
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
+            <div className="text-xs text-ink-light font-bold mb-1">📊 总进度</div>
+            <div className="text-lg font-extrabold text-ink">
+              {getCompletedLessons().length}<span className="text-sm text-ink-light font-normal">/72 课</span>
+            </div>
+            <div className="mt-1 h-1.5 bg-warm-bg rounded-full overflow-hidden">
+              <motion.div
+                className="h-full rounded-full bg-forest"
+                initial={{ width: 0 }}
+                animate={{ width: `${Math.round(getCompletedLessons().length / 72 * 100)}%` }}
+                transition={{ duration: 0.8 }}
+              />
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-xs text-ink-light font-bold">⭐ XP</div>
+            <div className="text-lg font-extrabold text-honey">{userState?.totalXp || 0}</div>
+          </div>
+        </div>
+        {/* 题型正确率 */}
+        {!statsLoading && Object.keys(typeStats).length > 0 && (
+          <div className="flex gap-1.5 mt-3 pt-3 border-t border-warm-border">
+            {['choice','fill','translate','reorder','listening'].map(qt => {
+              const acc = typeStats[qt]?.accuracy || 0;
+              return (
+                <div key={qt} className="flex-1 text-center">
+                  <div className="text-xs font-extrabold" style={{ color: acc >= 80 ? '#5B9A5A' : acc >= 50 ? '#D97706' : '#DC2626' }}>
+                    {acc}%
+                  </div>
+                  <div className="text-[10px] text-ink-muted">{TYPE_LABELS[qt]}</div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {/* 快捷入口 */}
+        <div className="flex gap-2 mt-3 pt-3 border-t border-warm-border text-[10px]">
+          <a href="/wrong-book" className="text-ink-muted hover:text-forest font-bold">📕 错题本</a>
+          <a href="/review" className="text-ink-muted hover:text-forest font-bold">📝 间隔复习</a>
+          <a href="/achievements" className="text-ink-muted hover:text-forest font-bold">🏆 成就</a>
+        </div>
+      </div>
+
       {/* 标题 + 太空场景背景图 */}
       <div className="relative overflow-hidden rounded-3xl border-2 border-warm-border shadow-sm">
         <img
@@ -50,15 +114,16 @@ export default function StarMapPage() {
 
       {/* 星球列表 */}
       {STAGES.map((stage, stageIdx) => {
+        const hasContent = true; // 所有阶段都有内容
         const groups = stage.groups.length > 0
           ? stage.groups
           : Array.from({ length: 12 }, (_, i) =>
               `lesson-${String(stage.lessonStart + i * 2).padStart(2, '0')}-${String(stage.lessonStart + i * 2 + 1).padStart(2, '0')}`
             );
-        const doneGroups = groups.filter(g => isCompleted(g));
-        const unlockedGroups = groups.filter(g => isUnlocked(g));
-        const isActive = unlockedGroups.length > 0;
-        const allDone = groups.length > 0 && doneGroups.length === groups.length;
+        const doneGroups = groups.filter(g => hasContent && isCompleted(g));
+        const unlockedGroups = groups.filter(g => hasContent && isUnlocked(g));
+        const isActive = hasContent && unlockedGroups.length > 0;
+        const allDone = hasContent && groups.length > 0 && doneGroups.length === groups.length;
         const planet = PLANET_STYLES[stage.id] || PLANET_STYLES[1];
 
         return (
@@ -134,6 +199,18 @@ export default function StarMapPage() {
                     animate={{ width: `${(doneGroups.length / groups.length) * 100}%` }}
                     transition={{ duration: 0.8 }}
                   />
+                </div>
+              )}
+              {/* 阶段即将完成提示 */}
+              {isActive && !allDone && doneGroups.length >= groups.length - 2 && doneGroups.length > 0 && (
+                <div className="mb-3 text-[10px] text-center bg-honey-pale text-honey font-bold rounded-lg py-1">
+                  🎁 再完成 {groups.length - doneGroups.length} 课解锁阶段奖励!
+                </div>
+              )}
+              {/* 阶段全部完成 */}
+              {allDone && (
+                <div className="mb-3 text-[10px] text-center bg-forest-pale text-forest font-bold rounded-lg py-1">
+                  🏆 阶段已掌握! +50 XP
                 </div>
               )}
 

@@ -157,6 +157,7 @@ def delete_account(user: dict = Depends(get_current_user)):
 def profile(user: dict = Depends(get_current_user)):
     return {"id": user["id"], "username": user["username"],
             "nickname": user.get("nickname", ""),
+            "grade": user.get("grade", ""),
             "role": user.get("role", "student"),
             "family_code": user.get("family_code", ""),
             "parent_id": user.get("parent_id"),
@@ -166,7 +167,7 @@ def profile(user: dict = Depends(get_current_user)):
 @app.get("/api/user/progress")
 def progress(user: dict = Depends(get_current_user)):
     rows = get_user_progress(user["id"])
-    return {"progress": [{"lesson_group": r["lesson_group"], "completed": bool(r["completed"]), "best_accuracy": r["best_accuracy"], "attempts": r["attempts"], "last_attempt_at": r.get("last_attempt_at"), "completed_at": r.get("completed_at")} for r in rows]}
+    return {"progress": [{"lesson_group": r["lesson_group"], "completed": bool(r["completed"]), "best_accuracy": r["best_accuracy"], "attempts": r["attempts"], "last_attempt_at": r.get("last_attempt_at"), "completed_at": r.get("completed_at"), "status": r.get("status", "locked"), "unlocked_by": r.get("unlocked_by", "")} for r in rows]}
 
 
 @app.get("/api/user/stats", response_model=UserStatsResponse)
@@ -177,7 +178,84 @@ def stats(user: dict = Depends(get_current_user)):
     conn = get_db()
     cur = conn.execute("SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records WHERE user_id=?", (user["id"],))
     row = cur.fetchone()
-    return {"total_xp": 0, "streak_days": 0, "total_questions": row["total"] if row else 0, "total_correct": row["correct"] if row else 0, "completed_lessons": completed, "total_lessons": 72}
+    return {"total_xp": user.get("total_xp", 0) or 0, "streak_days": 0, "total_questions": row["total"] if row else 0, "total_correct": row["correct"] if row else 0, "completed_lessons": completed, "total_lessons": 72}
+
+
+# ── XP 同步 ──
+@app.post("/api/user/sync-xp")
+def sync_xp(data: dict, user: dict = Depends(get_current_user)):
+    """同步客户端 totalXp 到服务端（取最大值）"""
+    xp = data.get("total_xp", 0)
+    if xp > (user.get("total_xp", 0) or 0):
+        conn = get_db()
+        conn.execute("UPDATE users SET total_xp=? WHERE id=?", (xp, user["id"]))
+        if hasattr(conn, 'commit'): conn.commit()
+    return {"ok": True, "total_xp": max(xp, user.get("total_xp", 0) or 0)}
+
+# ── 个人资料更新 ──
+
+@app.put("/api/user/update-profile")
+def update_profile(data: dict, user: dict = Depends(get_current_user)):
+    """更新用户昵称和年级"""
+    nickname = data.get("nickname")
+    grade = data.get("grade")
+
+    conn = get_db()
+    updates = []
+    params: list = []
+
+    if nickname is not None:
+        updates.append("nickname=?")
+        params.append(nickname)
+    if grade is not None:
+        updates.append("grade=?")
+        params.append(grade)
+
+    if not updates:
+        return {"ok": True, "message": "无变更"}
+
+    params.append(user["id"])
+    conn.execute(
+        f"UPDATE users SET {', '.join(updates)} WHERE id=?",
+        tuple(params))
+    if hasattr(conn, 'commit'): conn.commit()
+    return {"ok": True, "message": "已更新"}
+
+
+@app.put("/api/parent/child/{child_id}/update-profile")
+def parent_update_child_profile(child_id: int, data: dict, user: dict = Depends(get_current_user)):
+    """家长修改学生的昵称和年级"""
+    if user.get("role") != "parent":
+        raise HTTPException(403, "仅家长可操作")
+
+    conn = get_db()
+    child = conn.execute(
+        "SELECT id FROM users WHERE id=? AND parent_id=?",
+        (child_id, user["id"])).fetchone()
+    if not child:
+        raise HTTPException(404, "学生未找到")
+
+    nickname = data.get("nickname")
+    grade = data.get("grade")
+    updates = []
+    params: list = []
+
+    if nickname is not None:
+        updates.append("nickname=?")
+        params.append(nickname)
+    if grade is not None:
+        updates.append("grade=?")
+        params.append(grade)
+
+    if not updates:
+        return {"ok": True}
+
+    params.append(child_id)
+    conn.execute(
+        f"UPDATE users SET {', '.join(updates)} WHERE id=?",
+        tuple(params))
+    if hasattr(conn, 'commit'): conn.commit()
+    return {"ok": True, "message": "已更新"}
 
 
 # ── 课程常量 ──
@@ -242,6 +320,7 @@ def get_children(user: dict = Depends(get_current_user)):
 
 @app.post("/api/parent/child/{child_id}/unlock-lesson")
 def unlock_lesson(child_id: int, data: ChildUnlockRequest, user: dict = Depends(get_current_user)):
+    """家长解锁课程（不会覆盖学生的 completed/blockProgress/attempts 数据）"""
     if user.get("role") != "parent":
         raise HTTPException(403, "仅家长可操作")
     conn = get_db()
@@ -249,9 +328,12 @@ def unlock_lesson(child_id: int, data: ChildUnlockRequest, user: dict = Depends(
                          (child_id, user["id"])).fetchone()
     if not child:
         raise HTTPException(404, "学生未找到")
+    # DO UPDATE SET 仅改 status/unlocked_by/unlocked_at，不动 completed/blockProgress 等
     conn.execute(
-        "INSERT OR REPLACE INTO user_progress (user_id, lesson_group, completed, best_accuracy, attempts) "
-        "VALUES (?, ?, 1, 1.0, 0)",
+        "INSERT INTO user_progress (user_id, lesson_group, status, unlocked_by, unlocked_at, completed, best_accuracy, attempts) "
+        "VALUES (?, ?, 'unlocked', 'parent', datetime('now'), 0, 0, 0) "
+        "ON CONFLICT(user_id, lesson_group) DO UPDATE SET "
+        "status='unlocked', unlocked_by='parent', unlocked_at=datetime('now')",
         (child_id, data.lesson_group))
     if hasattr(conn, 'commit'): conn.commit()
     return {"ok": True}
@@ -266,10 +348,168 @@ def reset_lesson(child_id: int, data: ChildResetRequest, user: dict = Depends(ge
                          (child_id, user["id"])).fetchone()
     if not child:
         raise HTTPException(404, "学生未找到")
-    conn.execute("DELETE FROM user_progress WHERE user_id=? AND lesson_group=?",
-                 (child_id, data.lesson_group))
+    # 仅锁定状态，不摧毁已完成的进度数据
+    existing = conn.execute(
+        "SELECT completed, best_accuracy, attempts FROM user_progress "
+        "WHERE user_id=? AND lesson_group=?", (child_id, data.lesson_group)).fetchone()
+    if existing:
+        conn.execute(
+            "UPDATE user_progress SET status='locked', unlocked_by='parent_locked' WHERE user_id=? AND lesson_group=?",
+            (child_id, data.lesson_group))
+    else:
+        conn.execute(
+            "INSERT INTO user_progress (user_id, lesson_group, status, unlocked_by, completed, best_accuracy, attempts) "
+            "VALUES (?, ?, 'locked', 'parent_locked', 0, 0, 0)",
+            (child_id, data.lesson_group))
     if hasattr(conn, 'commit'): conn.commit()
     return {"ok": True}
+
+
+@app.post("/api/rewards/check")
+def check_rewards(data: dict, user: dict = Depends(get_current_user)):
+    """检查并触发当前用户应得的奖励"""
+    conn = get_db()
+    uid = user["id"]
+    rewards = []
+
+    # 1. 全对连跳: 找到最新完成的课,如果 best_accuracy=1.0 → 连跳 2 课
+    last_completed = conn.execute(
+        "SELECT lesson_group, best_accuracy FROM user_progress "
+        "WHERE user_id=? AND (status='completed' OR completed=1) "
+        "ORDER BY completed_at DESC LIMIT 1",
+        (uid,)).fetchone()
+    if last_completed:
+        ld = last_completed.to_dict() if hasattr(last_completed, 'to_dict') else dict(last_completed)
+        if float(ld.get("best_accuracy") or 0) >= 1.0:
+            lg = ld["lesson_group"]
+            try:
+                idx = ALL_LESSON_GROUPS.index(lg)
+                for offset in [1, 2]:
+                    if idx + offset < len(ALL_LESSON_GROUPS):
+                        target = ALL_LESSON_GROUPS[idx + offset]
+                        existing = conn.execute(
+                            "SELECT status FROM user_progress WHERE user_id=? AND lesson_group=?",
+                            (uid, target)).fetchone()
+                        ex_status = ''
+                        if existing:
+                            ed = existing.to_dict() if hasattr(existing, 'to_dict') else dict(existing)
+                            ex_status = ed.get('status', '')
+                        if not existing or ex_status == 'locked':
+                            conn.execute(
+                                "INSERT INTO user_progress (user_id, lesson_group, status, unlocked_by, unlocked_at, completed, best_accuracy, attempts) "
+                                "VALUES (?, ?, 'unlocked', 'reward', datetime('now'), 0, 0, 0) "
+                                "ON CONFLICT(user_id, lesson_group) DO UPDATE SET "
+                                "status='unlocked', unlocked_by='reward', unlocked_at=datetime('now')",
+                                (uid, target))
+                            rewards.append({"type": "combo_jump", "lesson_group": target,
+                                "message": f"🌟 全对通关! 连跳解锁 {target}"})
+            except ValueError:
+                pass
+
+    # 2. 复习达人: 前端传 check_type=review_master
+    if data.get("check_type") == "review_master":
+        max_completed = 0
+        all_progress = conn.execute(
+            "SELECT lesson_group FROM user_progress WHERE user_id=? AND (status='completed' OR completed=1)",
+            (uid,)).fetchall()
+        for r in all_progress:
+            rd = r.to_dict() if hasattr(r, 'to_dict') else dict(r)
+            try: max_completed = max(max_completed, ALL_LESSON_GROUPS.index(rd["lesson_group"]))
+            except: pass
+
+        candidates = []
+        for i in range(max_completed + 1, min(max_completed + 6, len(ALL_LESSON_GROUPS))):
+            lg = ALL_LESSON_GROUPS[i]
+            row = conn.execute("SELECT status FROM user_progress WHERE user_id=? AND lesson_group=?",
+                               (uid, lg)).fetchone()
+            st = 'locked'
+            if row:
+                rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
+                st = rd.get('status', 'locked')
+            if st == 'locked':
+                candidates.append(lg)
+
+        if candidates:
+            pick = _random.choice(candidates)
+            conn.execute(
+                "INSERT INTO user_progress (user_id, lesson_group, status, unlocked_by, unlocked_at, completed, best_accuracy, attempts) "
+                "VALUES (?, ?, 'unlocked', 'reward', datetime('now'), 0, 0, 0) "
+                "ON CONFLICT(user_id, lesson_group) DO UPDATE SET "
+                "status='unlocked', unlocked_by='reward', unlocked_at=datetime('now')",
+                (uid, pick))
+            rewards.append({"type": "review_master", "lesson_group": pick,
+                "message": f"🎁 复习达人! 奖励解锁 {pick}"})
+
+    # 3. 复习 20 题: 从待解锁课组中随机选 1 个
+    if data.get("check_type") == "review_20":
+        max_completed = 0
+        all_progress = conn.execute(
+            "SELECT lesson_group FROM user_progress WHERE user_id=? AND (status='completed' OR completed=1)",
+            (uid,)).fetchall()
+        for r in all_progress:
+            rd = r.to_dict() if hasattr(r, 'to_dict') else dict(r)
+            try: max_completed = max(max_completed, ALL_LESSON_GROUPS.index(rd["lesson_group"]))
+            except: pass
+
+        candidates = []
+        for i in range(max_completed + 1, min(max_completed + 4, len(ALL_LESSON_GROUPS))):
+            lg = ALL_LESSON_GROUPS[i]
+            row = conn.execute("SELECT status FROM user_progress WHERE user_id=? AND lesson_group=?",
+                               (uid, lg)).fetchone()
+            st = 'locked'
+            if row:
+                rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
+                st = rd.get('status', 'locked')
+            if st == 'locked':
+                candidates.append(lg)
+
+        if candidates:
+            pick = _random.choice(candidates)
+            conn.execute(
+                "INSERT INTO user_progress (user_id, lesson_group, status, unlocked_by, unlocked_at, completed, best_accuracy, attempts) "
+                "VALUES (?, ?, 'unlocked', 'reward', datetime('now'), 0, 0, 0) "
+                "ON CONFLICT(user_id, lesson_group) DO UPDATE SET "
+                "status='unlocked', unlocked_by='reward', unlocked_at=datetime('now')",
+                (uid, pick))
+            rewards.append({"type": "review_20", "lesson_group": pick,
+                "message": f"📚 复习 20 题达成! 奖励解锁 {pick}"})
+
+    # 4. 水平测试通过: 从待解锁课组中随机选 1 个
+    if data.get("check_type") == "diagnosis_pass":
+        max_completed = 0
+        all_progress = conn.execute(
+            "SELECT lesson_group FROM user_progress WHERE user_id=? AND (status='completed' OR completed=1)",
+            (uid,)).fetchall()
+        for r in all_progress:
+            rd = r.to_dict() if hasattr(r, 'to_dict') else dict(r)
+            try: max_completed = max(max_completed, ALL_LESSON_GROUPS.index(rd["lesson_group"]))
+            except: pass
+
+        candidates = []
+        for i in range(max_completed + 1, min(max_completed + 4, len(ALL_LESSON_GROUPS))):
+            lg = ALL_LESSON_GROUPS[i]
+            row = conn.execute("SELECT status FROM user_progress WHERE user_id=? AND lesson_group=?",
+                               (uid, lg)).fetchone()
+            st = 'locked'
+            if row:
+                rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
+                st = rd.get('status', 'locked')
+            if st == 'locked':
+                candidates.append(lg)
+
+        if candidates:
+            pick = _random.choice(candidates)
+            conn.execute(
+                "INSERT INTO user_progress (user_id, lesson_group, status, unlocked_by, unlocked_at, completed, best_accuracy, attempts) "
+                "VALUES (?, ?, 'unlocked', 'reward', datetime('now'), 0, 0, 0) "
+                "ON CONFLICT(user_id, lesson_group) DO UPDATE SET "
+                "status='unlocked', unlocked_by='reward', unlocked_at=datetime('now')",
+                (uid, pick))
+            rewards.append({"type": "diagnosis_pass", "lesson_group": pick,
+                "message": f"🔍 水平测试通过! 奖励解锁 {pick}"})
+
+    if hasattr(conn, 'commit'): conn.commit()
+    return {"rewards": rewards}
 
 
 @app.get("/api/parent/child/{child_id}/report")
@@ -305,11 +545,15 @@ def child_report(child_id: int, user: dict = Depends(get_current_user)):
                 "completed": bool(f.get("completed")),
                 "best_accuracy": float(f.get("best_accuracy") or 0),
                 "attempts": int(f.get("attempts") or 0),
+                "status": f.get("status", "locked"),
+                "unlocked_by": f.get("unlocked_by", ""),
             })
         else:
             lesson_list.append({
                 "lesson_group": lg, "completed": False,
                 "best_accuracy": 0, "attempts": 0,
+                "status": "locked",
+                "unlocked_by": "",
             })
 
     # 最近 7 天活跃度
@@ -363,11 +607,15 @@ def my_report(user: dict = Depends(get_current_user)):
                 "completed": bool(f.get("completed")),
                 "best_accuracy": float(f.get("best_accuracy") or 0),
                 "attempts": int(f.get("attempts") or 0),
+                "status": f.get("status", "locked"),
+                "unlocked_by": f.get("unlocked_by", ""),
             })
         else:
             lesson_list.append({
                 "lesson_group": lg, "completed": False,
                 "best_accuracy": 0, "attempts": 0,
+                "status": "locked",
+                "unlocked_by": "",
             })
 
     # 最近 7 天活跃度
@@ -436,15 +684,38 @@ def child_wrong_questions(child_id: int, user: dict = Depends(get_current_user))
         if len(wrong_list) >= 50:
             break
 
-    # 填充 wrong_count
+    # 填充 wrong_count + 检查是否已订正
+    corrected_count = 0
     for item in wrong_list:
         item["wrong_count"] = wrong_count_map.get(item["question_id"], 1)
+        # 检查该题之后是否有正确答案（即学生是否订正过）
+        cr = conn.execute(
+            "SELECT created_at FROM answer_records "
+            "WHERE user_id=? AND question_id=? AND correct=1 "
+            "ORDER BY created_at DESC LIMIT 1",
+            (child_id, item["question_id"])).fetchone()
+        if cr:
+            cd = cr.to_dict() if hasattr(cr, 'to_dict') else dict(cr)
+            item["has_corrected"] = True
+            item["corrected_at"] = cd.get("created_at", "")
+            corrected_count += 1
+        else:
+            item["has_corrected"] = False
+            item["corrected_at"] = ""
+        # 最近一次做题时间（无论对错）
+        lr = conn.execute(
+            "SELECT created_at FROM answer_records "
+            "WHERE user_id=? AND question_id=? "
+            "ORDER BY created_at DESC LIMIT 1",
+            (child_id, item["question_id"])).fetchone()
+        if lr:
+            ld = lr.to_dict() if hasattr(lr, 'to_dict') else dict(lr)
+            item["last_attempt_at"] = ld.get("created_at", "")
 
     # 聚合摘要
     by_type = Counter(item["question_type"] for item in wrong_list)
     by_lesson = Counter(item["lesson_group"] for item in wrong_list)
 
-    # 找出最弱题型和最弱课组
     most_missed_type = by_type.most_common(1)[0][0] if by_type else ""
     most_missed_lesson = by_lesson.most_common(1)[0][0] if by_lesson else ""
 
@@ -452,6 +723,7 @@ def child_wrong_questions(child_id: int, user: dict = Depends(get_current_user))
         "wrong_questions": wrong_list,
         "summary": {
             "total_wrong": len(wrong_list),
+            "corrected": corrected_count,
             "by_type": dict(by_type),
             "by_lesson": {k: v for k, v in by_lesson.most_common(10)},
             "most_missed_type": most_missed_type,
@@ -517,16 +789,25 @@ def my_wrong_questions(user: dict = Depends(get_current_user)):
 
 # ── 排行榜 ──
 @app.get("/api/leaderboard")
-def leaderboard(sort: str = "completed", limit: int = 50):
+def leaderboard(sort: str = "xp", limit: int = 50):
     conn = get_db()
+    order = "total_xp DESC" if sort != "completed" else "completed DESC"
     cur = conn.execute(
-        "SELECT u.id, u.username, u.nickname, COUNT(CASE WHEN up.completed=1 THEN 1 END) as completed "
+        "SELECT u.id, u.username, u.nickname, u.grade, u.total_xp, "
+        "COUNT(CASE WHEN up.completed=1 THEN 1 END) as completed "
         "FROM users u LEFT JOIN user_progress up ON u.id = up.user_id "
-        "GROUP BY u.id ORDER BY completed DESC LIMIT ?", (limit,))
+        f"GROUP BY u.id ORDER BY {order} LIMIT ?", (limit,))
     results = []
     for r in cur.fetchall():
         d = r.to_dict() if hasattr(r, 'to_dict') else dict(r)
-        results.append({"id": d["id"], "username": d["username"][:1]+"***", "nickname": d.get("nickname",""), "completed": d["completed"]})
+        results.append({
+            "id": d["id"],
+            "username": d["username"][:1] + "***",
+            "nickname": d.get("nickname", ""),
+            "grade": d.get("grade", ""),
+            "completed": d.get("completed", 0) or 0,
+            "xp": d.get("total_xp", 0) or 0,
+        })
     return {"leaderboard": results}
 
 

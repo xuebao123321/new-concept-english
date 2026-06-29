@@ -26,6 +26,7 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
 const WelcomePage = lazy(() => import('./pages/WelcomePage'));
 const ParentDashboardPage = lazy(() => import('./pages/ParentDashboardPage'));
+const WrongBookPage = lazy(() => import('./pages/WrongBookPage'));
 
 function Loading() {
   return (
@@ -95,6 +96,7 @@ export default function App() {
           <Route path="/practice" element={<PracticePage />} />
           <Route path="/review" element={<ReviewPage />} />
           <Route path="/review/scheduled" element={<ScheduledReviewPage />} />
+          <Route path="/wrong-book" element={<WrongBookPage />} />
           <Route path="/achievements" element={<AchievementsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/diagnosis" element={<DiagnosisPage />} />

@@ -4,7 +4,8 @@ export type QuestionType =
   | 'fill'         // 填空拼写题
   | 'translate'    // 翻译题
   | 'reorder'      // 连词成句
-  | 'listening';   // 听力题
+  | 'listening'    // 听力题
+  | 'speak';       // 口语题
 
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
@@ -95,12 +96,28 @@ export interface ListeningQuestion {
   explanation: string;
 }
 
+export interface SpeakingQuestion {
+  id: string;
+  type: 'speak';
+  lessonGroup: string;
+  lessonNumber: number;
+  difficulty: Difficulty;
+  tags: string[];
+  block?: BlockType;
+  prompt: string;
+  sentence: string;
+  chineseHint: string;
+  keywords: string[];
+  explanation: string;
+}
+
 export type Question =
   | ChoiceQuestion
   | FillQuestion
   | TranslateQuestion
   | ReorderQuestion
-  | ListeningQuestion;
+  | ListeningQuestion
+  | SpeakingQuestion;
 
 // ===== 用户数据 =====
 export interface UserState {
@@ -159,10 +176,14 @@ export interface WrongQuestionItem {
   difficulty: string;
   wrong_count: number;
   created_at: string;
+  has_corrected?: boolean;
+  corrected_at?: string;
+  last_attempt_at?: string;
 }
 
 export interface WrongQuestionSummary {
   total_wrong: number;
+  corrected?: number;
   by_type: Record<string, number>;
   by_lesson: Record<string, number>;
   most_missed_type: string;
@@ -177,6 +198,9 @@ export interface LessonProgress {
   attempts: number;              // 尝试次数
   lastAttemptAt: number;         // 最近一次尝试时间戳
   completedAt: number;           // 首次过关时间戳
+  status?: 'locked' | 'unlocked' | 'in_progress' | 'completed';  // V10: 四态
+  unlocked_by?: string;          // 'sequential' | 'reward' | 'parent' | ''
+  unlocked_at?: string;          // 解锁时间
   // Phase 1.5 新增：按学习块细分进度
   blockProgress?: {
     vocabulary: boolean;

@@ -304,7 +304,7 @@ export const lesson5556Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '过去时日常'],
     block: 'listening',
     prompt: '听音频，选出索耶一家昨天做了什么：',
-    audioSrc: '/audio/lesson-55-56.mp3', transcript: "The Sawyer family had a busy day yesterday. Mr. Sawyer went to work early in the morning and arrived home late at night. Mrs. Sawyer did housework all morning. In the afternoon, she went to the shops and bought some new clothes. The children went to school as usual. After school, they did their homework and then watched television. At 6 o'clock, they all had dinner together. After dinner, they listened to the radio and talked about their day.",
+    audioSrc: '/audio/lesson-55-56.m4a', transcript: "The Sawyer family had a busy day yesterday. Mr. Sawyer went to work early in the morning and arrived home late at night. Mrs. Sawyer did housework all morning. In the afternoon, she went to the shops and bought some new clothes. The children went to school as usual. After school, they did their homework and then watched television. At 6 o'clock, they all had dinner together. After dinner, they listened to the radio and talked about their day.",
     question: '索耶夫人昨天下午做了什么？',
     options: [
       '去商店买衣服 (went to the shops and bought new clothes)',
@@ -320,7 +320,7 @@ export const lesson5556Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '过去时活动'],
     block: 'listening',
     prompt: '听音频对话，选出说话者昨天的活动顺序：',
-    audioSrc: '/audio/lesson-55-56.mp3', transcript: "A: How was your day yesterday? B: It was quite good! I got up late — around 9 o'clock. I didn't have breakfast because I wasn't hungry. I did some housework first, and then I went to the gym. After the gym, I telephoned my mother — we talked for about 30 minutes. In the afternoon, I met a friend for coffee. We went to a nice café near my house. In the evening, I stayed at home and watched a film. I went to bed at midnight.",
+    audioSrc: '/audio/lesson-55-56.m4a', transcript: "A: How was your day yesterday? B: It was quite good! I got up late — around 9 o'clock. I didn't have breakfast because I wasn't hungry. I did some housework first, and then I went to the gym. After the gym, I telephoned my mother — we talked for about 30 minutes. In the afternoon, I met a friend for coffee. We went to a nice café near my house. In the evening, I stayed at home and watched a film. I went to bed at midnight.",
     question: 'B 做完家务后做了什么？',
     options: [
       '去了健身房 (went to the gym)',
@@ -336,7 +336,7 @@ export const lesson5556Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '过去时否定'],
     block: 'listening',
     prompt: '听音频，选出说话者没做什么：',
-    audioSrc: '/audio/lesson-55-56.mp3', transcript: "I had a very lazy Sunday yesterday. I didn't get up until 10 o'clock. I didn't do any housework — the house was already clean. I didn't go shopping because the shops were closed. I didn't cook — I ordered a pizza instead. I didn't watch any television either. What did I do? I just read a book in the garden all afternoon. It was wonderful!",
+    audioSrc: '/audio/lesson-55-56.m4a', transcript: "I had a very lazy Sunday yesterday. I didn't get up until 10 o'clock. I didn't do any housework — the house was already clean. I didn't go shopping because the shops were closed. I didn't cook — I ordered a pizza instead. I didn't watch any television either. What did I do? I just read a book in the garden all afternoon. It was wonderful!",
     question: '说话者昨天没有做什么？',
     options: [
       '做家务、购物、做饭、看电视 (housework, shopping, cooking, TV)',
@@ -352,7 +352,7 @@ export const lesson5556Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合理解'],
     block: 'listening',
     prompt: '听音频独白，选出正确的完整描述：',
-    audioSrc: '/audio/lesson-55-56.mp3', transcript: "Yesterday was my birthday — I turned 30! I didn't want a big party, so I celebrated quietly at home. In the morning, I stayed in bed until 9 and read all the birthday messages on my phone. My husband made me breakfast — pancakes with fresh fruit. It was delicious! After breakfast, I telephoned my parents to thank them for their gift. They sent me a beautiful watch. In the afternoon, my best friend arrived — she came all the way from Manchester to surprise me! We went for a long walk in the park because the weather was lovely. We talked about old times and laughed a lot. In the evening, my husband cooked a special dinner — steak and red wine. After dinner, we had birthday cake and I opened my presents. I didn't go to bed until midnight because I was so happy. It was the best birthday I ever had!",
+    audioSrc: '/audio/lesson-55-56.m4a', transcript: "Yesterday was my birthday — I turned 30! I didn't want a big party, so I celebrated quietly at home. In the morning, I stayed in bed until 9 and read all the birthday messages on my phone. My husband made me breakfast — pancakes with fresh fruit. It was delicious! After breakfast, I telephoned my parents to thank them for their gift. They sent me a beautiful watch. In the afternoon, my best friend arrived — she came all the way from Manchester to surprise me! We went for a long walk in the park because the weather was lovely. We talked about old times and laughed a lot. In the evening, my husband cooked a special dinner — steak and red wine. After dinner, we had birthday cake and I opened my presents. I didn't go to bed until midnight because I was so happy. It was the best birthday I ever had!",
     question: '关于说话者的生日，哪个描述是正确的？',
     options: [
       '过30岁生日，在家安静庆祝。丈夫做早餐和晚餐，好友从曼彻斯特来给她惊喜，在公园散步聊天，午夜才睡',

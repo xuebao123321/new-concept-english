@@ -329,7 +329,7 @@ export const lesson4950Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', 'was/were'],
     block: 'listening',
     prompt: '听音频，选出说话者昨天在哪里：',
-    audioSrc: '/audio/lesson-49-50.mp3', transcript: "Yesterday I was not at home. I was at the butcher's in the morning. The butcher was very friendly. I bought some beef and lamb. Then in the afternoon, I was at the greengrocer's. I bought some fresh tomatoes and potatoes.",
+    audioSrc: '/audio/lesson-49-50.m4a', transcript: "Yesterday I was not at home. I was at the butcher's in the morning. The butcher was very friendly. I bought some beef and lamb. Then in the afternoon, I was at the greengrocer's. I bought some fresh tomatoes and potatoes.",
     question: '说话者昨天早上在哪里？',
     options: [
       '在肉店 (at the butcher\'s)',
@@ -345,7 +345,7 @@ export const lesson4950Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '购物'],
     block: 'listening',
     prompt: '听音频对话，选出顾客买了什么：',
-    audioSrc: '/audio/lesson-49-50.mp3', transcript: "Butcher: Good morning. What would you like? Customer: I'd like some beef, please. Butcher: Certainly. How much would you like? Customer: A kilo, please. And two steaks. Butcher: Here you are — a kilo of beef and two nice steaks. Customer: Do you have any chicken? Butcher: Yes, it's very fresh. Customer: I'll have a chicken too, please. Butcher: Anything else? Customer: No, that's all. How much is it? Butcher: That's 18 pounds, please.",
+    audioSrc: '/audio/lesson-49-50.m4a', transcript: "Butcher: Good morning. What would you like? Customer: I'd like some beef, please. Butcher: Certainly. How much would you like? Customer: A kilo, please. And two steaks. Butcher: Here you are — a kilo of beef and two nice steaks. Customer: Do you have any chicken? Butcher: Yes, it's very fresh. Customer: I'll have a chicken too, please. Butcher: Anything else? Customer: No, that's all. How much is it? Butcher: That's 18 pounds, please.",
     question: '顾客没有买以下哪种东西？',
     options: [
       '羔羊肉 (lamb)',
@@ -361,7 +361,7 @@ export const lesson4950Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'was/were'],
     block: 'listening',
     prompt: '听音频，选出关于这个家庭的正确描述：',
-    audioSrc: '/audio/lesson-49-50.mp3', transcript: "Last Sunday was a busy day for my family. In the morning, my father was at the butcher's — he bought some lamb. My mother was at the greengrocer's — she bought tomatoes, peas, and grapes. My sister and I were at home — we were doing our homework. In the afternoon, we were all at the park. It was a beautiful day!",
+    audioSrc: '/audio/lesson-49-50.m4a', transcript: "Last Sunday was a busy day for my family. In the morning, my father was at the butcher's — he bought some lamb. My mother was at the greengrocer's — she bought tomatoes, peas, and grapes. My sister and I were at home — we were doing our homework. In the afternoon, we were all at the park. It was a beautiful day!",
     question: '上周日早上谁在肉店？',
     options: [
       '父亲 (the father)',
@@ -377,7 +377,7 @@ export const lesson4950Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合理解'],
     block: 'listening',
     prompt: '听音频对话，选出正确的完整描述：',
-    audioSrc: '/audio/lesson-49-50.mp3', transcript: "A: Where were you yesterday? I was looking for you everywhere! B: Oh, I was out all day. In the morning I was at the butcher's on High Street. A: Was the butcher there? B: No, he wasn't. His wife was there. She was very friendly and helpful. A: What did you buy? B: I bought a kilo of beef and some lamb chops. Then I was at the supermarket for about an hour. A: Were there many people at the supermarket? B: Yes, there were! It was very crowded. A: And where were you in the afternoon? B: I was at home. I was tired after all the shopping! A: I see. Well, next time tell me — I was worried about you!",
+    audioSrc: '/audio/lesson-49-50.m4a', transcript: "A: Where were you yesterday? I was looking for you everywhere! B: Oh, I was out all day. In the morning I was at the butcher's on High Street. A: Was the butcher there? B: No, he wasn't. His wife was there. She was very friendly and helpful. A: What did you buy? B: I bought a kilo of beef and some lamb chops. Then I was at the supermarket for about an hour. A: Were there many people at the supermarket? B: Yes, there were! It was very crowded. A: And where were you in the afternoon? B: I was at home. I was tired after all the shopping! A: I see. Well, next time tell me — I was worried about you!",
     question: '关于 B 昨天的行踪，哪个描述是正确的？',
     options: [
       '早上在肉店（屠夫的妻子在），然后去了超市（很多人），下午在家休息',

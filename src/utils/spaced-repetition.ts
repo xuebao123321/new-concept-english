@@ -89,8 +89,8 @@ export function calculateNextReview(
     : stage;
 
   if (!passed) {
-    // 任何阶段失败 → 回炉 stage 0
-    return { nextStage: 0, nextReviewTime: Date.now() };
+    // 任何阶段失败 → 回炉 stage 0，5分钟后可再次复习
+    return { nextStage: 0, nextReviewTime: Date.now() + 5 * 60 * 1000 };
   }
   const nextStage = Math.min(effectiveStage + 1, 5);
   const stageInfo = SPACED_STAGES[nextStage];

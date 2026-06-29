@@ -304,7 +304,7 @@ export const lesson5960Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '购物'],
     block: 'listening',
     prompt: '听音频，选出顾客买了什么：',
-    audioSrc: '/audio/lesson-59-60.mp3', transcript: "Shop assistant: Good morning. Can I help you? Customer: Yes, please. I'd like some writing paper. Shop assistant: Certainly. We have very nice writing paper. How many pads would you like? Customer: Two pads, please. And have you got any envelopes? Shop assistant: Yes. Large or small? Customer: Small, please. A pack of ten. Shop assistant: Here you are. Anything else? Customer: Yes, a bottle of glue, please. Shop assistant: Here you are. Is that all? Customer: Yes, that's all. How much is that? Shop assistant: That's 4 pounds 50, please.",
+    audioSrc: '/audio/lesson-59-60.m4a', transcript: "Shop assistant: Good morning. Can I help you? Customer: Yes, please. I'd like some writing paper. Shop assistant: Certainly. We have very nice writing paper. How many pads would you like? Customer: Two pads, please. And have you got any envelopes? Shop assistant: Yes. Large or small? Customer: Small, please. A pack of ten. Shop assistant: Here you are. Anything else? Customer: Yes, a bottle of glue, please. Shop assistant: Here you are. Is that all? Customer: Yes, that's all. How much is that? Shop assistant: That's 4 pounds 50, please.",
     question: '顾客没有买以下哪样东西？',
     options: [
       '粉笔 (chalk)',
@@ -320,7 +320,7 @@ export const lesson5960Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'have got'],
     block: 'listening',
     prompt: '听音频，选出每个人的物品：',
-    audioSrc: '/audio/lesson-59-60.mp3', transcript: "In our classroom, everyone has different things. I've got a pen and a pencil, but I haven't got a ruler. My friend Tom has got a large pad and some coloured pencils — he loves drawing. Sarah has got some glue and scissors — she's good at art. James hasn't got any paper today — he forgot it at home. The teacher has got a box of chalk and a big ruler. What about you? Have you got everything for the lesson?",
+    audioSrc: '/audio/lesson-59-60.m4a', transcript: "In our classroom, everyone has different things. I've got a pen and a pencil, but I haven't got a ruler. My friend Tom has got a large pad and some coloured pencils — he loves drawing. Sarah has got some glue and scissors — she's good at art. James hasn't got any paper today — he forgot it at home. The teacher has got a box of chalk and a big ruler. What about you? Have you got everything for the lesson?",
     question: '谁今天没有带纸？',
     options: [
       '詹姆斯 (James)',
@@ -336,7 +336,7 @@ export const lesson5960Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '购物对话'],
     block: 'listening',
     prompt: '听音频对话，选出关于这次购物的正确信息：',
-    audioSrc: '/audio/lesson-59-60.mp3', transcript: "A: Excuse me, do you have any writing pads? B: Yes, we do. They're over here. What size would you like? A: I'd like a large one, please. How much is it? B: A large pad is 3 pounds 50. And the small ones are 2 pounds. A: I'll take the large one. And I also need some glue. B: We've got small bottles and large bottles. A: How much is the large bottle? B: It's 2 pounds 80. A: OK, I'll have the large bottle too. And a pack of envelopes — the small size. B: Here you are. That's a large pad, a large glue, and small envelopes. Is that everything? A: Yes, that's all. How much is it altogether? B: Let me see... the pad is 3.50, the glue is 2.80, and the envelopes are 1.50. That's 7 pounds 80 in total. A: Here's 10 pounds. B: Thank you. And here's 2 pounds 20 change. Have a nice day!",
+    audioSrc: '/audio/lesson-59-60.m4a', transcript: "A: Excuse me, do you have any writing pads? B: Yes, we do. They're over here. What size would you like? A: I'd like a large one, please. How much is it? B: A large pad is 3 pounds 50. And the small ones are 2 pounds. A: I'll take the large one. And I also need some glue. B: We've got small bottles and large bottles. A: How much is the large bottle? B: It's 2 pounds 80. A: OK, I'll have the large bottle too. And a pack of envelopes — the small size. B: Here you are. That's a large pad, a large glue, and small envelopes. Is that everything? A: Yes, that's all. How much is it altogether? B: Let me see... the pad is 3.50, the glue is 2.80, and the envelopes are 1.50. That's 7 pounds 80 in total. A: Here's 10 pounds. B: Thank you. And here's 2 pounds 20 change. Have a nice day!",
     question: '顾客总共付了多少钱，找回多少零钱？',
     options: [
       '付了10英镑，找回2.20英镑',
@@ -352,7 +352,7 @@ export const lesson5960Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合理解'],
     block: 'listening',
     prompt: '听音频独白，选出正确的完整描述：',
-    audioSrc: '/audio/lesson-59-60.mp3', transcript: "Last week I made a big mistake. I went to the stationery shop to buy some things for the office. I had a list: two large pads, three packs of envelopes, a bottle of glue, and a box of chalk. Simple, right? Well, I got to the shop and the assistant was very helpful. I asked for everything on my list and she got it all for me. But then, at the last moment, I saw some beautiful coloured pens near the counter. 'Oh, I'll take these too,' I said. 'They're 12 pounds 50,' the assistant said. I paid for everything — 28 pounds in total — and left. When I got back to the office, I looked at the pens. Each pen cost 2 pounds 50! For five pens! I didn't even need coloured pens — I just bought them because they looked nice. My boss wasn't very happy when he saw the receipt. 'Next time,' he said, 'stick to the list. We don't need coloured pens — we need you to write reports!' I learned my lesson: never go shopping when you're feeling impulsive!",
+    audioSrc: '/audio/lesson-59-60.m4a', transcript: "Last week I made a big mistake. I went to the stationery shop to buy some things for the office. I had a list: two large pads, three packs of envelopes, a bottle of glue, and a box of chalk. Simple, right? Well, I got to the shop and the assistant was very helpful. I asked for everything on my list and she got it all for me. But then, at the last moment, I saw some beautiful coloured pens near the counter. 'Oh, I'll take these too,' I said. 'They're 12 pounds 50,' the assistant said. I paid for everything — 28 pounds in total — and left. When I got back to the office, I looked at the pens. Each pen cost 2 pounds 50! For five pens! I didn't even need coloured pens — I just bought them because they looked nice. My boss wasn't very happy when he saw the receipt. 'Next time,' he said, 'stick to the list. We don't need coloured pens — we need you to write reports!' I learned my lesson: never go shopping when you're feeling impulsive!",
     question: '说话者犯了什么错误？',
     options: [
       '冲动买了一套12.50英镑的彩色笔（并不需要），老板看到收据不高兴',

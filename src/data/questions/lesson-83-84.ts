@@ -304,7 +304,7 @@ export const lesson8384Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', 'for/since 基本'],
     block: 'listening',
     prompt: '听音频，选出说话者在这里住了多久：',
-    audioSrc: '/audio/lesson-83-84.mp3', transcript: "A: How long have you lived in this neighbourhood? B: I have lived here for ten years. We moved here when my daughter was born. A: That's a long time! Do you like it here? B: Yes, I love it. I have known all my neighbours since we moved in. It's a very friendly community.",
+    audioSrc: '/audio/lesson-83-84.m4a', transcript: "A: How long have you lived in this neighbourhood? B: I have lived here for ten years. We moved here when my daughter was born. A: That's a long time! Do you like it here? B: Yes, I love it. I have known all my neighbours since we moved in. It's a very friendly community.",
     question: '说话者在这里住了多久？',
     options: [
       '十年（ten years — for ten years）',
@@ -320,7 +320,7 @@ export const lesson8384Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '现在完成时 生活经历'],
     block: 'listening',
     prompt: '听音频，选出关于这段婚姻的正确描述：',
-    audioSrc: '/audio/lesson-83-84.mp3', transcript: "My grandparents have been married for fifty years. Can you believe it? Fifty years! They got married in 1975 and they have been together ever since. I asked my grandmother, 'What's the secret?' She said, 'We have never gone to bed angry. Not once in fifty years.' My grandfather added, 'And she has always been right — or at least I have let her think so!' They both laughed. I have never seen a happier couple. They have lived in the same house since 1980. They say they have loved every minute of it — well, almost every minute!",
+    audioSrc: '/audio/lesson-83-84.m4a', transcript: "My grandparents have been married for fifty years. Can you believe it? Fifty years! They got married in 1975 and they have been together ever since. I asked my grandmother, 'What's the secret?' She said, 'We have never gone to bed angry. Not once in fifty years.' My grandfather added, 'And she has always been right — or at least I have let her think so!' They both laughed. I have never seen a happier couple. They have lived in the same house since 1980. They say they have loved every minute of it — well, almost every minute!",
     question: '关于这对夫妇的婚姻，哪项描述正确？',
     options: [
       '结婚50年了，从1975年就在一起，1980年起住在同一所房子（married 50 years, together since 1975, same house since 1980）',
@@ -336,7 +336,7 @@ export const lesson8384Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '度假准备'],
     block: 'listening',
     prompt: '听音频，选出Tom需要做什么：',
-    audioSrc: '/audio/lesson-83-84.mp3', transcript: "Mum: Tom, have you packed your suitcase yet? Tom: Not yet, Mum. I'll do it later. Mum: Tom, we leave in two hours! You have been saying 'I'll do it later' since breakfast. Your room is a mess and you haven't packed anything. Tom: I know, I know. But I have already made a list of what I need. Mum: A list is not the same as a packed suitcase! I have already packed my things and your father has been ready since yesterday. Tom: Really? Dad has been ready since yesterday? Mum: Yes! He has had his suitcase by the door for over twenty-four hours! Tom: OK, OK. I'll start packing now. I promise I'll be ready before we leave. Mum: You have made that promise three times this holiday!",
+    audioSrc: '/audio/lesson-83-84.m4a', transcript: "Mum: Tom, have you packed your suitcase yet? Tom: Not yet, Mum. I'll do it later. Mum: Tom, we leave in two hours! You have been saying 'I'll do it later' since breakfast. Your room is a mess and you haven't packed anything. Tom: I know, I know. But I have already made a list of what I need. Mum: A list is not the same as a packed suitcase! I have already packed my things and your father has been ready since yesterday. Tom: Really? Dad has been ready since yesterday? Mum: Yes! He has had his suitcase by the door for over twenty-four hours! Tom: OK, OK. I'll start packing now. I promise I'll be ready before we leave. Mum: You have made that promise three times this holiday!",
     question: 'Tom还没做什么？',
     options: [
       '还没打包行李 — 房间很乱，什么都没打包（hasn\'t packed, room is a mess）',
@@ -352,7 +352,7 @@ export const lesson8384Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '现在完成时 朋友重逢'],
     block: 'listening',
     prompt: '听音频，选出这两个人的关系：',
-    audioSrc: '/audio/lesson-83-84.mp3', transcript: "A: Sarah? Is that really you? B: Oh my goodness! I can't believe it! A: I haven't seen you for... how long has it been? B: It has been at least fifteen years! A: You haven't changed a bit! What have you been doing all these years? B: Well, I got married in 2015. I have been married since then. We have two children now. We have lived in Manchester for the last ten years. What about you? A: I have been in London this whole time. I have worked at the same bank since I graduated. B: We have so much to talk about! Let's go for a coffee and catch up. We have known each other since primary school — we can't let another fifteen years go by!",
+    audioSrc: '/audio/lesson-83-84.m4a', transcript: "A: Sarah? Is that really you? B: Oh my goodness! I can't believe it! A: I haven't seen you for... how long has it been? B: It has been at least fifteen years! A: You haven't changed a bit! What have you been doing all these years? B: Well, I got married in 2015. I have been married since then. We have two children now. We have lived in Manchester for the last ten years. What about you? A: I have been in London this whole time. I have worked at the same bank since I graduated. B: We have so much to talk about! Let's go for a coffee and catch up. We have known each other since primary school — we can't let another fifteen years go by!",
     question: '这两个人是什么关系？',
     options: [
       '老同学——从小学就认识，十五年没见了（known each other since primary school, haven\'t seen for 15 years）',
@@ -368,7 +368,7 @@ export const lesson8384Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', 'for/since 综合故事'],
     block: 'listening',
     prompt: '听音频故事，选出主人公为什么对城市感到陌生：',
-    audioSrc: '/audio/lesson-83-84.mp3', transcript: "I have just come back to my hometown after twenty years. Twenty years! I have been away for so long that I almost don't recognise the place. The small shops where I used to buy sweets have gone. The old cinema where I watched my first film has been closed since 2010. The park where I learned to ride a bike has been turned into a shopping centre. There is a new metro station near my old school — they have been building it for three years. The only thing that hasn't changed is the old library. It has stood on the same corner since 1920. My grandfather took me there when I was a child. I have loved that place since the first time I saw it. As I stood in front of the library, I realised something — you can go away for twenty years, but some things, the important things, have been waiting for you the whole time. I have been away for half my life, but in that moment, I felt like I had never left.",
+    audioSrc: '/audio/lesson-83-84.m4a', transcript: "I have just come back to my hometown after twenty years. Twenty years! I have been away for so long that I almost don't recognise the place. The small shops where I used to buy sweets have gone. The old cinema where I watched my first film has been closed since 2010. The park where I learned to ride a bike has been turned into a shopping centre. There is a new metro station near my old school — they have been building it for three years. The only thing that hasn't changed is the old library. It has stood on the same corner since 1920. My grandfather took me there when I was a child. I have loved that place since the first time I saw it. As I stood in front of the library, I realised something — you can go away for twenty years, but some things, the important things, have been waiting for you the whole time. I have been away for half my life, but in that moment, I felt like I had never left.",
     question: '为什么主人公对自己的家乡感到陌生？',
     options: [
       '离开二十年，城市变化太大了 — 老店关了、电影院关了、公园变成了购物中心（away 20 years, city has changed so much）',

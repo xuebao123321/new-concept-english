@@ -304,7 +304,7 @@ export const lesson6970Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '过去时基本'],
     block: 'listening',
     prompt: '听音频，选出说话人去了哪里：',
-    audioSrc: '/audio/lesson-69-70.mp3', transcript: "Last Saturday I went to a big car race. I went with my father. We arrived at the track at 9 in the morning. There were hundreds of cars and thousands of people. It was incredible!",
+    audioSrc: '/audio/lesson-69-70.m4a', transcript: "Last Saturday I went to a big car race. I went with my father. We arrived at the track at 9 in the morning. There were hundreds of cars and thousands of people. It was incredible!",
     question: '说话人上周六做了什么？',
     options: [
       '去了赛车比赛（went to a car race）',
@@ -320,7 +320,7 @@ export const lesson6970Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '时间顺序叙事'],
     block: 'listening',
     prompt: '听音频，排列事件的正确顺序：',
-    audioSrc: '/audio/lesson-69-70.mp3', transcript: "First we got up very early — at 6 o'clock. Then we had a quick breakfast. After that, we drove to the track. When we arrived, there was already a big crowd. Finally, the race started at exactly 10. What a day!",
+    audioSrc: '/audio/lesson-69-70.m4a', transcript: "First we got up very early — at 6 o'clock. Then we had a quick breakfast. After that, we drove to the track. When we arrived, there was already a big crowd. Finally, the race started at exactly 10. What a day!",
     question: '哪个事件发生在最后？',
     options: [
       '比赛在10点开始（the race started at 10）',
@@ -336,7 +336,7 @@ export const lesson6970Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '赛车场景细节'],
     block: 'listening',
     prompt: '听音频，选出获胜赛车的信息：',
-    audioSrc: '/audio/lesson-69-70.mp3', transcript: "There were twenty cars in the race. At first, the red car was the fastest. But in the middle of the race, the blue car started to speed up. On the last lap, the blue car overtook the red one and crossed the finish line first. The blue car won! Its driver was a young woman — the youngest in the race.",
+    audioSrc: '/audio/lesson-69-70.m4a', transcript: "There were twenty cars in the race. At first, the red car was the fastest. But in the middle of the race, the blue car started to speed up. On the last lap, the blue car overtook the red one and crossed the finish line first. The blue car won! Its driver was a young woman — the youngest in the race.",
     question: '哪辆车赢了比赛？',
     options: [
       '蓝色的车（在最后一圈超过了红车并率先冲线）',
@@ -352,7 +352,7 @@ export const lesson6970Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'crowd/stand/behind'],
     block: 'listening',
     prompt: '听音频，选出说话人的位置情况：',
-    audioSrc: '/audio/lesson-69-70.mp3', transcript: "The crowd was huge. I couldn't see the race very well at first. I stood behind a very tall man. He was much taller than me — I couldn't see anything! Then my father said, \"Come in front of me.\" So I stood in front of him and finally I could see the cars. What a difference!",
+    audioSrc: '/audio/lesson-69-70.m4a', transcript: "The crowd was huge. I couldn't see the race very well at first. I stood behind a very tall man. He was much taller than me — I couldn't see anything! Then my father said, \"Come in front of me.\" So I stood in front of him and finally I could see the cars. What a difference!",
     question: '说话人为什么一开始看不到比赛？',
     options: [
       '他站在一个很高的人后面（stood behind a very tall man）',
@@ -368,7 +368,7 @@ export const lesson6970Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合叙事理解'],
     block: 'listening',
     prompt: '听音频，选出正确的完整描述：',
-    audioSrc: '/audio/lesson-69-70.mp3', transcript: "Last year I went to the most exciting race of my life. It was the final of the national car racing championship. First, my friends and I took a train to the city where the race was held. We arrived two hours before the race started. There was already a huge crowd. I had never seen so many people in one place! We found our seats and waited. Then the race began. There were thirty cars — more than I expected. The noise they made was incredible — you could feel it in your chest. For the first few laps, car number 7 was the fastest. It was a red car with white stripes. I liked it the most. But then, on the eighth lap, something unexpected happened — car number 7 slowed down! Car number 12, a blue car, overtook it easily. After that, car number 12 stayed ahead and won the race. The crowd went wild! I stood up and cheered with everyone else. It was such an exciting moment. Finally, after the race, we went to a restaurant near the track. We talked about the race for hours. It was truly the best day of the year for me.",
+    audioSrc: '/audio/lesson-69-70.m4a', transcript: "Last year I went to the most exciting race of my life. It was the final of the national car racing championship. First, my friends and I took a train to the city where the race was held. We arrived two hours before the race started. There was already a huge crowd. I had never seen so many people in one place! We found our seats and waited. Then the race began. There were thirty cars — more than I expected. The noise they made was incredible — you could feel it in your chest. For the first few laps, car number 7 was the fastest. It was a red car with white stripes. I liked it the most. But then, on the eighth lap, something unexpected happened — car number 7 slowed down! Car number 12, a blue car, overtook it easily. After that, car number 12 stayed ahead and won the race. The crowd went wild! I stood up and cheered with everyone else. It was such an exciting moment. Finally, after the race, we went to a restaurant near the track. We talked about the race for hours. It was truly the best day of the year for me.",
     question: '以下哪项不是实际发生的事情？',
     options: [
       '说话人在比赛中途离场了（从未提及——实际一直看到最后并去了餐厅）',

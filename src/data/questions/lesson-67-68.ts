@@ -304,7 +304,7 @@ export const lesson6768Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '最高级识别'],
     block: 'listening',
     prompt: '听音频，选出三个人的身高关系：',
-    audioSrc: '/audio/lesson-67-68.mp3', transcript: "Three boys: Jack is 1.70m. Tom is 1.75m. Mike is 1.80m. Tom is taller than Jack. Mike is taller than Tom. Mike is the tallest of the three. Jack is the shortest.",
+    audioSrc: '/audio/lesson-67-68.m4a', transcript: "Three boys: Jack is 1.70m. Tom is 1.75m. Mike is 1.80m. Tom is taller than Jack. Mike is taller than Tom. Mike is the tallest of the three. Jack is the shortest.",
     question: '谁是最矮的？',
     options: ['Jack (1.70m)', 'Tom (1.75m)', 'Mike (1.80m)', '三人一样高'],
     correctIndex: 0,
@@ -315,7 +315,7 @@ export const lesson6768Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '店铺购物'],
     block: 'listening',
     prompt: '听音频，选出说话人在哪家店花了最多的钱：',
-    audioSrc: '/audio/lesson-67-68.mp3', transcript: "I went shopping this morning. First I went to the butcher's and spent 5 pounds on meat. Then I went to the greengrocer's and spent 8 pounds on vegetables and fruit. After that, I went to the baker's and spent 3 pounds on bread. I spent the most at the greengrocer's and the least at the baker's.",
+    audioSrc: '/audio/lesson-67-68.m4a', transcript: "I went shopping this morning. First I went to the butcher's and spent 5 pounds on meat. Then I went to the greengrocer's and spent 8 pounds on vegetables and fruit. After that, I went to the baker's and spent 3 pounds on bread. I spent the most at the greengrocer's and the least at the baker's.",
     question: '说话人在哪里花了最多钱？',
     options: [
       '蔬果店 (greengrocer\'s — 8 pounds)',
@@ -331,7 +331,7 @@ export const lesson6768Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'worst/best 对比'],
     block: 'listening',
     prompt: '听音频，选出说话人对四季的排名：',
-    audioSrc: '/audio/lesson-67-68.mp3', transcript: "There are four seasons. Summer is the hottest. Winter is the coldest. Spring is the most beautiful. Autumn is the most comfortable. For me, summer is the best season because I love swimming. Winter is the worst — I hate being cold. Most people say spring is the best, but for me, summer wins!",
+    audioSrc: '/audio/lesson-67-68.m4a', transcript: "There are four seasons. Summer is the hottest. Winter is the coldest. Spring is the most beautiful. Autumn is the most comfortable. For me, summer is the best season because I love swimming. Winter is the worst — I hate being cold. Most people say spring is the best, but for me, summer wins!",
     question: '说话人对四季的排名是什么？',
     options: [
       '最好：夏天（游泳）— 最差：冬天（怕冷）',
@@ -347,7 +347,7 @@ export const lesson6768Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '蔬果店场景'],
     block: 'listening',
     prompt: '听音频，选出顾客买了什么：',
-    audioSrc: '/audio/lesson-67-68.mp3', transcript: "Customer: I'd like some tomatoes, please. Greengrocer: These are the freshest tomatoes we have. They arrived this morning. Customer: They look great. How much are they? Greengrocer: They're 2 pounds a kilo. They're the cheapest in the market today. Customer: I'll take a kilo. What about the oranges? Greengrocer: These are the sweetest oranges of the season. And the juiciest! Customer: Give me five, please. And the strawberries — are they good? Greengrocer: They're the most expensive, I'm afraid. But they're also the best quality. Customer: Maybe next time. I'll just take the tomatoes and oranges.",
+    audioSrc: '/audio/lesson-67-68.m4a', transcript: "Customer: I'd like some tomatoes, please. Greengrocer: These are the freshest tomatoes we have. They arrived this morning. Customer: They look great. How much are they? Greengrocer: They're 2 pounds a kilo. They're the cheapest in the market today. Customer: I'll take a kilo. What about the oranges? Greengrocer: These are the sweetest oranges of the season. And the juiciest! Customer: Give me five, please. And the strawberries — are they good? Greengrocer: They're the most expensive, I'm afraid. But they're also the best quality. Customer: Maybe next time. I'll just take the tomatoes and oranges.",
     question: '顾客最终买了什么？',
     options: [
       '西红柿和橙子（西红柿最新鲜最便宜，橙子最甜）',
@@ -363,7 +363,7 @@ export const lesson6768Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合最高级理解'],
     block: 'listening',
     prompt: '听音频对话，选出正确的综合描述：',
-    audioSrc: '/audio/lesson-67-68.mp3', transcript: "Grandma: Tell me about your week, dear. Lucy: It was the busiest week of the year, Grandma! On Monday I had the most difficult maths test ever. I think I got the worst mark in the class. Grandma: Oh dear. What about the other days? Lucy: Tuesday was better. I got the best mark in English — the highest in the whole class! Wednesday was the most exciting day — we had Sports Day. I ran in the 100-metre race. I wasn't the fastest, but I wasn't the slowest either. I came in the middle. Thursday was the most boring day — nothing happened. Friday was the best day of the week. We went to the most interesting museum in the city. Grandma: And the weekend? Lucy: I spent Saturday at the greengrocer's with Mum. She says it's the cheapest place for fruit. On Sunday I went to the park with my friends. That was the most relaxing day of all. So, Grandma, it was the busiest week but also one of the best! Grandma: It sounds wonderful, dear. You are the most energetic granddaughter I have!",
+    audioSrc: '/audio/lesson-67-68.m4a', transcript: "Grandma: Tell me about your week, dear. Lucy: It was the busiest week of the year, Grandma! On Monday I had the most difficult maths test ever. I think I got the worst mark in the class. Grandma: Oh dear. What about the other days? Lucy: Tuesday was better. I got the best mark in English — the highest in the whole class! Wednesday was the most exciting day — we had Sports Day. I ran in the 100-metre race. I wasn't the fastest, but I wasn't the slowest either. I came in the middle. Thursday was the most boring day — nothing happened. Friday was the best day of the week. We went to the most interesting museum in the city. Grandma: And the weekend? Lucy: I spent Saturday at the greengrocer's with Mum. She says it's the cheapest place for fruit. On Sunday I went to the park with my friends. That was the most relaxing day of all. So, Grandma, it was the busiest week but also one of the best! Grandma: It sounds wonderful, dear. You are the most energetic granddaughter I have!",
     question: '以下哪一项是Lucy没有提到的？',
     options: [
       '她周一得到了最好的数学分数（错误—她说数学得了最差的分数，最好的是英语）',

@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getQuestionsByBlock } from '../data/questions';
 import { useQuestions } from '../hooks/useQuestions';
 import { useLessonProgressStore } from '../stores/useLessonProgressStore';
@@ -16,7 +16,7 @@ const BLOCK_INFO: Record<BlockType, { icon: string; name: string; color: string;
   vocabulary: { icon: '📡', name: '单词森林',   color: '#5B9ED4', bg: '#E8F2FC' },
   grammar:    { icon: '🔧', name: '语法工坊',   color: '#7E57C2', bg: '#EDE7F6' },
   sentence:   { icon: '🗣️', name: '句子城堡',   color: '#5B9A5A', bg: '#E8F5E8' },
-  listening:  { icon: '📻', name: '听力花园',   color: '#FF8C42', bg: '#FFF2E8' },
+  listening:  { icon: '🎤', name: '听说花园',   color: '#FF8C42', bg: '#FFF2E8' },
 };
 
 export default function BlockSessionPage() {
@@ -35,12 +35,30 @@ export default function BlockSessionPage() {
     if (blockType === 'vocabulary') return q.type === 'choice' || (q.type === 'fill' && q.tags?.some((t: string) => t.includes('词汇')));
     if (blockType === 'grammar') return q.type === 'fill' || q.type === 'reorder';
     if (blockType === 'sentence') return q.type === 'translate';
-    if (blockType === 'listening') return q.type === 'listening';
+    if (blockType === 'listening') return q.type === 'listening' || q.type === 'speak';
     return true;
   });
 
   const [sessionQ, setSessionQ] = useState<Question[]>([]);
   useEffect(() => { if (filteredQuestions.length > 0) setSessionQ([...filteredQuestions].sort(() => Math.random() - 0.5)); }, [filteredQuestions.length]);
+
+  // 检测上次未完成的练习
+  useEffect(() => {
+    if (!groupId) return;
+    const key = `nce_block_${groupId}_${blockType}`;
+    const lastState = localStorage.getItem(key);
+    if (lastState === 'in_progress') {
+      setMsg('💡 上次有未完成的练习,从头开始吧~');
+      setTimeout(() => setMsg(''), 3000);
+    }
+  }, [groupId, blockType]);
+
+  // 进入练习时标记进行中
+  useEffect(() => {
+    if (sessionQ.length > 0 && groupId) {
+      localStorage.setItem(`nce_block_${groupId}_${blockType}`, 'in_progress');
+    }
+  }, [sessionQ.length > 0, groupId, blockType]);
   const [idx, setIdx] = useState(0);
   const [wrongList, setWrongList] = useState<Question[]>([]);
   const [round, setRound] = useState<'main' | 'review'>('main');
@@ -49,6 +67,10 @@ export default function BlockSessionPage() {
   const [done, setDone] = useState(false);
   const [allCorrect, setAllCorrect] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [rewards, setRewards] = useState<Array<{type:string; lesson_group:string; message:string}>>([]);
+  const [showRewards, setShowRewards] = useState(false);
 
   const cur = round === 'main' ? sessionQ[idx] : wrongList[0];
 
@@ -92,12 +114,21 @@ export default function BlockSessionPage() {
   const finishBlock = async (perfect: boolean) => {
     if (groupId) {
       await completeBlock(groupId, blockType);
+      localStorage.setItem(`nce_block_${groupId}_${blockType}`, 'done');
     }
     await addXp(calculateBlockCompleteXp());
     // 异步向后端推送进度
     api.updateProgress(groupId || '', correctCount, sessionQ.length).catch(() => {});
     setAllCorrect(perfect);
     setDone(true);
+
+    // 全对完成 → 检查连跳奖励
+    if (perfect) {
+      api.checkRewards().then(res => {
+        const r = res?.rewards || [];
+        if (r.length > 0) { setRewards(r); setShowRewards(true); }
+      }).catch(() => {});
+    }
   };
 
   // 完成页
@@ -105,6 +136,41 @@ export default function BlockSessionPage() {
     return (
       <div className="min-h-screen flex flex-col bg-cream">
         <Confetti active={allCorrect} />
+
+        {/* ═══ 奖励弹窗 ═══ */}
+        {showRewards && rewards.length > 0 && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={() => setShowRewards(false)}
+          >
+            <motion.div
+              className="card mx-4 max-w-xs w-full p-6 text-center space-y-4 border-honey/40 bg-cream"
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1 }}
+              transition={springs.popIn}
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="text-5xl">🎁</div>
+              <h2 className="text-h2 text-ink font-extrabold">获得奖励!</h2>
+              {rewards.map((r, i) => (
+                <div key={i} className="bg-honey-pale rounded-xl p-3 border border-honey/30">
+                  <p className="text-sm font-bold text-ink">{r.message}</p>
+                  <p className="text-xs text-ink-muted mt-0.5">已解锁,去课程列表看看吧~</p>
+                </div>
+              ))}
+              <button
+                onClick={() => setShowRewards(false)}
+                className="w-full py-3 rounded-xl bg-forest text-cream font-bold text-base
+                           hover:bg-forest/90 active:scale-[0.98] transition-all shadow-sm"
+              >
+                🎉 太棒了!
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+
         <motion.div
           className="flex-1 flex flex-col items-center justify-center px-4 gap-4"
           initial={{ scale: 0 }}
@@ -157,11 +223,19 @@ export default function BlockSessionPage() {
               <button onClick={() => navigate(-1)} className="w-full py-3 bg-warm-bg text-ink-light font-bold rounded-xl border border-warm-border">
                 📋 返回课程
               </button>
+              <a href="/wrong-book" className="block text-center text-xs text-ink-muted hover:text-forest font-bold">
+                📕 错题本 → 随时回顾巩固
+              </a>
             </div>
           ) : (
-            <button onClick={() => { setRound('review'); setDone(false); }} className="w-full max-w-xs py-3 btn-gold mt-2">
-              🔄 补考错题（{wrongList.length}题）
-            </button>
+            <div className="space-y-3 w-full max-w-xs mt-2">
+              <button onClick={() => { setRound('review'); setDone(false); }} className="w-full py-3 btn-gold">
+                🔄 补考错题（{wrongList.length}题）
+              </button>
+              <a href="/wrong-book" className="block text-center text-xs text-ink-muted hover:text-forest font-bold">
+                📕 这些错题已加入错题本
+              </a>
+            </div>
           )}
         </motion.div>
       </div>
@@ -189,34 +263,28 @@ export default function BlockSessionPage() {
     );
   }
 
-  // 心不足
-  if (hearts === 0) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-cream gap-4">
-        <img
-          src="/assets/characters/bears-cabin.webp"
-          alt="心已用完"
-          className="w-32 h-32 rounded-2xl object-cover border-2 border-warm-border shadow-sm"
-          style={{ objectPosition: 'center 30%' }}
-        />
-        <h2 className="text-h2 text-ink">❤️ 心已用完</h2>
-        <p className="text-meta text-ink-light text-center max-w-xs">
-          答错会消耗一颗心,每 30 分钟自动恢复一颗~
-          <br />休息一会儿再来吧!
-        </p>
-        <button onClick={() => navigate(-1)} className="btn-ghost text-base w-40">
-          ← 返回
-        </button>
-      </div>
-    );
-  }
+
+  // 计算已完成题数 (用于退出确认)
+  const completedCount = round === 'main' ? idx : (initialWrongCount - wrongList.length);
+  const totalCount = round === 'main' ? sessionQ.length : initialWrongCount;
 
   // 练习中
   return (
     <div className="min-h-screen px-4 py-4 bg-cream">
+      {/* 顶部消息 */}
+      {msg && (
+        <motion.div
+          className="mb-3 p-2.5 rounded-xl bg-honey-pale text-honey text-sm font-bold text-center"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          {msg}
+        </motion.div>
+      )}
+
       {/* 顶部栏 */}
       <div className="flex items-center justify-between mb-3">
-        <button onClick={() => navigate(-1)} className="text-sm font-bold text-ink-muted hover:text-ink-light">
+        <button onClick={() => setShowExitConfirm(true)} className="text-sm font-bold text-ink-muted hover:text-ink-light">
           ← 退出
         </button>
         <div className="flex items-center gap-1.5">
@@ -254,6 +322,52 @@ export default function BlockSessionPage() {
         totalQuestions={round === 'main' ? sessionQ.length : wrongList.length}
         onAnswer={handleAnswer}
       />
+
+      {/* ═══ 退出确认弹窗 ═══ */}
+      <AnimatePresence>
+        {showExitConfirm && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowExitConfirm(false)}
+          >
+            <motion.div
+              className="card p-6 max-w-xs w-full text-center space-y-4 bg-cream"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={springs.popIn}
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="text-4xl">🤔</div>
+              <h3 className="text-h3 text-ink font-bold">确定要退出吗?</h3>
+              <p className="text-sm text-ink-light">
+                已完成 {completedCount} 题
+                {round === 'main' ? ` / ${totalCount}` : ''}
+              </p>
+              <p className="text-xs text-ink-muted">
+                退出后下次进入将从第一题重新开始
+              </p>
+              <div className="flex gap-2 pt-1">
+                <button
+                  onClick={() => setShowExitConfirm(false)}
+                  className="flex-1 py-2.5 text-sm font-bold rounded-xl bg-warm-bg text-ink-light"
+                >
+                  继续做题
+                </button>
+                <button
+                  onClick={() => navigate(-1)}
+                  className="flex-1 py-2.5 text-sm font-bold rounded-xl bg-berry-pale text-berry border border-berry/30"
+                >
+                  退出
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

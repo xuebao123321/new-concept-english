@@ -319,7 +319,7 @@ export const lesson8586Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '现在完成时基本'],
     block: 'listening',
     prompt: '听音频，选出说话者做了什么：',
-    audioSrc: '/audio/lesson-85-86.mp3', transcript: "George: Hello, Ken. Have you just been to the cinema? Ken: Yes, I have. George: What's on? Ken: 'Paris in the spring'. George: Oh, I've already seen it. I saw it on television last year. It's an old film, but it's very good. Ken: Paris is a beautiful city. George: I've never been there. Have you ever been there, Ken? Ken: Yes, I have. I was there in April. George: Paris in the spring, eh? Ken: It was spring, but the weather was awful. It rained all the time. George: Just like London!",
+    audioSrc: '/audio/lesson-85-86.m4a', transcript: "George: Hello, Ken. Have you just been to the cinema? Ken: Yes, I have. George: What's on? Ken: 'Paris in the spring'. George: Oh, I've already seen it. I saw it on television last year. It's an old film, but it's very good. Ken: Paris is a beautiful city. George: I've never been there. Have you ever been there, Ken? Ken: Yes, I have. I was there in April. George: Paris in the spring, eh? Ken: It was spring, but the weather was awful. It rained all the time. George: Just like London!",
     question: 'Ken刚刚去了哪里？',
     options: ['电影院（the cinema）', '巴黎（Paris）', '伦敦（London）', '电视上'],
     correctIndex: 0,
@@ -330,7 +330,7 @@ export const lesson8586Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'already/yet/ever/never'],
     block: 'listening',
     prompt: '听音频，选出关于 George 的正确描述：',
-    audioSrc: '/audio/lesson-85-86.mp3', transcript: "George: Hello, Ken. Have you just been to the cinema? Ken: Yes, I have. George: What's on? Ken: 'Paris in the spring'. George: Oh, I've already seen it. I saw it on television last year. It's an old film, but it's very good. Ken: Paris is a beautiful city. George: I've never been there. Have you ever been there, Ken? Ken: Yes, I have. I was there in April. George: Paris in the spring, eh? Ken: It was spring, but the weather was awful. It rained all the time. George: Just like London!",
+    audioSrc: '/audio/lesson-85-86.m4a', transcript: "George: Hello, Ken. Have you just been to the cinema? Ken: Yes, I have. George: What's on? Ken: 'Paris in the spring'. George: Oh, I've already seen it. I saw it on television last year. It's an old film, but it's very good. Ken: Paris is a beautiful city. George: I've never been there. Have you ever been there, Ken? Ken: Yes, I have. I was there in April. George: Paris in the spring, eh? Ken: It was spring, but the weather was awful. It rained all the time. George: Just like London!",
     question: '关于George，哪个描述是正确的？',
     options: [
       '他已经看过那部电影了，但从未去过巴黎（already seen the film, never been to Paris）',
@@ -346,7 +346,7 @@ export const lesson8586Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '现在完成时对话理解'],
     block: 'listening',
     prompt: '听音频，选出说话者还没有做的事：',
-    audioSrc: '/audio/lesson-85-86.mp3', transcript: "A: Have you done your homework yet? B: Yes, I've already finished it. I did it after dinner. A: Good. Have you called Grandma yet? B: Oh, no! I haven't called her yet. I completely forgot! A: You should call her now. B: But I've just started watching my favourite programme. Can I call her after? A: You've already watched TV for two hours today. Call her first. B: OK, OK. I'll call her right now. ... Hello, Grandma? Yes, I've just finished my homework. How are you?",
+    audioSrc: '/audio/lesson-85-86.m4a', transcript: "A: Have you done your homework yet? B: Yes, I've already finished it. I did it after dinner. A: Good. Have you called Grandma yet? B: Oh, no! I haven't called her yet. I completely forgot! A: You should call her now. B: But I've just started watching my favourite programme. Can I call her after? A: You've already watched TV for two hours today. Call her first. B: OK, OK. I'll call her right now. ... Hello, Grandma? Yes, I've just finished my homework. How are you?",
     question: 'B还没有做什么？',
     options: [
       '给奶奶打电话（call Grandma）',
@@ -362,7 +362,7 @@ export const lesson8586Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '现在完成时综合场景'],
     block: 'listening',
     prompt: '听音频，选出说话者从未做过的事：',
-    audioSrc: '/audio/lesson-85-86.mp3', transcript: "Tom: I'm so excited! I've just booked a trip to Japan! Anna: Wow! I've never been to Japan. Have you ever been there before? Tom: No, I haven't. This will be my first time. But I've been to China twice. Anna: Really? I've always wanted to go to China. What have you seen there? Tom: I've visited Beijing and Shanghai. I've also walked on the Great Wall! It's the most amazing thing I've ever done. Anna: I've never even been to Asia. But I've been to several countries in Europe. Tom: Have you ever been to France? Anna: Yes, I've been to Paris three times. It's my favourite city. But I've never been to the south of France. Tom: I've heard the French Riviera is beautiful. Maybe we should both go somewhere new!",
+    audioSrc: '/audio/lesson-85-86.m4a', transcript: "Tom: I'm so excited! I've just booked a trip to Japan! Anna: Wow! I've never been to Japan. Have you ever been there before? Tom: No, I haven't. This will be my first time. But I've been to China twice. Anna: Really? I've always wanted to go to China. What have you seen there? Tom: I've visited Beijing and Shanghai. I've also walked on the Great Wall! It's the most amazing thing I've ever done. Anna: I've never even been to Asia. But I've been to several countries in Europe. Tom: Have you ever been to France? Anna: Yes, I've been to Paris three times. It's my favourite city. But I've never been to the south of France. Tom: I've heard the French Riviera is beautiful. Maybe we should both go somewhere new!",
     question: 'Anna从未做过什么？',
     options: [
       '去过日本，也没去过中国（never been to Japan, never been to China）',

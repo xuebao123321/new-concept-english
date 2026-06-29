@@ -320,7 +320,7 @@ export const lesson109110Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '间接引语', '识别转述'],
     block: 'listening',
     prompt: '听音频，选出 Tom 说了什么（识别间接引语中的原始话语）：',
-    audioSrc: '/audio/lesson-109-110.mp3', transcript: "A: What did Tom say about the meeting? B: He said that he couldn't come because he was too busy. A: Did he say anything else? B: He also said that he would send the report by email. A: OK. And what about Mary? B: She said that she had already finished her part. She said she would join us later. A: Good. What time did she say she would come? B: She said she would arrive at about 3 o'clock.",
+    audioSrc: '/audio/lesson-109-110.m4a', transcript: "A: What did Tom say about the meeting? B: He said that he couldn't come because he was too busy. A: Did he say anything else? B: He also said that he would send the report by email. A: OK. And what about Mary? B: She said that she had already finished her part. She said she would join us later. A: Good. What time did she say she would come? B: She said she would arrive at about 3 o'clock.",
     question: 'Tom 说他不能来的原因是什么？',
     options: [
       '他太忙了（he was too busy）',
@@ -336,7 +336,7 @@ export const lesson109110Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '间接引语', '信息提取'],
     block: 'listening',
     prompt: '听音频，选出 Mary 已经完成的工作和到达时间：',
-    audioSrc: '/audio/lesson-109-110.mp3', transcript: "A: What did Tom say about the meeting? B: He said that he couldn't come because he was too busy. A: Did he say anything else? B: He also said that he would send the report by email. A: OK. And what about Mary? B: She said that she had already finished her part. She said she would join us later. A: Good. What time did she say she would come? B: She said she would arrive at about 3 o'clock.",
+    audioSrc: '/audio/lesson-109-110.m4a', transcript: "A: What did Tom say about the meeting? B: He said that he couldn't come because he was too busy. A: Did he say anything else? B: He also said that he would send the report by email. A: OK. And what about Mary? B: She said that she had already finished her part. She said she would join us later. A: Good. What time did she say she would come? B: She said she would arrive at about 3 o'clock.",
     question: 'Mary 说她什么时候到？',
     options: [
       '大约3点（about 3 o\'clock）',
@@ -352,7 +352,7 @@ export const lesson109110Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '间接引语', '比较+建议'],
     block: 'listening',
     prompt: '听音频，选出说话者关于咖啡的建议：',
-    audioSrc: '/audio/lesson-109-110.mp3', transcript: "A: I've been feeling tired lately. B: How much coffee do you drink? A: About four cups a day. B: Four cups! That's a lot. My doctor said that I should drink less coffee. He said that a little coffee in the morning was fine, but too much was bad for sleep. A: Really? What did he suggest? B: He said that instead of coffee, I could try tea. He said that tea had less caffeine. And he said that if I drank less coffee, I would sleep better. A: That's good advice. But I love my coffee! B: He also said that adding a teaspoonful of sugar was better than two. Small changes make a difference. A: I suppose that's true. Maybe I'll try drinking a little less. B: That's a good idea! Your body will thank you.",
+    audioSrc: '/audio/lesson-109-110.m4a', transcript: "A: I've been feeling tired lately. B: How much coffee do you drink? A: About four cups a day. B: Four cups! That's a lot. My doctor said that I should drink less coffee. He said that a little coffee in the morning was fine, but too much was bad for sleep. A: Really? What did he suggest? B: He said that instead of coffee, I could try tea. He said that tea had less caffeine. And he said that if I drank less coffee, I would sleep better. A: That's good advice. But I love my coffee! B: He also said that adding a teaspoonful of sugar was better than two. Small changes make a difference. A: I suppose that's true. Maybe I'll try drinking a little less. B: That's a good idea! Your body will thank you.",
     question: '医生关于咖啡给了什么建议？',
     options: [
       '少喝咖啡，改喝茶，少加糖（drink less coffee, try tea instead, use less sugar）',
@@ -368,7 +368,7 @@ export const lesson109110Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '间接引语', '故事转述'],
     block: 'listening',
     prompt: '听音频，选出 Jane 对巴黎之行最遗憾的是什么：',
-    audioSrc: '/audio/lesson-109-110.mp3', transcript: "A: Did you see Jane yesterday? She texted me something interesting. B: Yes, I met her at the cafe. She told me all about her trip to Paris. A: What did she say? B: She said that she had just come back from Paris. She said it was the best trip she had ever had. A: Did she spend a lot of money? B: She said she had taken 500 euros but had spent almost all of it. She said that she had bought a beautiful dress, a pair of shoes, and a handbag. A: That sounds amazing! B: But she also said that it was a pity she couldn't stay longer. She said that if she had more money, she would have stayed for another week. A: Oh, that is a pity. Did she give you any advice? B: Yes, she said that if I went to Paris, I should take more money than I think I need. And she said that the croissants were the best in the world. A: Now I really want to go!",
+    audioSrc: '/audio/lesson-109-110.m4a', transcript: "A: Did you see Jane yesterday? She texted me something interesting. B: Yes, I met her at the cafe. She told me all about her trip to Paris. A: What did she say? B: She said that she had just come back from Paris. She said it was the best trip she had ever had. A: Did she spend a lot of money? B: She said she had taken 500 euros but had spent almost all of it. She said that she had bought a beautiful dress, a pair of shoes, and a handbag. A: That sounds amazing! B: But she also said that it was a pity she couldn't stay longer. She said that if she had more money, she would have stayed for another week. A: Oh, that is a pity. Did she give you any advice? B: Yes, she said that if I went to Paris, I should take more money than I think I need. And she said that the croissants were the best in the world. A: Now I really want to go!",
     question: 'Jane 最遗憾的是什么？',
     options: [
       '她不能待更久（she couldn\'t stay longer）— 如果有更多钱她会多待一周',

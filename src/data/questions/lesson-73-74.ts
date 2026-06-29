@@ -346,7 +346,7 @@ export const lesson7374Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '现在完成时 基本'],
     block: 'listening',
     prompt: '听音频，选出说话者遇到了什么问题：',
-    audioSrc: '/audio/lesson-73-74.mp3', transcript: "Man: Excuse me. I have lost my way. Can you help me? Woman: Of course. Where do you want to go? Man: I want to go to King Street. I have looked at my map but I still can't find it. Woman: King Street? You have walked past it. It's behind you. Man: Really? I have walked too far then. Woman: Yes, you have gone about three blocks too far. Just turn around and go back.",
+    audioSrc: '/audio/lesson-73-74.m4a', transcript: "Man: Excuse me. I have lost my way. Can you help me? Woman: Of course. Where do you want to go? Man: I want to go to King Street. I have looked at my map but I still can't find it. Woman: King Street? You have walked past it. It's behind you. Man: Really? I have walked too far then. Woman: Yes, you have gone about three blocks too far. Just turn around and go back.",
     question: '这位男士遇到了什么问题？',
     options: [
       '他迷路了，找不到国王街（He has lost his way to King Street）',
@@ -362,7 +362,7 @@ export const lesson7374Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '现在完成时 细节'],
     block: 'listening',
     prompt: '听音频，选出对话中提到的信息：',
-    audioSrc: '/audio/lesson-73-74.mp3', transcript: "Tom: Hi Lucy. You look worried. What's wrong? Lucy: I have lost my phrasebook. I can't find it anywhere. Tom: Have you looked in your bag? Lucy: Yes, I have looked everywhere — my bag, my pockets, my desk. Tom: Have you asked the teacher? Lucy: Not yet. I'll ask her now. Tom: Wait! Is this your phrasebook? I have just found it under your chair. Lucy: Oh, thank you, Tom! You have saved my day!",
+    audioSrc: '/audio/lesson-73-74.m4a', transcript: "Tom: Hi Lucy. You look worried. What's wrong? Lucy: I have lost my phrasebook. I can't find it anywhere. Tom: Have you looked in your bag? Lucy: Yes, I have looked everywhere — my bag, my pockets, my desk. Tom: Have you asked the teacher? Lucy: Not yet. I'll ask her now. Tom: Wait! Is this your phrasebook? I have just found it under your chair. Lucy: Oh, thank you, Tom! You have saved my day!",
     question: 'Lucy丢了什么？最后在哪里找到的？',
     options: [
       '短语手册，在椅子下面（phrasebook, under the chair）',
@@ -378,7 +378,7 @@ export const lesson7374Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '现在完成时 问答'],
     block: 'listening',
     prompt: '听音频，选出正确的描述：',
-    audioSrc: '/audio/lesson-73-74.mp3', transcript: "Mother: Jack, have you done your homework? Jack: Yes, Mum. I have already finished it. Mother: Have you eaten your dinner? Jack: Not yet. I'm not hungry. Mother: Why not? Have you eaten something after school? Jack: Well... I have eaten some biscuits. Mother: Jack! You have eaten too many biscuits again! That's why you're not hungry. Jack: I'm sorry, Mum. But I have also drunk a lot of water! Mother: That doesn't help, Jack.",
+    audioSrc: '/audio/lesson-73-74.m4a', transcript: "Mother: Jack, have you done your homework? Jack: Yes, Mum. I have already finished it. Mother: Have you eaten your dinner? Jack: Not yet. I'm not hungry. Mother: Why not? Have you eaten something after school? Jack: Well... I have eaten some biscuits. Mother: Jack! You have eaten too many biscuits again! That's why you're not hungry. Jack: I'm sorry, Mum. But I have also drunk a lot of water! Mother: That doesn't help, Jack.",
     question: 'Jack为什么现在不饿？',
     options: [
       '他吃了太多饼干（He has eaten too many biscuits）',
@@ -394,7 +394,7 @@ export const lesson7374Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '现在完成时 综合故事'],
     block: 'listening',
     prompt: '听音频故事，选出正确的事件顺序：',
-    audioSrc: '/audio/lesson-73-74.mp3', transcript: "Last week, Mr. Green wanted to go to the museum. He had never been there before. He looked at a map before he left home. He thought he had understood the directions. But when he arrived in the city centre, he suddenly realized he had lost his way. He walked for half an hour but couldn't find the museum. He asked a woman for help. She smiled and said, 'The museum? You have walked past it three times! It's right behind you.' Mr. Green turned around and saw the museum. He felt very silly. He has never lost his way since then because he now always uses a GPS on his phone. He has learned his lesson!",
+    audioSrc: '/audio/lesson-73-74.m4a', transcript: "Last week, Mr. Green wanted to go to the museum. He had never been there before. He looked at a map before he left home. He thought he had understood the directions. But when he arrived in the city centre, he suddenly realized he had lost his way. He walked for half an hour but couldn't find the museum. He asked a woman for help. She smiled and said, 'The museum? You have walked past it three times! It's right behind you.' Mr. Green turned around and saw the museum. He felt very silly. He has never lost his way since then because he now always uses a GPS on his phone. He has learned his lesson!",
     question: '为什么Mr. Green找不到博物馆？',
     options: [
       '他以为自己理解了路线但其实没有——他走过了博物馆三次却没看到（walked past it three times）',

@@ -304,7 +304,7 @@ export const lesson5758Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '时间表达'],
     block: 'listening',
     prompt: '听音频，选出说话者的作息时间：',
-    audioSrc: '/audio/lesson-57-58.mp3', transcript: "I usually have a very regular schedule. I get up at 6:30 in the morning on weekdays. I leave home at 7:15 and catch the 7:30 train. I arrive at work at 8 o'clock. I have lunch at 12:30. I finish work at 5 o'clock in the afternoon. I get home at about 6. I have dinner at 7. I go to bed at 11 o'clock at night.",
+    audioSrc: '/audio/lesson-57-58.m4a', transcript: "I usually have a very regular schedule. I get up at 6:30 in the morning on weekdays. I leave home at 7:15 and catch the 7:30 train. I arrive at work at 8 o'clock. I have lunch at 12:30. I finish work at 5 o'clock in the afternoon. I get home at about 6. I have dinner at 7. I go to bed at 11 o'clock at night.",
     question: '说话者几点下班？',
     options: [
       '下午5点 (at 5 o\'clock in the afternoon)',
@@ -320,7 +320,7 @@ export const lesson5758Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '车站场景'],
     block: 'listening',
     prompt: '听音频对话，选出正确的火车信息：',
-    audioSrc: '/audio/lesson-57-58.mp3', transcript: "A: Excuse me, what time is the next train to London? B: The next train to London is at 10:45. It leaves from platform 4. A: And what time does it arrive in London? B: It arrives at 12:15. A: Is it a direct train? B: No, it stops at Reading and Slough. A: How much is a return ticket? B: A return ticket is 35 pounds. A: OK. One return ticket, please. B: Here you are. The train is at platform 4 — you have about 10 minutes. A: Thank you very much!",
+    audioSrc: '/audio/lesson-57-58.m4a', transcript: "A: Excuse me, what time is the next train to London? B: The next train to London is at 10:45. It leaves from platform 4. A: And what time does it arrive in London? B: It arrives at 12:15. A: Is it a direct train? B: No, it stops at Reading and Slough. A: How much is a return ticket? B: A return ticket is 35 pounds. A: OK. One return ticket, please. B: Here you are. The train is at platform 4 — you have about 10 minutes. A: Thank you very much!",
     question: '下一班去伦敦的火车几点出发？',
     options: [
       '10:45',
@@ -336,7 +336,7 @@ export const lesson5758Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '时间介词'],
     block: 'listening',
     prompt: '听音频，选出关于这个人日常的正确描述：',
-    audioSrc: '/audio/lesson-57-58.mp3', transcript: "My name is David and I'm a doctor. My day starts very early. On weekdays, I get up at 5:30 in the morning. I arrive at the hospital at 6:30. I usually finish work at 4 o'clock in the afternoon. On Tuesdays and Thursdays, I work late and don't get home until 8 at night. On Saturdays, I only work in the morning — from 8 to 12. On Sundays, I don't work at all. I usually stay in bed until 9 and then go for a walk in the park. In summer, I sometimes play tennis in the evening. In winter, I prefer to stay at home and read.",
+    audioSrc: '/audio/lesson-57-58.m4a', transcript: "My name is David and I'm a doctor. My day starts very early. On weekdays, I get up at 5:30 in the morning. I arrive at the hospital at 6:30. I usually finish work at 4 o'clock in the afternoon. On Tuesdays and Thursdays, I work late and don't get home until 8 at night. On Saturdays, I only work in the morning — from 8 to 12. On Sundays, I don't work at all. I usually stay in bed until 9 and then go for a walk in the park. In summer, I sometimes play tennis in the evening. In winter, I prefer to stay at home and read.",
     question: 'David 周二和周四有什么不同？',
     options: [
       '下班晚，晚上8点才到家 (works late, gets home at 8 at night)',
@@ -352,7 +352,7 @@ export const lesson5758Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合理解'],
     block: 'listening',
     prompt: '听音频独白，选出正确的完整描述：',
-    audioSrc: '/audio/lesson-57-58.mp3', transcript: "Do you want to know about the worst day of my life? It happened last month, on a Monday. I had a very important meeting in London at 9 o'clock in the morning. I planned to take the 7 o'clock train — that would get me there at 8:30, plenty of time. Well, my alarm clock didn't go off. I woke up at 7:15 — the exact time my train was leaving the station! I jumped out of bed, got dressed in two minutes, and ran to the station. When I arrived at 7:35, the train was gone. I had to wait for the 8 o'clock train. That train was delayed and didn't arrive until 8:20. It finally left at 8:30. I arrived in London at 10 o'clock — an hour late for my meeting. When I got to the office at 10:15, everyone was waiting for me. My boss didn't say anything, but his face told me everything. I learned my lesson — now I set three alarm clocks every night!",
+    audioSrc: '/audio/lesson-57-58.m4a', transcript: "Do you want to know about the worst day of my life? It happened last month, on a Monday. I had a very important meeting in London at 9 o'clock in the morning. I planned to take the 7 o'clock train — that would get me there at 8:30, plenty of time. Well, my alarm clock didn't go off. I woke up at 7:15 — the exact time my train was leaving the station! I jumped out of bed, got dressed in two minutes, and ran to the station. When I arrived at 7:35, the train was gone. I had to wait for the 8 o'clock train. That train was delayed and didn't arrive until 8:20. It finally left at 8:30. I arrived in London at 10 o'clock — an hour late for my meeting. When I got to the office at 10:15, everyone was waiting for me. My boss didn't say anything, but his face told me everything. I learned my lesson — now I set three alarm clocks every night!",
     question: '关于说话者最糟糕的一天，哪个说法是正确的？',
     options: [
       '计划坐7点的火车去伦敦开9点的会。闹钟没响7:15才醒，错过了火车。8点的火车延误，10点才到伦敦，到办公室10:15迟到一个小时',

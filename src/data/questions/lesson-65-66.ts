@@ -304,7 +304,7 @@ export const lesson6566Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', 'as...as 比较'],
     block: 'listening',
     prompt: '听音频，选出说话人的年龄和身高关系：',
-    audioSrc: '/audio/lesson-65-66.mp3', transcript: "I am 13 years old. My sister is 15. She is older than me but I am as tall as her. People often think we are twins. She doesn't like it when people say that.",
+    audioSrc: '/audio/lesson-65-66.m4a', transcript: "I am 13 years old. My sister is 15. She is older than me but I am as tall as her. People often think we are twins. She doesn't like it when people say that.",
     question: '说话人和姐姐的关系是？',
     options: [
       '一样高但姐姐更年长（as tall as but older）',
@@ -320,7 +320,7 @@ export const lesson6566Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'more than 比较'],
     block: 'listening',
     prompt: '听音频对话，选出顾客的决定：',
-    audioSrc: '/audio/lesson-65-66.mp3', transcript: "Assistant: We have two watches. This one is 50 pounds and that one is 80 pounds. The expensive one is more beautiful and more accurate. Customer: Which one is more popular? Assistant: The 50-pound one — it's cheaper and just as useful. Most people choose the cheaper one. Customer: I'll take the cheaper one then. I don't need the most expensive watch.",
+    audioSrc: '/audio/lesson-65-66.m4a', transcript: "Assistant: We have two watches. This one is 50 pounds and that one is 80 pounds. The expensive one is more beautiful and more accurate. Customer: Which one is more popular? Assistant: The 50-pound one — it's cheaper and just as useful. Most people choose the cheaper one. Customer: I'll take the cheaper one then. I don't need the most expensive watch.",
     question: '顾客选了哪个手表？',
     options: [
       '50英镑的（更便宜、同样实用、更受欢迎）',
@@ -336,7 +336,7 @@ export const lesson6566Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '最高级场景'],
     block: 'listening',
     prompt: '听音频，选出三个人的特征：',
-    audioSrc: '/audio/lesson-65-66.mp3', transcript: "There are three girls in my family. Lisa is the oldest — she is 17. She is the most serious one. She studies the hardest. Emma is 15. She is the most beautiful and the most popular at school. I am the youngest — I am 13. But I am the happiest! I enjoy myself every day. My mum says I am the most relaxed person in the family.",
+    audioSrc: '/audio/lesson-65-66.m4a', transcript: "There are three girls in my family. Lisa is the oldest — she is 17. She is the most serious one. She studies the hardest. Emma is 15. She is the most beautiful and the most popular at school. I am the youngest — I am 13. But I am the happiest! I enjoy myself every day. My mum says I am the most relaxed person in the family.",
     question: '谁是最快乐的？',
     options: [
       '说话人 (I — 13岁最年轻)',
@@ -352,7 +352,7 @@ export const lesson6566Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '生日场景'],
     block: 'listening',
     prompt: '听音频，选出说话人的生日感受：',
-    audioSrc: '/audio/lesson-65-66.mp3', transcript: "Today was my birthday. It was the best birthday I have ever had! My presents were more wonderful than last year's. The cake was the most delicious cake in the world. And my friends sang the happiest song. Even the weather was better than expected — it was the warmest day this month. I felt like the luckiest person alive.",
+    audioSrc: '/audio/lesson-65-66.m4a', transcript: "Today was my birthday. It was the best birthday I have ever had! My presents were more wonderful than last year's. The cake was the most delicious cake in the world. And my friends sang the happiest song. Even the weather was better than expected — it was the warmest day this month. I felt like the luckiest person alive.",
     question: '说话人对生日的总体感觉是什么？',
     options: [
       '最好的生日——一切都是最高级/比较级的好（the best, more wonderful, the most delicious, the happiest, better, the warmest, the luckiest）',
@@ -368,7 +368,7 @@ export const lesson6566Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合比较理解'],
     block: 'listening',
     prompt: '听音频对话，选出正确的描述：',
-    audioSrc: '/audio/lesson-65-66.mp3', transcript: "Dad: Happy birthday, Kate! You're fifteen now. Kate: Thanks, Dad. I feel so much older. I'm not a baby any more! Dad: You certainly aren't. You're as tall as your mother now — maybe even taller. Kate: I think I am taller! Dad, do you remember when I was the smallest in my class? Dad: I remember. And now look at you — one of the tallest. Kate: Life is getting more and more interesting. Dad: It will get even more interesting. But being older means more responsibility. Kate: I know. Being the oldest child in the family, I must set a good example. Dad: Exactly. But also enjoy yourself. These are the best years of your life. Kate: Do you think so? I think the best years are still ahead. More exciting things are coming! Dad: (laughs) You sound more and more like an adult. Kate: Maybe I am the most adult-like fifteen-year-old you know! Dad: You're the most wonderful daughter, that's for sure. Kate: (smiles) And you're the best dad.",
+    audioSrc: '/audio/lesson-65-66.m4a', transcript: "Dad: Happy birthday, Kate! You're fifteen now. Kate: Thanks, Dad. I feel so much older. I'm not a baby any more! Dad: You certainly aren't. You're as tall as your mother now — maybe even taller. Kate: I think I am taller! Dad, do you remember when I was the smallest in my class? Dad: I remember. And now look at you — one of the tallest. Kate: Life is getting more and more interesting. Dad: It will get even more interesting. But being older means more responsibility. Kate: I know. Being the oldest child in the family, I must set a good example. Dad: Exactly. But also enjoy yourself. These are the best years of your life. Kate: Do you think so? I think the best years are still ahead. More exciting things are coming! Dad: (laughs) You sound more and more like an adult. Kate: Maybe I am the most adult-like fifteen-year-old you know! Dad: You're the most wonderful daughter, that's for sure. Kate: (smiles) And you're the best dad.",
     question: '关于Kate的变化，以下哪项是对话中没有提到的？',
     options: [
       '她现在是全校最聪明的学生（对话中完全没有提到成绩或聪明）',

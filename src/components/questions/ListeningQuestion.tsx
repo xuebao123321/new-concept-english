@@ -15,6 +15,7 @@ export default function ListeningQuestionComp({ question, onAnswer, startTime }:
   const [playCount, setPlayCount] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
+  const [audioFailed, setAudioFailed] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const handlePlay = useCallback(() => {
@@ -71,41 +72,49 @@ export default function ListeningQuestionComp({ question, onAnswer, startTime }:
     <div className="space-y-4">
       <p className="text-sm text-ink-light">{question.prompt}</p>
 
-      {/* 播放按钮 */}
-      <div className="flex items-center gap-4 p-4 rounded-xl bg-forest/5 border border-forest/20">
-        <motion.button
-          onClick={handlePlay}
-          className="w-16 h-16 rounded-full flex items-center justify-center text-2xl
-                     bg-warm-bg border-2 border-forest/40 text-forest
-                     shadow-[0_0_20px_rgba(91,158,212,0.15)]"
-          whileTap={{ scale: 0.9 }}
-          animate={isPlaying ? { scale: [1, 1.06, 1], borderColor: ['rgba(91,158,212,0.4)', 'rgba(91,158,212,0.8)', 'rgba(91,158,212,0.4)'] } : {}}
-          transition={{ repeat: isPlaying ? Infinity : 0, duration: 1.5 }}
-        >
-          {isPlaying ? '⏸' : '▶'}
-        </motion.button>
-
-        <div className="flex-1">
-          <div className="text-sm font-medium text-ink">
-            {isPlaying ? '正在播放...' : `已播放 ${playCount} 遍`}
-          </div>
-          {isPlaying && (
-            <div className="flex gap-1 mt-2">
-              {[0, 1, 2, 3].map(i => (
-                <motion.div
-                  key={i}
-                  className="w-1.5 bg-forest rounded-full"
-                  animate={{ height: [8, 16 + Math.random() * 12, 8] }}
-                  transition={{ repeat: Infinity, duration: 0.6 + i * 0.15, delay: i * 0.1 }}
-                />
-              ))}
-            </div>
-          )}
-          {!isPlaying && (
-            <div className="text-xs text-ink-muted mt-1">点击播放按钮听音频（可重复播放）</div>
-          )}
+      {/* 播放按钮 / 文字降级 */}
+      {audioFailed ? (
+        <div className="p-4 rounded-xl bg-sky-pale border border-sky/30 text-center">
+          <p className="text-sm text-ink-light font-medium">🎧 听力文本（无音频）</p>
+          <p className="text-base text-ink font-bold mt-1.5 leading-relaxed">{question.transcript}</p>
+          <p className="text-[10px] text-ink-muted mt-2">请阅读文本后作答</p>
         </div>
-      </div>
+      ) : (
+        <div className="flex items-center gap-4 p-4 rounded-xl bg-forest/5 border border-forest/20">
+          <motion.button
+            onClick={handlePlay}
+            className="w-16 h-16 rounded-full flex items-center justify-center text-2xl
+                       bg-warm-bg border-2 border-forest/40 text-forest
+                       shadow-[0_0_20px_rgba(91,158,212,0.15)]"
+            whileTap={{ scale: 0.9 }}
+            animate={isPlaying ? { scale: [1, 1.06, 1], borderColor: ['rgba(91,158,212,0.4)', 'rgba(91,158,212,0.8)', 'rgba(91,158,212,0.4)'] } : {}}
+            transition={{ repeat: isPlaying ? Infinity : 0, duration: 1.5 }}
+          >
+            {isPlaying ? '⏸' : '▶'}
+          </motion.button>
+
+          <div className="flex-1">
+            <div className="text-sm font-medium text-ink">
+              {isPlaying ? '正在播放...' : `已播放 ${playCount} 遍`}
+            </div>
+            {isPlaying && (
+              <div className="flex gap-1 mt-2">
+                {[0, 1, 2, 3].map(i => (
+                  <motion.div
+                    key={i}
+                    className="w-1.5 bg-forest rounded-full"
+                    animate={{ height: [8, 16 + Math.random() * 12, 8] }}
+                    transition={{ repeat: Infinity, duration: 0.6 + i * 0.15, delay: i * 0.1 }}
+                  />
+                ))}
+              </div>
+            )}
+            {!isPlaying && (
+              <div className="text-xs text-ink-muted mt-1">点击播放按钮听音频（可重复播放）</div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* hidden audio */}
       <audio
@@ -113,6 +122,7 @@ export default function ListeningQuestionComp({ question, onAnswer, startTime }:
         src={question.audioSrc}
         onEnded={handleAudioEnded}
         onPause={() => setIsPlaying(false)}
+        onError={() => setAudioFailed(true)}
         className="hidden"
       />
 

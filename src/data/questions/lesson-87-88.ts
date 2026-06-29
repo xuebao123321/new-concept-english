@@ -319,7 +319,7 @@ export const lesson8788Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '过去进行时基本'],
     block: 'listening',
     prompt: '听音频，选出说话者昨晚8点在做什么：',
-    audioSrc: '/audio/lesson-87-88.mp3', transcript: "A: Where were you at 8 o'clock last night? B: I was at home. I was watching a film on TV. A: What film was it? B: It was a French film about Paris. My wife was reading a book. Our children were doing their homework. A: Sounds like a peaceful evening. B: Yes, it was. Until my neighbour started playing loud music at 10!",
+    audioSrc: '/audio/lesson-87-88.m4a', transcript: "A: Where were you at 8 o'clock last night? B: I was at home. I was watching a film on TV. A: What film was it? B: It was a French film about Paris. My wife was reading a book. Our children were doing their homework. A: Sounds like a peaceful evening. B: Yes, it was. Until my neighbour started playing loud music at 10!",
     question: '说话者昨晚8点在做什么？',
     options: [
       '在看电视上的电影（watching a film on TV）',
@@ -335,7 +335,7 @@ export const lesson8788Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '事故场景'],
     block: 'listening',
     prompt: '听音频，选出事故中发生了什么：',
-    audioSrc: '/audio/lesson-87-88.mp3', transcript: "Policeman: Can you tell me what happened, sir? Witness: Yes. I was walking along the road when I saw a car going very fast. It was a red car. The driver was trying to turn left at the traffic lights. But he was driving too fast. He couldn't make the turn, and the car crashed into a lamp-post. Policeman: Was anyone hurt? Witness: No, luckily. The driver got out of the car. He wasn't hurt, but he was very shocked. I called the police immediately. Policeman: And what were you doing when all this happened? Witness: As I said, I was just walking along the road. I was on my way to the supermarket.",
+    audioSrc: '/audio/lesson-87-88.m4a', transcript: "Policeman: Can you tell me what happened, sir? Witness: Yes. I was walking along the road when I saw a car going very fast. It was a red car. The driver was trying to turn left at the traffic lights. But he was driving too fast. He couldn't make the turn, and the car crashed into a lamp-post. Policeman: Was anyone hurt? Witness: No, luckily. The driver got out of the car. He wasn't hurt, but he was very shocked. I called the police immediately. Policeman: And what were you doing when all this happened? Witness: As I said, I was just walking along the road. I was on my way to the supermarket.",
     question: '事故是怎么发生的？',
     options: [
       '司机开得太快，试图左转时撞到了路灯柱（driving too fast, tried to turn left, crashed into a lamp-post）',
@@ -351,7 +351,7 @@ export const lesson8788Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '过去进行时对话'],
     block: 'listening',
     prompt: '听音频，选出对话发生的时间：',
-    audioSrc: '/audio/lesson-87-88.mp3', transcript: "A: I called you three times last night but you didn't answer. What were you doing? B: Oh, I'm sorry. I was in the garage. A: The garage? What were you doing there at 9pm? B: I was repairing my car. It broke down yesterday. A: You were repairing your car at 9 at night? B: Yes, I needed it for this morning. I was trying to fix the engine. It took much longer than I thought. A: Did you manage to fix it? B: Yes, I did. I finished at about midnight.",
+    audioSrc: '/audio/lesson-87-88.m4a', transcript: "A: I called you three times last night but you didn't answer. What were you doing? B: Oh, I'm sorry. I was in the garage. A: The garage? What were you doing there at 9pm? B: I was repairing my car. It broke down yesterday. A: You were repairing your car at 9 at night? B: Yes, I needed it for this morning. I was trying to fix the engine. It took much longer than I thought. A: Did you manage to fix it? B: Yes, I did. I finished at about midnight.",
     question: 'B昨晚9点在哪里做什么？',
     options: [
       '在车库修车（in the garage, repairing his car）',
@@ -367,7 +367,7 @@ export const lesson8788Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '过去进行时综合理解'],
     block: 'listening',
     prompt: '听音频，选出对事件的正确描述：',
-    audioSrc: '/audio/lesson-87-88.mp3', transcript: "Police officer: We're investigating the accident on Bridge Street last Tuesday afternoon. Where were you at 3pm? Mr. Wood: I was at work. I was sitting in my office. I was talking to a customer on the phone. Police officer: Can anyone confirm that? Mr. Wood: Yes, my assistant. She was sitting next to me. She was typing a report. And my boss came in at about 3:15. He was looking for some papers. Police officer: And what about the car? Your car was seen near Bridge Street that afternoon. Mr. Wood: That's impossible. My car was in the garage all day. The mechanic was repairing it. I have the receipt. Police officer: Can we have a copy of that receipt? Mr. Wood: Of course. Look, it says here: 'Repairs carried out on Tuesday from 9am to 5pm.' Police officer: Thank you, Mr. Wood. That clears things up.",
+    audioSrc: '/audio/lesson-87-88.m4a', transcript: "Police officer: We're investigating the accident on Bridge Street last Tuesday afternoon. Where were you at 3pm? Mr. Wood: I was at work. I was sitting in my office. I was talking to a customer on the phone. Police officer: Can anyone confirm that? Mr. Wood: Yes, my assistant. She was sitting next to me. She was typing a report. And my boss came in at about 3:15. He was looking for some papers. Police officer: And what about the car? Your car was seen near Bridge Street that afternoon. Mr. Wood: That's impossible. My car was in the garage all day. The mechanic was repairing it. I have the receipt. Police officer: Can we have a copy of that receipt? Mr. Wood: Of course. Look, it says here: 'Repairs carried out on Tuesday from 9am to 5pm.' Police officer: Thank you, Mr. Wood. That clears things up.",
     question: '为什么Mr. Wood不可能是事故的肇事者？',
     options: [
       '他的车一整天都在车库里修理（car was in the garage being repaired all day — 有收据证明）',

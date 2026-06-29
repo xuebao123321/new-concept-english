@@ -304,7 +304,7 @@ export const lesson5354Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '不规则动词'],
     block: 'listening',
     prompt: '听音频，选出说话者昨天做了什么：',
-    audioSrc: '/audio/lesson-53-54.mp3', transcript: "Yesterday was a busy day. In the morning, I went to the bank and then I went to the supermarket. I bought some meat and vegetables. For lunch, I ate at a Chinese restaurant — the food was delicious. In the afternoon, I saw a film at the cinema. I spoke to an old friend on the phone in the evening. I went to bed early because I was tired.",
+    audioSrc: '/audio/lesson-53-54.m4a', transcript: "Yesterday was a busy day. In the morning, I went to the bank and then I went to the supermarket. I bought some meat and vegetables. For lunch, I ate at a Chinese restaurant — the food was delicious. In the afternoon, I saw a film at the cinema. I spoke to an old friend on the phone in the evening. I went to bed early because I was tired.",
     question: '说话者午餐做了什么？',
     options: [
       '在一家中餐馆吃饭 (ate at a Chinese restaurant)',
@@ -320,7 +320,7 @@ export const lesson5354Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '国家国籍'],
     block: 'listening',
     prompt: '听音频，选出每个人的国籍：',
-    audioSrc: '/audio/lesson-53-54.mp3', transcript: "In my English class, there are students from many countries. Maria comes from Spain — she is Spanish. Takeshi is from Japan — he is Japanese. Anika comes from India — she is Indian. Hans is from Germany — he is German. And Sophie is from France — she is French. Our teacher, Mr. Brown, is from England — he is English. I come from China — I am Chinese.",
+    audioSrc: '/audio/lesson-53-54.m4a', transcript: "In my English class, there are students from many countries. Maria comes from Spain — she is Spanish. Takeshi is from Japan — he is Japanese. Anika comes from India — she is Indian. Hans is from Germany — he is German. And Sophie is from France — she is French. Our teacher, Mr. Brown, is from England — he is English. I come from China — I am Chinese.",
     question: 'Takeshi 是哪里人？',
     options: [
       '日本人 (Japanese)',
@@ -336,7 +336,7 @@ export const lesson5354Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'Did 问句'],
     block: 'listening',
     prompt: '听音频对话，选出关于旅行的正确信息：',
-    audioSrc: '/audio/lesson-53-54.mp3', transcript: "A: Did you have a good trip to Japan? B: Yes, I did! It was amazing. A: Where did you go in Japan? B: I went to Tokyo, Kyoto, and Osaka. A: What did you see in Kyoto? B: I saw many beautiful temples. I also saw the cherry blossoms — they were so pretty! A: Did you eat sushi every day? B: No, I didn't! I ate many different things — ramen, tempura, and okonomiyaki. A: Did you buy any souvenirs? B: Yes, I bought some Japanese tea and a kimono for my mother. A: Sounds wonderful! I want to go to Japan too.",
+    audioSrc: '/audio/lesson-53-54.m4a', transcript: "A: Did you have a good trip to Japan? B: Yes, I did! It was amazing. A: Where did you go in Japan? B: I went to Tokyo, Kyoto, and Osaka. A: What did you see in Kyoto? B: I saw many beautiful temples. I also saw the cherry blossoms — they were so pretty! A: Did you eat sushi every day? B: No, I didn't! I ate many different things — ramen, tempura, and okonomiyaki. A: Did you buy any souvenirs? B: Yes, I bought some Japanese tea and a kimono for my mother. A: Sounds wonderful! I want to go to Japan too.",
     question: 'B 在京都看到了什么？',
     options: [
       '美丽的寺庙和樱花 (beautiful temples and cherry blossoms)',
@@ -352,7 +352,7 @@ export const lesson5354Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合理解'],
     block: 'listening',
     prompt: '听音频独白，选出正确的完整描述：',
-    audioSrc: '/audio/lesson-53-54.mp3', transcript: "I had an amazing experience last month. I went to an international food festival in London. There were cooks from all over the world. I met a Thai cook who made the best green curry I ever ate. He told me the secret was fresh Thai basil. Then I spoke to a Japanese chef who showed me how to make sushi — I even tried to make one myself, but it didn't look very good! I bought some Indian spices from a very friendly lady from Mumbai. She taught me how to use them in cooking. For dessert, I ate Austrian apple strudel — it was delicious! I also saw a Korean cooking show — they made bibimbap in a huge stone bowl. The festival opened my eyes to so many different food cultures. I took lots of photos and wrote down many recipes.",
+    audioSrc: '/audio/lesson-53-54.m4a', transcript: "I had an amazing experience last month. I went to an international food festival in London. There were cooks from all over the world. I met a Thai cook who made the best green curry I ever ate. He told me the secret was fresh Thai basil. Then I spoke to a Japanese chef who showed me how to make sushi — I even tried to make one myself, but it didn't look very good! I bought some Indian spices from a very friendly lady from Mumbai. She taught me how to use them in cooking. For dessert, I ate Austrian apple strudel — it was delicious! I also saw a Korean cooking show — they made bibimbap in a huge stone bowl. The festival opened my eyes to so many different food cultures. I took lots of photos and wrote down many recipes.",
     question: '说话者在美食节上没有做以下哪件事？',
     options: [
       '去澳大利亚的展位 (visit the Australian stand)',

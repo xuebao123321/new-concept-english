@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { springs, staggerDelay } from '../utils/motion-tokens';
 import { useAuthStore } from '../stores/useAuthStore';
+import { GRADE_LABELS } from '../components/onboarding/ProfileSetupModal';
 
 const API = import.meta.env.PROD
   ? 'https://new-concept-english-production.up.railway.app'
   : 'http://localhost:8000';
 
-interface Entry { id: number; username: string; nickname: string; completed: number; }
+interface Entry { id: number; username: string; nickname: string; completed: number; xp: number; grade?: string; }
 
 /* 奖牌配置 (前三名) */
 const MEDAL_STYLES = [
@@ -44,8 +45,12 @@ export default function LeaderboardPage() {
       <div className="text-center">
         <h2 className="text-h1 text-ink">🏆 闯关排行榜</h2>
         <p className="text-meta text-ink-light mt-1">
-          看看谁修复了最多的课程!
+          排名根据 <b className="text-forest">XP（经验值）</b> 计算
           {myId && <span className="ml-1 text-forest font-bold">· 你在第 {myRankIndex >= 0 ? myRankIndex + 1 : '?'} 名</span>}
+        </p>
+        <p className="text-caption text-ink-muted mt-1 max-w-xs mx-auto leading-relaxed">
+          💡 完成学习块 +30XP · 通过综合测试 +50XP<br/>
+          复习 +5XP/题 · 成就 +15XP · 打卡7天 +20XP
         </p>
         {isParent && (
           <button onClick={() => setFamilyOnly(!familyOnly)}
@@ -109,14 +114,16 @@ export default function LeaderboardPage() {
                   <div className="flex-1 min-w-0">
                     <div className="text-meta font-bold text-ink truncate">
                       {e.nickname || e.username}
+                      {e.grade && <span className="ml-1 text-[10px] text-ink-muted">· {GRADE_LABELS[e.grade] || e.grade}</span>}
                       {isMe && (
                         <span className="ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full bg-forest text-white font-bold">你</span>
                       )}
                     </div>
                   </div>
                   <div className="text-right tabular-nums">
-                    <div className="text-h3 font-extrabold text-forest">{e.completed}</div>
-                    <div className="text-caption text-ink-light">课</div>
+                    <div className="text-h3 font-extrabold text-forest">{e.xp}</div>
+                    <div className="text-caption text-ink-light">XP</div>
+                    <div className="text-[10px] text-ink-muted">{e.completed} 课</div>
                   </div>
                 </motion.div>
               );
@@ -167,12 +174,16 @@ function MedalCard({ entry, rank, delay, featured = false, isMe = false }: {
           <span className="ml-1 text-[10px] px-1 py-0.5 rounded-full bg-forest text-white align-middle font-bold">你</span>
         )}
       </div>
+      {entry.grade && (
+        <div className="text-[10px] text-ink-muted">{GRADE_LABELS[entry.grade] || entry.grade}</div>
+      )}
 
       {/* 数字 */}
       <div className={`tabular-nums ${featured ? 'text-display' : 'text-h1'} font-extrabold text-ink mt-0.5`}>
-        {entry.completed}
+        {entry.xp}
       </div>
-      <div className="text-caption text-ink-light">课</div>
+      <div className="text-caption text-ink-light">XP</div>
+      <div className="text-[10px] text-ink-muted mt-0.5">{entry.completed} 课</div>
     </motion.div>
   );
 }

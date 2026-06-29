@@ -305,7 +305,7 @@ export const lesson7778Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '看牙医'],
     block: 'listening',
     prompt: '听音频，选出病人需要什么：',
-    audioSrc: '/audio/lesson-77-78.mp3', transcript: "Patient: Good morning. I have an appointment with Dr. Smith at 10 o'clock. Receptionist: What's your name, please? Patient: It's John Brown. Receptionist: Yes, Mr. Brown. You have an appointment at 10. The doctor is ready now. Please go in. Patient: Thank you. I have had a terrible toothache for three days. I can't eat or sleep. I hope the doctor can help me.",
+    audioSrc: '/audio/lesson-77-78.m4a', transcript: "Patient: Good morning. I have an appointment with Dr. Smith at 10 o'clock. Receptionist: What's your name, please? Patient: It's John Brown. Receptionist: Yes, Mr. Brown. You have an appointment at 10. The doctor is ready now. Please go in. Patient: Thank you. I have had a terrible toothache for three days. I can't eat or sleep. I hope the doctor can help me.",
     question: '病人遇到了什么问题？',
     options: [
       '他有严重的牙痛，已经三天了（terrible toothache for three days）',
@@ -321,7 +321,7 @@ export const lesson7778Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '牙医诊断'],
     block: 'listening',
     prompt: '听音频，选出牙医的诊断和建议：',
-    audioSrc: '/audio/lesson-77-78.mp3', transcript: "Dentist: Good morning, Mr. Brown. What seems to be the problem? Patient: I have a terrible toothache, doctor. It hurts a lot. Dentist: How long have you had it? Patient: Since Monday. That's three days now. Dentist: Let me take a look. Open your mouth wide, please. Hmm... I can see the problem. You have a bad tooth. Patient: Is it serious? Dentist: I'm afraid you need to have it out. It can't be saved. Patient: Oh no! I have never had a tooth out before. Will it hurt? Dentist: Don't worry. I have done this many times. You won't feel a thing.",
+    audioSrc: '/audio/lesson-77-78.m4a', transcript: "Dentist: Good morning, Mr. Brown. What seems to be the problem? Patient: I have a terrible toothache, doctor. It hurts a lot. Dentist: How long have you had it? Patient: Since Monday. That's three days now. Dentist: Let me take a look. Open your mouth wide, please. Hmm... I can see the problem. You have a bad tooth. Patient: Is it serious? Dentist: I'm afraid you need to have it out. It can't be saved. Patient: Oh no! I have never had a tooth out before. Will it hurt? Dentist: Don't worry. I have done this many times. You won't feel a thing.",
     question: '牙医决定怎么处理？',
     options: [
       '拔掉这颗牙（have it out — it can\'t be saved）',
@@ -337,7 +337,7 @@ export const lesson7778Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '现在完成时 经历'],
     block: 'listening',
     prompt: '听音频，选出说话者的经历：',
-    audioSrc: '/audio/lesson-77-78.mp3', transcript: "I have had many toothaches in my life. I have been to the dentist more times than I can count. I have had three teeth out, I have had braces twice, and I have even had a surgery on my jaw. My friends say I have spent more time at the dentist than anyone they know. But the funny thing is — I have never broken a bone, I have never been to hospital for anything else, and I have never had any other health problems. It's just my teeth!",
+    audioSrc: '/audio/lesson-77-78.m4a', transcript: "I have had many toothaches in my life. I have been to the dentist more times than I can count. I have had three teeth out, I have had braces twice, and I have even had a surgery on my jaw. My friends say I have spent more time at the dentist than anyone they know. But the funny thing is — I have never broken a bone, I have never been to hospital for anything else, and I have never had any other health problems. It's just my teeth!",
     question: '说话者关于自己健康情况的描述哪项正确？',
     options: [
       '牙科问题很多但身体其他方面非常健康（many dental problems but no other health issues）',
@@ -353,7 +353,7 @@ export const lesson7778Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'ever/never 问答'],
     block: 'listening',
     prompt: '听音频，选出正确的答案：',
-    audioSrc: '/audio/lesson-77-78.mp3', transcript: "Teacher: Today we're going to talk about experiences. Maria, have you ever been to a foreign country? Maria: Yes, I have. I have been to three foreign countries — Japan, Thailand and France. Teacher: That's wonderful. And Carlos, have you ever eaten anything unusual? Carlos: Well, I have tried insects once. They were crunchy! Teacher: Insects! That's very unusual. And Li, have you ever met anyone famous? Li: Actually, yes! I have met a famous singer. I met her at the airport last year. She was very nice. Teacher: You're all very lucky. I have never done any of those things!",
+    audioSrc: '/audio/lesson-77-78.m4a', transcript: "Teacher: Today we're going to talk about experiences. Maria, have you ever been to a foreign country? Maria: Yes, I have. I have been to three foreign countries — Japan, Thailand and France. Teacher: That's wonderful. And Carlos, have you ever eaten anything unusual? Carlos: Well, I have tried insects once. They were crunchy! Teacher: Insects! That's very unusual. And Li, have you ever met anyone famous? Li: Actually, yes! I have met a famous singer. I met her at the airport last year. She was very nice. Teacher: You're all very lucky. I have never done any of those things!",
     question: 'Carlos说他做过什么不寻常的事？',
     options: [
       '他吃过一次昆虫（tried insects once — they were crunchy）',
@@ -369,7 +369,7 @@ export const lesson7778Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', 'ever/never 综合故事'],
     block: 'listening',
     prompt: '听音频故事，选出为什么老奶奶不害怕看牙医：',
-    audioSrc: '/audio/lesson-77-78.mp3', transcript: "My grandmother is 85 years old and she has never had a toothache in her life. Can you believe it? She has never been to a dentist — not even once. She told me her secret: 'I have never eaten many sweets. I have always brushed my teeth three times a day. And I have never missed a day.' But the most surprising thing is that she still has all her own teeth! When I asked her if she has ever been afraid of the dentist, she laughed and said, 'Why would I be afraid of someone I have never met?' I think she is the luckiest person I have ever known. I have had three cavities this year alone. I wish I had her teeth!",
+    audioSrc: '/audio/lesson-77-78.m4a', transcript: "My grandmother is 85 years old and she has never had a toothache in her life. Can you believe it? She has never been to a dentist — not even once. She told me her secret: 'I have never eaten many sweets. I have always brushed my teeth three times a day. And I have never missed a day.' But the most surprising thing is that she still has all her own teeth! When I asked her if she has ever been afraid of the dentist, she laughed and said, 'Why would I be afraid of someone I have never met?' I think she is the luckiest person I have ever known. I have had three cavities this year alone. I wish I had her teeth!",
     question: '老奶奶为什么不害怕看牙医？',
     options: [
       '因为她从来没有看过牙医——她从未有过牙痛（never been to a dentist, never had a toothache）',

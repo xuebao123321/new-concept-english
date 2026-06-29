@@ -319,7 +319,7 @@ export const lesson8990Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '事故基本'],
     block: 'listening',
     prompt: '听音频，选出发生了什么：',
-    audioSrc: '/audio/lesson-89-90.mp3', transcript: "A: What happened to you? You're walking with a stick! B: I had an accident last week. I was walking down the stairs at work when I slipped and fell. A: Oh no! Were you hurt? B: Yes, I hurt my back. I couldn't stand up for a few minutes. Someone called an ambulance. A: That sounds terrible. How are you feeling now? B: Much better, thanks. But I still can't walk very well. The doctor says I need to rest for another week.",
+    audioSrc: '/audio/lesson-89-90.m4a', transcript: "A: What happened to you? You're walking with a stick! B: I had an accident last week. I was walking down the stairs at work when I slipped and fell. A: Oh no! Were you hurt? B: Yes, I hurt my back. I couldn't stand up for a few minutes. Someone called an ambulance. A: That sounds terrible. How are you feeling now? B: Much better, thanks. But I still can't walk very well. The doctor says I need to rest for another week.",
     question: 'B发生了什么事？',
     options: [
       '在楼梯上滑倒摔伤（slipped and fell on the stairs at work）',
@@ -335,7 +335,7 @@ export const lesson8990Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'while 同时动作'],
     block: 'listening',
     prompt: '听音频，选出每个人在做什么：',
-    audioSrc: '/audio/lesson-89-90.mp3', transcript: "Last night at about 8 o'clock, everyone in my family was doing something different. My father was reading the newspaper in the living room. My mother was cooking in the kitchen. My sister was doing her homework in her room. And I was watching TV. While I was watching TV, I heard a strange noise from outside. I looked out of the window and saw our neighbour. He was trying to repair his car. But something was wrong — the engine was making a very strange sound! My father went out to help him. While they were trying to fix the car, it started to rain. What a night!",
+    audioSrc: '/audio/lesson-89-90.m4a', transcript: "Last night at about 8 o'clock, everyone in my family was doing something different. My father was reading the newspaper in the living room. My mother was cooking in the kitchen. My sister was doing her homework in her room. And I was watching TV. While I was watching TV, I heard a strange noise from outside. I looked out of the window and saw our neighbour. He was trying to repair his car. But something was wrong — the engine was making a very strange sound! My father went out to help him. While they were trying to fix the car, it started to rain. What a night!",
     question: '说话者听到奇怪的声音时在做什么？',
     options: [
       '在看电视（watching TV）',
@@ -351,7 +351,7 @@ export const lesson8990Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'when/while 对话'],
     block: 'listening',
     prompt: '听音频，选出事故发生的时间：',
-    audioSrc: '/audio/lesson-89-90.mp3', transcript: "A: I heard you were in hospital last month. What happened? B: I fell down the stairs. A: Oh no! When did that happen? B: It was a Tuesday morning. I was getting ready for work. I was carrying my laptop and a cup of coffee. While I was going down the stairs, I missed a step and fell. A: That sounds painful. Did you hurt yourself badly? B: I broke my arm. The funny thing is, while I was lying on the floor waiting for the ambulance, I was still thinking about my coffee. It went all over the carpet! A: Only you would worry about the carpet at a time like that!",
+    audioSrc: '/audio/lesson-89-90.m4a', transcript: "A: I heard you were in hospital last month. What happened? B: I fell down the stairs. A: Oh no! When did that happen? B: It was a Tuesday morning. I was getting ready for work. I was carrying my laptop and a cup of coffee. While I was going down the stairs, I missed a step and fell. A: That sounds painful. Did you hurt yourself badly? B: I broke my arm. The funny thing is, while I was lying on the floor waiting for the ambulance, I was still thinking about my coffee. It went all over the carpet! A: Only you would worry about the carpet at a time like that!",
     question: '事故是什么时候发生的？',
     options: [
       '周二早上，B正在准备去上班的时候（Tuesday morning, while getting ready for work）',
@@ -367,7 +367,7 @@ export const lesson8990Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '事故综合理解'],
     block: 'listening',
     prompt: '听音频，选出目击者当时在做什么：',
-    audioSrc: '/audio/lesson-89-90.mp3', transcript: "Police officer: You witnessed the accident at the corner of Park Road and Bridge Street yesterday. Can you tell me what you saw? Witness: Yes. I was waiting for the bus. I was standing at the bus stop when I saw a man running across the road. Police officer: What was he doing? Witness: He was running to catch a bus on the other side. He wasn't looking at the traffic. While he was crossing the road, a car came around the corner. Police officer: Was the car going fast? Witness: Not very fast. But the driver didn't see the man. She was looking at her phone. When she finally noticed him, it was too late. She tried to stop but hit him. Police officer: What happened then? Witness: The man fell down. He was lying on the road. He wasn't moving. Several people ran to help him. While we were waiting for the ambulance, a woman who said she was a nurse checked his pulse. Police officer: Did you see the driver? Witness: Yes, she got out of her car. She was crying. She kept saying, 'I'm sorry, I didn't see him.' Police officer: Thank you. That's very helpful.",
+    audioSrc: '/audio/lesson-89-90.m4a', transcript: "Police officer: You witnessed the accident at the corner of Park Road and Bridge Street yesterday. Can you tell me what you saw? Witness: Yes. I was waiting for the bus. I was standing at the bus stop when I saw a man running across the road. Police officer: What was he doing? Witness: He was running to catch a bus on the other side. He wasn't looking at the traffic. While he was crossing the road, a car came around the corner. Police officer: Was the car going fast? Witness: Not very fast. But the driver didn't see the man. She was looking at her phone. When she finally noticed him, it was too late. She tried to stop but hit him. Police officer: What happened then? Witness: The man fell down. He was lying on the road. He wasn't moving. Several people ran to help him. While we were waiting for the ambulance, a woman who said she was a nurse checked his pulse. Police officer: Did you see the driver? Witness: Yes, she got out of her car. She was crying. She kept saying, 'I'm sorry, I didn't see him.' Police officer: Thank you. That's very helpful.",
     question: '目击者看到事故时正在做什么？',
     options: [
       '在公交站等公交车（waiting for the bus at the bus stop）',

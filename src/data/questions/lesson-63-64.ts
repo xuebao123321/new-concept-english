@@ -333,7 +333,7 @@ export const lesson6364Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '比较级识别'],
     block: 'listening',
     prompt: '听音频，选出正确的比较对象：',
-    audioSrc: '/audio/lesson-63-64.mp3', transcript: "Tom is 12 years old. Mary is 10. Tim is 14. Tom is older than Mary. Mary is younger than Tom. Tim is older than Tom. Tom is not the oldest. Tim is the oldest of the three.",
+    audioSrc: '/audio/lesson-63-64.m4a', transcript: "Tom is 12 years old. Mary is 10. Tim is 14. Tom is older than Mary. Mary is younger than Tom. Tim is older than Tom. Tom is not the oldest. Tim is the oldest of the three.",
     question: '谁是最年长的？',
     options: ['Tim (14岁)', 'Tom (12岁)', 'Mary (10岁)', '三个人一样大'],
     correctIndex: 0,
@@ -344,7 +344,7 @@ export const lesson6364Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '比较级 better/worse'],
     block: 'listening',
     prompt: '听音频，选出Jimmy的病情变化：',
-    audioSrc: '/audio/lesson-63-64.mp3', transcript: "Doctor: How is Jimmy today? Mrs. Williams: He is better than yesterday. His temperature is lower. He feels much happier. Doctor: That's good. Is his headache worse? Mrs. Williams: No, it's better too. The medicine is helping him. He is getting stronger now.",
+    audioSrc: '/audio/lesson-63-64.m4a', transcript: "Doctor: How is Jimmy today? Mrs. Williams: He is better than yesterday. His temperature is lower. He feels much happier. Doctor: That's good. Is his headache worse? Mrs. Williams: No, it's better too. The medicine is helping him. He is getting stronger now.",
     question: '关于Jimmy的情况，以下哪项是正确的？',
     options: [
       '他各方面都在好转（better, lower, happier, stronger）',
@@ -360,7 +360,7 @@ export const lesson6364Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '比较选择'],
     block: 'listening',
     prompt: '听音频对话，选出顾客选了什么：',
-    audioSrc: '/audio/lesson-63-64.mp3', transcript: "Customer: I'd like to buy a suitcase, please. Assistant: Certainly. We have these two — the blue one and the black one. The blue one is lighter but smaller. The black one is bigger but heavier. Customer: Which is cheaper? Assistant: The blue one is cheaper. The black one is more expensive but stronger. Customer: I'll take the blue one. I want something light and cheap.",
+    audioSrc: '/audio/lesson-63-64.m4a', transcript: "Customer: I'd like to buy a suitcase, please. Assistant: Certainly. We have these two — the blue one and the black one. The blue one is lighter but smaller. The black one is bigger but heavier. Customer: Which is cheaper? Assistant: The blue one is cheaper. The black one is more expensive but stronger. Customer: I'll take the blue one. I want something light and cheap.",
     question: '顾客为什么选了蓝色的？',
     options: [
       '因为它更轻、更便宜（lighter and cheaper）',
@@ -376,7 +376,7 @@ export const lesson6364Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '图书馆规则'],
     block: 'listening',
     prompt: '听音频，选出图书馆的规定：',
-    audioSrc: '/audio/lesson-63-64.mp3', transcript: "Library rules: You must be quiet in the library. Don't talk loudly. Don't make noise. You can read any book here. But you mustn't take the books home without permission. You can borrow three books at a time. Keep the books clean. Don't eat or drink in the library. The library is a place for reading, not for playing.",
+    audioSrc: '/audio/lesson-63-64.m4a', transcript: "Library rules: You must be quiet in the library. Don't talk loudly. Don't make noise. You can read any book here. But you mustn't take the books home without permission. You can borrow three books at a time. Keep the books clean. Don't eat or drink in the library. The library is a place for reading, not for playing.",
     question: '根据规定，以下哪项是不允许的？',
     options: [
       '大声交谈（talk loudly）和制造噪音（make noise）',
@@ -392,7 +392,7 @@ export const lesson6364Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合比较理解'],
     block: 'listening',
     prompt: '听音频对话，选出正确的完整描述：',
-    audioSrc: '/audio/lesson-63-64.mp3', transcript: "Mum: Jimmy, how are you feeling today? Jimmy: Much better, Mum. I'm not as tired as yesterday. My headache is gone. But my throat still hurts a little. Mum: Good. You look better too. You have more colour in your face now. But remember — you mustn't run around yet. You are still weaker than usual. Jimmy: Can I play in the garden then? It's such a nice day. Mum: You can sit in the garden and read. It's warmer outside than yesterday. But no running or playing football. Jimmy: What about watching TV? Mum: You can watch TV for an hour. But first, you must take your medicine. The doctor said it's important. You mustn't skip it. Jimmy: The medicine tastes worse than anything! It's worse than last week's medicine. Mum: I know, dear. But it makes you better. A bad taste is better than a bad cold. Now, open your mouth. Jimmy: Oh, all right...",
+    audioSrc: '/audio/lesson-63-64.m4a', transcript: "Mum: Jimmy, how are you feeling today? Jimmy: Much better, Mum. I'm not as tired as yesterday. My headache is gone. But my throat still hurts a little. Mum: Good. You look better too. You have more colour in your face now. But remember — you mustn't run around yet. You are still weaker than usual. Jimmy: Can I play in the garden then? It's such a nice day. Mum: You can sit in the garden and read. It's warmer outside than yesterday. But no running or playing football. Jimmy: What about watching TV? Mum: You can watch TV for an hour. But first, you must take your medicine. The doctor said it's important. You mustn't skip it. Jimmy: The medicine tastes worse than anything! It's worse than last week's medicine. Mum: I know, dear. But it makes you better. A bad taste is better than a bad cold. Now, open your mouth. Jimmy: Oh, all right...",
     question: '关于Jimmy和妈妈的对话，以下哪个说法是错误的？',
     options: [
       'Jimmy已经完全康复了，可以到处跑着玩了（错误—他仍然虚弱，被禁止跑步）',

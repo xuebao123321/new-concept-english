@@ -344,7 +344,7 @@ export const lesson7576Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '购物对话'],
     block: 'listening',
     prompt: '听音频购物对话，选出顾客买了什么：',
-    audioSrc: '/audio/lesson-75-76.mp3', transcript: "Shop Assistant: Can I help you? Customer: Yes, I'm looking for a pair of shoes. Shop Assistant: We have many styles. What size do you wear? Customer: Size 38, please. Shop Assistant: Here's a nice pair. They're very fashionable this year. Customer: Can I try them on? Shop Assistant: Of course. How do they feel? Customer: They feel very comfortable! I have tried on many shoes today, but these are the best. I'll take them.",
+    audioSrc: '/audio/lesson-75-76.m4a', transcript: "Shop Assistant: Can I help you? Customer: Yes, I'm looking for a pair of shoes. Shop Assistant: We have many styles. What size do you wear? Customer: Size 38, please. Shop Assistant: Here's a nice pair. They're very fashionable this year. Customer: Can I try them on? Shop Assistant: Of course. How do they feel? Customer: They feel very comfortable! I have tried on many shoes today, but these are the best. I'll take them.",
     question: '顾客最后做了什么决定？',
     options: [
       '买了这双鞋，因为它们很舒服（bought the shoes because they are comfortable）',
@@ -360,7 +360,7 @@ export const lesson7576Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '现在完成时 购物'],
     block: 'listening',
     prompt: '听音频，选出正确的信息：',
-    audioSrc: '/audio/lesson-75-76.mp3', transcript: "Anna: Have you ever bought shoes from this shop? Ben: Yes, I have. I bought a pair last month. Anna: Are they comfortable? Ben: Not really. I have worn them a few times and they hurt my feet. Anna: That's too bad. I have never bought shoes here. I usually buy them online. Ben: I have bought clothes online before, but never shoes. You need to try shoes on before you buy them. Anna: You're right. I think I have learned my lesson from your experience!",
+    audioSrc: '/audio/lesson-75-76.m4a', transcript: "Anna: Have you ever bought shoes from this shop? Ben: Yes, I have. I bought a pair last month. Anna: Are they comfortable? Ben: Not really. I have worn them a few times and they hurt my feet. Anna: That's too bad. I have never bought shoes here. I usually buy them online. Ben: I have bought clothes online before, but never shoes. You need to try shoes on before you buy them. Anna: You're right. I think I have learned my lesson from your experience!",
     question: 'Ben从这次购物中学到了什么？',
     options: [
       '买鞋需要先试穿（need to try shoes on before buying）',
@@ -376,7 +376,7 @@ export const lesson7576Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '过去时 购物体验'],
     block: 'listening',
     prompt: '听音频，选出正确的购物体验描述：',
-    audioSrc: '/audio/lesson-75-76.mp3', transcript: "Last weekend I went shopping with my friend. We went to the new shopping centre in town. I wanted to buy a jacket. I tried on about ten different jackets! Some were too big, some were too small, and some were just uncomfortable. Finally, I found a blue jacket that was perfect. It was on sale too! I bought it immediately. My friend bought a pair of boots. She said they were the most comfortable boots she had ever worn. We both went home happy.",
+    audioSrc: '/audio/lesson-75-76.m4a', transcript: "Last weekend I went shopping with my friend. We went to the new shopping centre in town. I wanted to buy a jacket. I tried on about ten different jackets! Some were too big, some were too small, and some were just uncomfortable. Finally, I found a blue jacket that was perfect. It was on sale too! I bought it immediately. My friend bought a pair of boots. She said they were the most comfortable boots she had ever worn. We both went home happy.",
     question: '讲述者买夹克的过程是怎样的？',
     options: [
       '试了大约十件夹克，最后找到了一件完美的蓝色夹克（tried on ~10, found a blue one）',
@@ -392,7 +392,7 @@ export const lesson7576Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '现在完成时 综合故事'],
     block: 'listening',
     prompt: '听音频故事，选出为什么演讲者感到紧张：',
-    audioSrc: '/audio/lesson-75-76.mp3', transcript: "I have done many difficult things in my life, but the most difficult thing I have ever done was to give a speech in English. I have never been good at public speaking. Before the speech, I had written everything down and I had practised many times. I had spoken the words aloud in front of a mirror. But when I stood on the stage, I suddenly forgot everything I had prepared. My heart was beating so fast. Then I remembered what my teacher had told me: 'Just speak from your heart.' So I took a deep breath and started speaking. I didn't follow the written speech at all. I don't know if the speech was good, but when I finished, people clapped. After that day, I have never been afraid of public speaking again. I have learned that sometimes the best things are not the things you have planned.",
+    audioSrc: '/audio/lesson-75-76.m4a', transcript: "I have done many difficult things in my life, but the most difficult thing I have ever done was to give a speech in English. I have never been good at public speaking. Before the speech, I had written everything down and I had practised many times. I had spoken the words aloud in front of a mirror. But when I stood on the stage, I suddenly forgot everything I had prepared. My heart was beating so fast. Then I remembered what my teacher had told me: 'Just speak from your heart.' So I took a deep breath and started speaking. I didn't follow the written speech at all. I don't know if the speech was good, but when I finished, people clapped. After that day, I have never been afraid of public speaking again. I have learned that sometimes the best things are not the things you have planned.",
     question: '演讲者为什么一开始感到紧张？',
     options: [
       '他不擅长公开演讲，而且在台上突然忘了准备的内容（not good at public speaking, forgot prepared content on stage）',

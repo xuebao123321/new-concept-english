@@ -305,7 +305,7 @@ export const lesson9394Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', 'want to do 基本'],
     block: 'listening',
     prompt: '听音频，选出说话者未来想做什么：',
-    audioSrc: '/audio/lesson-93-94.mp3', transcript: "A: What do you want to do when you grow up? B: I want to be a pilot. I've always wanted to fly. A: That's a great dream. Where do you want to fly? B: I want to fly to Tokyo, New York, Madrid — everywhere! I want to see the world from the sky. A: Have you ever been on a plane? B: Yes, last year. After that flight, I decided to become a pilot. A: What did your parents say? B: They told me to follow my dream. My father said he would help me pay for flight school.",
+    audioSrc: '/audio/lesson-93-94.m4a', transcript: "A: What do you want to do when you grow up? B: I want to be a pilot. I've always wanted to fly. A: That's a great dream. Where do you want to fly? B: I want to fly to Tokyo, New York, Madrid — everywhere! I want to see the world from the sky. A: Have you ever been on a plane? B: Yes, last year. After that flight, I decided to become a pilot. A: What did your parents say? B: They told me to follow my dream. My father said he would help me pay for flight school.",
     question: 'B长大后想做什么？',
     options: [
       '飞行员（a pilot）',
@@ -321,7 +321,7 @@ export const lesson9394Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '不定式 计划'],
     block: 'listening',
     prompt: '听音频，选出说话者打算怎么去巴黎：',
-    audioSrc: '/audio/lesson-93-94.mp3', transcript: "A: Have you decided where to go for your holiday? B: Yes, I've decided to go to Paris. A: Paris is beautiful! How do you plan to get there? B: I wanted to fly, but the tickets are very expensive. So I decided to go by train. A: The train is a good choice. You can see the countryside. When do you plan to leave? B: I plan to leave next Monday. I hope to arrive by Tuesday afternoon. A: That sounds wonderful. Don't forget to take lots of pictures! B: I won't. I promise to send you some.",
+    audioSrc: '/audio/lesson-93-94.m4a', transcript: "A: Have you decided where to go for your holiday? B: Yes, I've decided to go to Paris. A: Paris is beautiful! How do you plan to get there? B: I wanted to fly, but the tickets are very expensive. So I decided to go by train. A: The train is a good choice. You can see the countryside. When do you plan to leave? B: I plan to leave next Monday. I hope to arrive by Tuesday afternoon. A: That sounds wonderful. Don't forget to take lots of pictures! B: I won't. I promise to send you some.",
     question: 'B打算怎么去巴黎？',
     options: [
       '坐火车（by train）',
@@ -337,7 +337,7 @@ export const lesson9394Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'try to do 场景'],
     block: 'listening',
     prompt: '听音频，选出问题是怎么解决的：',
-    audioSrc: '/audio/lesson-93-94.mp3', transcript: "A: You look tired. What happened? B: I tried to fix my computer last night. It took me three hours. A: Did you manage to fix it? B: No, I didn't. I tried everything — I tried restarting it, I tried updating the software, I even tried hitting it! But nothing worked. A: Hitting it probably wasn't a good idea! B: I know. Finally, I decided to call a professional. A: And did that help? B: Yes. He came this morning and fixed it in ten minutes. I promised never to try to fix a computer again! A: At least you tried. B: I guess so. But next time, I'll remember to call for help first.",
+    audioSrc: '/audio/lesson-93-94.m4a', transcript: "A: You look tired. What happened? B: I tried to fix my computer last night. It took me three hours. A: Did you manage to fix it? B: No, I didn't. I tried everything — I tried restarting it, I tried updating the software, I even tried hitting it! But nothing worked. A: Hitting it probably wasn't a good idea! B: I know. Finally, I decided to call a professional. A: And did that help? B: Yes. He came this morning and fixed it in ten minutes. I promised never to try to fix a computer again! A: At least you tried. B: I guess so. But next time, I'll remember to call for help first.",
     question: 'B的电脑问题最终是怎么解决的？',
     options: [
       '决定叫了专业人员，他十分钟就修好了（decided to call a professional, fixed it in ten minutes）',
@@ -353,7 +353,7 @@ export const lesson9394Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '不定式综合理解'],
     block: 'listening',
     prompt: '听音频，选出说话者为什么最终去了马德里：',
-    audioSrc: '/audio/lesson-93-94.mp3', transcript: "A: So tell me about your new job in Madrid. How did you decide to move there? B: It's a long story. I had always wanted to live abroad. I tried to find a job in London for a year, but nothing worked out. A: So you decided to try Madrid? B: Not at first. I wanted to go to New York. I even started to learn English seriously. But then my company asked me to move to the Madrid office. At first, I wasn't sure. I didn't know whether to accept or not. A: What made you decide? B: My wife encouraged me to take the opportunity. She said we needed to try something new. And she promised to learn Spanish with me. A: That's supportive! B: Yes. So I agreed to go. And now I'm happy we decided to move. The people here are wonderful, the food is amazing, and I'm learning to speak Spanish little by little. A: It sounds like the best decision you ever made! B: It really was. I want to stay here for a long time. Maybe I'll never want to leave!",
+    audioSrc: '/audio/lesson-93-94.m4a', transcript: "A: So tell me about your new job in Madrid. How did you decide to move there? B: It's a long story. I had always wanted to live abroad. I tried to find a job in London for a year, but nothing worked out. A: So you decided to try Madrid? B: Not at first. I wanted to go to New York. I even started to learn English seriously. But then my company asked me to move to the Madrid office. At first, I wasn't sure. I didn't know whether to accept or not. A: What made you decide? B: My wife encouraged me to take the opportunity. She said we needed to try something new. And she promised to learn Spanish with me. A: That's supportive! B: Yes. So I agreed to go. And now I'm happy we decided to move. The people here are wonderful, the food is amazing, and I'm learning to speak Spanish little by little. A: It sounds like the best decision you ever made! B: It really was. I want to stay here for a long time. Maybe I'll never want to leave!",
     question: 'B为什么最终决定去马德里？',
     options: [
       '妻子鼓励他抓住机会，并承诺和他一起学西班牙语（wife encouraged him, promised to learn Spanish together）',

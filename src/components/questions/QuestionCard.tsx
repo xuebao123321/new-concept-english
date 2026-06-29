@@ -5,6 +5,7 @@ import FillInBlank from './FillInBlank';
 import TranslationInput from './TranslationInput';
 import SentenceReorder from './SentenceReorder';
 import ListeningQuestionComp from './ListeningQuestion';
+import SpeakingQuestionComp from './SpeakingQuestion';
 import AnswerFeedback from './AnswerFeedback';
 import ComboToast from './ComboToast';
 import { playCorrect, playWrong } from '../common/SoundManager';
@@ -28,6 +29,7 @@ function getPromptText(q: Question): string {
     case 'translate': return `翻译: ${q.sourceText || ''}`;
     case 'reorder': return `连词成句: ${q.correctSentence || ''}`;
     case 'listening': return q.question || q.prompt || '';
+    case 'speak': return (q as any).sentence || (q as any).prompt || '';
     default: return '';
   }
 }
@@ -40,6 +42,7 @@ function getCorrectText(q: Question): string {
     case 'translate': return q.acceptableAnswers?.[0] || '';
     case 'reorder': return q.correctSentence || '';
     case 'listening': return q.options?.[q.correctIndex] || '';
+    case 'speak': return (q as any).sentence || '';
     default: return '';
   }
 }
@@ -50,6 +53,7 @@ const TYPE_LABELS: Record<QuestionType, string> = {
   translate: '🌐 翻译',
   reorder: '🧩 连词',
   listening: '🎧 听力',
+  speak: '🎤 口语',
 };
 
 export default function QuestionCard({ question, questionNumber, totalQuestions, onAnswer }: Props) {
@@ -113,6 +117,7 @@ export default function QuestionCard({ question, questionNumber, totalQuestions,
       case 'translate': return <TranslationInput question={question} onAnswer={handleAnswer} startTime={startTime} />;
       case 'reorder': return <SentenceReorder question={question} onAnswer={handleAnswer} startTime={startTime} />;
       case 'listening': return <ListeningQuestionComp question={question} onAnswer={handleAnswer} startTime={startTime} />;
+      case 'speak': return <SpeakingQuestionComp question={question as any} onAnswer={handleAnswer} startTime={startTime} />;
       default: return <div className="text-ink-light">未知题型</div>;
     }
   };

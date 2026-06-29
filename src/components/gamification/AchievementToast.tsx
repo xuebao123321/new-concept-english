@@ -9,16 +9,60 @@ export default function AchievementToast() {
 
   useEffect(() => {
     if (newAchievements.length > 0) {
-      const timer = setTimeout(clearNewAchievements, 4000);
+      const hasMilestone = newAchievements.some(a => a.category === 'milestone');
+      const timer = setTimeout(clearNewAchievements, hasMilestone ? 8000 : 4000);
       return () => clearTimeout(timer);
     }
   }, [newAchievements, clearNewAchievements]);
 
+  const milestones = newAchievements.filter(a => a.category === 'milestone');
+  const normal = newAchievements.filter(a => a.category !== 'milestone');
+
   return (
     <AnimatePresence>
-      {newAchievements.length > 0 && (
+      {/* 重要成就: 全屏庆祝 */}
+      {milestones.length > 0 && milestones.map(achievement => (
+        <motion.div
+          key={achievement.id}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={clearNewAchievements}
+        >
+          <motion.div
+            className="card mx-4 max-w-xs w-full p-8 text-center space-y-4 border-honey/40 bg-cream"
+            initial={{ scale: 0.5 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.5 }}
+            transition={springs.popIn}
+            onClick={e => e.stopPropagation()}
+          >
+            <motion.div
+              className="text-6xl"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            >
+              {achievement.icon}
+            </motion.div>
+            <h2 className="text-h2 text-ink font-extrabold">🎉 成就解锁!</h2>
+            <p className="text-xl font-extrabold text-forest">{achievement.name}</p>
+            <p className="text-sm text-ink-light">{achievement.description}</p>
+            <button
+              onClick={clearNewAchievements}
+              className="w-full py-3 rounded-xl bg-forest text-cream font-bold text-base
+                         hover:bg-forest/90 active:scale-[0.98] transition-all shadow-sm"
+            >
+              太棒了!
+            </button>
+          </motion.div>
+        </motion.div>
+      ))}
+
+      {/* 普通成就: 顶部 Toast */}
+      {normal.length > 0 && (
         <div className="fixed top-20 left-4 right-4 z-50 flex flex-col items-center gap-2 pointer-events-none">
-          {newAchievements.map((achievement, index) => (
+          {normal.map((achievement, index) => (
             <AchievementCard key={achievement.id} achievement={achievement} index={index} />
           ))}
         </div>

@@ -329,7 +329,7 @@ export const lesson5152Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '天气气候'],
     block: 'listening',
     prompt: '听音频，选出希腊的气候特点：',
-    audioSrc: '/audio/lesson-51-52.mp3', transcript: "I love Greece. The climate is very pleasant. It's warm in spring and hot in summer. Autumn is cool and winter is mild — it does not get very cold. It rains sometimes in winter, but it never snows. The best time to visit is spring — it's warm and the flowers are beautiful.",
+    audioSrc: '/audio/lesson-51-52.m4a', transcript: "I love Greece. The climate is very pleasant. It's warm in spring and hot in summer. Autumn is cool and winter is mild — it does not get very cold. It rains sometimes in winter, but it never snows. The best time to visit is spring — it's warm and the flowers are beautiful.",
     question: '希腊冬天会下雪吗？',
     options: [
       '不会 (it never snows)',
@@ -345,7 +345,7 @@ export const lesson5152Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '季节活动'],
     block: 'listening',
     prompt: '听音频，选出说话者去年夏天做了什么：',
-    audioSrc: '/audio/lesson-51-52.mp3', transcript: "Last summer I visited my uncle in Greece. He lives in a small town near the sea. The weather was wonderful — hot and sunny every day. I swam in the sea every morning. In the afternoon, I walked around the town and tried different Greek foods. I liked souvlaki the best. I stayed there for two weeks. It was a great holiday!",
+    audioSrc: '/audio/lesson-51-52.m4a', transcript: "Last summer I visited my uncle in Greece. He lives in a small town near the sea. The weather was wonderful — hot and sunny every day. I swam in the sea every morning. In the afternoon, I walked around the town and tried different Greek foods. I liked souvlaki the best. I stayed there for two weeks. It was a great holiday!",
     question: '说话者每天早上做了什么？',
     options: [
       '在海里游泳 (swam in the sea)',
@@ -361,7 +361,7 @@ export const lesson5152Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'Did 问句'],
     block: 'listening',
     prompt: '听音频对话，选出正确的回答：',
-    audioSrc: '/audio/lesson-51-52.mp3', transcript: "A: Did you enjoy your holiday in Greece? B: Yes, I did. It was wonderful! A: Did you stay in a hotel? B: No, I didn't. I stayed with a Greek family. A: Did you like the food? B: I loved it! I tried moussaka and it was delicious. A: Did it rain? B: No, it didn't rain at all. The weather was perfect. A: Did you visit Athens? B: Yes, I visited Athens for three days. The Parthenon was amazing!",
+    audioSrc: '/audio/lesson-51-52.m4a', transcript: "A: Did you enjoy your holiday in Greece? B: Yes, I did. It was wonderful! A: Did you stay in a hotel? B: No, I didn't. I stayed with a Greek family. A: Did you like the food? B: I loved it! I tried moussaka and it was delicious. A: Did it rain? B: No, it didn't rain at all. The weather was perfect. A: Did you visit Athens? B: Yes, I visited Athens for three days. The Parthenon was amazing!",
     question: 'B 住在哪里？',
     options: [
       '和一个希腊家庭住在一起 (stayed with a Greek family)',
@@ -377,7 +377,7 @@ export const lesson5152Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合理解'],
     block: 'listening',
     prompt: '听音频独白，选出完整的正确描述：',
-    audioSrc: '/audio/lesson-51-52.mp3', transcript: "I moved to England three years ago. Before that, I lived in Greece for ten years. The climate in England is very different from Greece. In Greece, it was sunny almost every day. I loved walking on the beach in the evening. In England, it rains a lot. When I first arrived, I didn't like the weather at all. I missed the Greek sunshine. But now I'm used to it. I enjoy the green countryside — all the rain makes everything so green! And the people here are very friendly too. Last week I visited a lovely village in the countryside. The weather was perfect that day — sunny and warm. I walked for hours and then enjoyed a nice lunch in a small pub. It reminded me of Greece a little bit!",
+    audioSrc: '/audio/lesson-51-52.m4a', transcript: "I moved to England three years ago. Before that, I lived in Greece for ten years. The climate in England is very different from Greece. In Greece, it was sunny almost every day. I loved walking on the beach in the evening. In England, it rains a lot. When I first arrived, I didn't like the weather at all. I missed the Greek sunshine. But now I'm used to it. I enjoy the green countryside — all the rain makes everything so green! And the people here are very friendly too. Last week I visited a lovely village in the countryside. The weather was perfect that day — sunny and warm. I walked for hours and then enjoyed a nice lunch in a small pub. It reminded me of Greece a little bit!",
     question: '说话者刚来英国时对英国的天气是什么感受？',
     options: [
       '完全不喜欢（didn\'t like it at all），想念希腊的阳光',

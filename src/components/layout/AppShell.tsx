@@ -11,7 +11,7 @@ import { variants } from '../../utils/motion-tokens';
 const STUDENT_TABS = [
   { path: '/', icon: '🏠', label: '首页' },
   { path: '/star-map', icon: '🌟', label: '星图' },
-  { path: '/lesson', icon: '📚', label: '学习' },
+  { path: '/leaderboard', icon: '🏆', label: '排行' },
   { path: '/review', icon: '📝', label: '复习' },
   { path: '/profile', icon: '👤', label: '我的' },
 ];
@@ -25,7 +25,7 @@ const PARENT_TABS = [
 function getPageTitle(pathname: string): string {
   if (pathname === '/' || pathname === '/parent') return '🏠 温暖森林学院';
   if (pathname.startsWith('/star-map')) return '🌟 学习星图';
-  if (pathname.startsWith('/lesson')) return '📚 知识森林';
+  if (pathname.startsWith('/leaderboard')) return '🏆 闯关排行';
   if (pathname.startsWith('/review')) return '📝 复习小屋';
   if (pathname.startsWith('/achievements')) return '🏆 荣誉勋章';
   if (pathname.startsWith('/profile')) return '👤 我的档案';
@@ -74,7 +74,6 @@ export default function AppShell() {
                 const active = t.path === '/'
                   ? loc.pathname === '/'
                   : loc.pathname.startsWith(t.path);
-                const isCenter = t.path === '/lesson';
 
                 return (
                   <button
@@ -82,28 +81,15 @@ export default function AppShell() {
                     onClick={() => nav(t.path)}
                     className="flex flex-col items-center justify-center"
                   >
-                    {isCenter ? (
-                      <motion.div
-                        whileTap={{ scale: 0.88 }}
-                        className="w-14 h-14 -mt-3 flex items-center justify-center rounded-2xl"
-                        style={{
-                          background: 'linear-gradient(135deg, #5B9A5A, #4A8B49)',
-                          boxShadow: '0 4px 0 #3D723D, 0 6px 16px rgba(91,154,90,0.25)',
-                        }}
-                      >
-                        <span className="text-2xl">{t.icon}</span>
-                      </motion.div>
-                    ) : (
-                      <span className={`text-2xl transition-all ${active ? 'scale-110' : 'opacity-40 grayscale'}`}>
-                        {t.icon}
-                      </span>
-                    )}
-                    <span className={`text-[10px] font-extrabold leading-none ${isCenter ? '-mt-0.5' : 'mt-0.5'} ${
+                    <span className={`text-2xl transition-all ${active ? 'scale-110' : 'opacity-40 grayscale'}`}>
+                      {t.icon}
+                    </span>
+                    <span className={`text-[10px] font-extrabold leading-none mt-0.5 ${
                       active ? 'text-forest' : 'text-ink-muted'
                     }`}>
                       {t.label}
                     </span>
-                    {active && !isCenter && (
+                    {active && (
                       <div className="w-5 h-1 rounded-full bg-forest mt-0.5" />
                     )}
                   </button>

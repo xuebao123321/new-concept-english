@@ -41,6 +41,9 @@ export async function getPrioritizedWrongs(): Promise<{
   };
 
   for (const wq of all) {
+    // 刚复习完（1分钟内）的题跳过，不立即显示
+    if (wq.lastWrongTime > 0 && now - wq.lastWrongTime < 60000) continue;
+
     const stage = estimateStage(wq);
     const nextLabel = STAGE_LABELS[stage] || '现在';
 
@@ -49,7 +52,7 @@ export async function getPrioritizedWrongs(): Promise<{
       ? Math.floor((now - wq.nextReviewTime) / 3600000)
       : 0;
     const dueSoon = wq.nextReviewTime > 0 && now < wq.nextReviewTime
-      && wq.nextReviewTime - now < 24 * 60 * 60 * 1000;
+      && wq.nextReviewTime - now < 4 * 60 * 60 * 1000;
 
     let priority: ReviewPriority;
     let label: string;
@@ -90,11 +93,8 @@ export async function getPrioritizedWrongs(): Promise<{
   return result;
 }
 
-/** 获取首页复习提醒 (到期且未掌握的题目数) */
+/** 获取首页复习提醒 (未掌握且需要复习的题目数，与复习中心一致) */
 export async function getReviewReminder(): Promise<number> {
-  const all = await db.wrongQuestions.toArray();
-  const now = Date.now();
-  return all.filter(wq =>
-    !wq.mastered && wq.nextReviewTime > 0 && wq.nextReviewTime <= now
-  ).length;
+  const { urgent, due, weak } = await getPrioritizedWrongs();
+  return urgent.length + due.length + weak.length;
 }

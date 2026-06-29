@@ -320,7 +320,7 @@ export const lesson6162Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '看病症状'],
     block: 'listening',
     prompt: '听音频，选出Jimmy的症状：',
-    audioSrc: '/audio/lesson-61-62.mp3', transcript: "Jimmy feels ill this morning. He has a headache and a sore throat. He doesn't want to eat anything. His mother feels his forehead and it feels hot. She says he must have a fever. She is going to call the doctor.",
+    audioSrc: '/audio/lesson-61-62.m4a', transcript: "Jimmy feels ill this morning. He has a headache and a sore throat. He doesn't want to eat anything. His mother feels his forehead and it feels hot. She says he must have a fever. She is going to call the doctor.",
     question: 'Jimmy的症状不包括以下哪项？',
     options: ['肚子疼 (stomachache)', '头疼 (headache)', '嗓子疼 (sore throat)', '发烧 (fever)'],
     correctIndex: 0,
@@ -331,7 +331,7 @@ export const lesson6162Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '医生建议'],
     block: 'listening',
     prompt: '听音频，选出医生的建议：',
-    audioSrc: '/audio/lesson-61-62.mp3', transcript: "Doctor: Good morning, Jimmy. What's the matter with you? Jimmy: I feel ill, doctor. I have a headache and my throat hurts. Doctor: Open your mouth, please. Show me your tongue. Hmm... You have a bad cold. You must stay in bed for three days. And you must take this medicine three times a day. Don't go to school. Jimmy: Must I stay in bed all day? Doctor: Yes, you must. Rest is very important.",
+    audioSrc: '/audio/lesson-61-62.m4a', transcript: "Doctor: Good morning, Jimmy. What's the matter with you? Jimmy: I feel ill, doctor. I have a headache and my throat hurts. Doctor: Open your mouth, please. Show me your tongue. Hmm... You have a bad cold. You must stay in bed for three days. And you must take this medicine three times a day. Don't go to school. Jimmy: Must I stay in bed all day? Doctor: Yes, you must. Rest is very important.",
     question: '医生给了Jimmy几个指令？',
     options: [
       '三条：卧床三天、每天吃药三次、不去上学',
@@ -347,7 +347,7 @@ export const lesson6162Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'must/can 辨析'],
     block: 'listening',
     prompt: '听音频对话，选出正确的理解：',
-    audioSrc: '/audio/lesson-61-62.mp3', transcript: "Mother: Jimmy, you mustn't go out today. You must stay in bed. Jimmy: But Mum, I feel better now. Can I play in the garden for a while? Mother: No, you can't. The doctor said you must rest. But you can read a book in bed. Jimmy: Must I take the medicine again? Mother: Yes, you must take it after lunch. And you must drink lots of water. Jimmy: I don't like the medicine. It tastes bad. Mother: I know, but you must take it. Remember, the doctor said so.",
+    audioSrc: '/audio/lesson-61-62.m4a', transcript: "Mother: Jimmy, you mustn't go out today. You must stay in bed. Jimmy: But Mum, I feel better now. Can I play in the garden for a while? Mother: No, you can't. The doctor said you must rest. But you can read a book in bed. Jimmy: Must I take the medicine again? Mother: Yes, you must take it after lunch. And you must drink lots of water. Jimmy: I don't like the medicine. It tastes bad. Mother: I know, but you must take it. Remember, the doctor said so.",
     question: 'Jimmy被允许做什么？',
     options: [
       '在床上看书 (read a book in bed)',
@@ -363,7 +363,7 @@ export const lesson6162Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '综合理解'],
     block: 'listening',
     prompt: '听音频，选出正确的完整描述：',
-    audioSrc: '/audio/lesson-61-62.mp3', transcript: "Mrs. Williams: Good morning, Dr. Smith. This is Mrs. Williams speaking. I'm calling about my son, Jimmy. He's not feeling well. Dr. Smith: What's the matter with him? Mrs. Williams: He has a headache, a sore throat, and he feels very tired. He looks pale too. I think he must have a bad cold. Dr. Smith: Does he have a fever? Mrs. Williams: Yes, I think so. His forehead felt hot this morning. Dr. Smith: I see. Well, he must stay in bed for at least three days. I'll come and see him this afternoon. Until then, he must drink plenty of water. Don't give him any heavy food. And remember to keep the room warm. Mrs. Williams: Must he take any medicine before you arrive? Dr. Smith: No, he needn't take anything yet. Just rest. I'll bring some medicine when I come. Mrs. Williams: Thank you very much, doctor. Dr. Smith: You're welcome. I'll see you around three o'clock. Goodbye. Mrs. Williams: Goodbye.",
+    audioSrc: '/audio/lesson-61-62.m4a', transcript: "Mrs. Williams: Good morning, Dr. Smith. This is Mrs. Williams speaking. I'm calling about my son, Jimmy. He's not feeling well. Dr. Smith: What's the matter with him? Mrs. Williams: He has a headache, a sore throat, and he feels very tired. He looks pale too. I think he must have a bad cold. Dr. Smith: Does he have a fever? Mrs. Williams: Yes, I think so. His forehead felt hot this morning. Dr. Smith: I see. Well, he must stay in bed for at least three days. I'll come and see him this afternoon. Until then, he must drink plenty of water. Don't give him any heavy food. And remember to keep the room warm. Mrs. Williams: Must he take any medicine before you arrive? Dr. Smith: No, he needn't take anything yet. Just rest. I'll bring some medicine when I come. Mrs. Williams: Thank you very much, doctor. Dr. Smith: You're welcome. I'll see you around three o'clock. Goodbye. Mrs. Williams: Goodbye.",
     question: '医生在电话里没有给出以下哪个建议？',
     options: [
       '立即吃药 (take medicine immediately)',

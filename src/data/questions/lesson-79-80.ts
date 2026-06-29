@@ -304,7 +304,7 @@ export const lesson7980Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '购物清单'],
     block: 'listening',
     prompt: '听音频，选出Carol需要买什么：',
-    audioSrc: '/audio/lesson-79-80.mp3', transcript: "Carol: Mum, I'm going to the supermarket. Do we need anything? Mum: Let me think... We need some vegetables. Carol: What kind of vegetables? Mum: Carrots, tomatoes, and some onions. We also need fruit — apples and bananas. Carol: OK, vegetables and fruit. Anything else? Mum: Oh yes, we need milk and bread too. I'll make a shopping list for you. Carol: Don't worry, Mum. I can remember. Vegetables, fruit, milk and bread. Mum: Wait, I hope that you have enough money. Carol: Yes, I have got my wallet. I'll be back in an hour.",
+    audioSrc: '/audio/lesson-79-80.m4a', transcript: "Carol: Mum, I'm going to the supermarket. Do we need anything? Mum: Let me think... We need some vegetables. Carol: What kind of vegetables? Mum: Carrots, tomatoes, and some onions. We also need fruit — apples and bananas. Carol: OK, vegetables and fruit. Anything else? Mum: Oh yes, we need milk and bread too. I'll make a shopping list for you. Carol: Don't worry, Mum. I can remember. Vegetables, fruit, milk and bread. Mum: Wait, I hope that you have enough money. Carol: Yes, I have got my wallet. I'll be back in an hour.",
     question: 'Carol需要买什么？',
     options: [
       '蔬菜（胡萝卜、西红柿、洋葱）、水果（苹果、香蕉）、牛奶和面包',
@@ -320,7 +320,7 @@ export const lesson7980Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'been/gone 区分'],
     block: 'listening',
     prompt: '听音频，选出正确的描述：',
-    audioSrc: '/audio/lesson-79-80.mp3', transcript: "A: Where's John? I haven't seen him all day. B: He has gone to London. He left early this morning. A: Oh, I didn't know that. Has he ever been to London before? B: No, he hasn't. This is his first time. He has never been there. A: I have been to London many times. It's a wonderful city. I hope he has a good time. B: Me too. He'll be back on Sunday.",
+    audioSrc: '/audio/lesson-79-80.m4a', transcript: "A: Where's John? I haven't seen him all day. B: He has gone to London. He left early this morning. A: Oh, I didn't know that. Has he ever been to London before? B: No, he hasn't. This is his first time. He has never been there. A: I have been to London many times. It's a wonderful city. I hope he has a good time. B: Me too. He'll be back on Sunday.",
     question: '关于John的伦敦之行，哪项描述正确？',
     options: [
       'John去了伦敦（has gone），以前从未去过（has never been），周日回来',
@@ -336,7 +336,7 @@ export const lesson7980Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '超市购物'],
     block: 'listening',
     prompt: '听音频，选出正确的答案：',
-    audioSrc: '/audio/lesson-79-80.mp3', transcript: "Customer: Excuse me. I need to buy some groceries but I can't find the things on my list. Assistant: Let me help you. What do you need? Customer: First, I need some vegetables. Where can I find carrots and tomatoes? Assistant: Vegetables are in aisle 3, on your left. Customer: Thank you. And I also need milk and eggs. Assistant: Dairy products are in aisle 5, at the back of the store. Customer: One more thing — I hope you have fresh bread. The bread I saw earlier didn't look very fresh. Assistant: We have fresh bread delivered every morning. It's in the bakery section, next to aisle 2. Customer: Perfect. Thank you so much. You have been very helpful!",
+    audioSrc: '/audio/lesson-79-80.m4a', transcript: "Customer: Excuse me. I need to buy some groceries but I can't find the things on my list. Assistant: Let me help you. What do you need? Customer: First, I need some vegetables. Where can I find carrots and tomatoes? Assistant: Vegetables are in aisle 3, on your left. Customer: Thank you. And I also need milk and eggs. Assistant: Dairy products are in aisle 5, at the back of the store. Customer: One more thing — I hope you have fresh bread. The bread I saw earlier didn't look very fresh. Assistant: We have fresh bread delivered every morning. It's in the bakery section, next to aisle 2. Customer: Perfect. Thank you so much. You have been very helpful!",
     question: '顾客最终对店员说了什么？',
     options: [
       'You have been very helpful!（你帮了很大的忙！—现在完成时表达感谢）',
@@ -352,7 +352,7 @@ export const lesson7980Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', 'been/gone 情景'],
     block: 'listening',
     prompt: '听音频，选出正确的去向信息：',
-    audioSrc: '/audio/lesson-79-80.mp3', transcript: "This is the Smith family's Saturday afternoon. Mr. Smith has gone to the garage to fix the car. He has been there since lunch. Mrs. Smith has gone to the hairdresser's — she has an appointment at 2. Their son Tom has gone to the park with his friends. He has taken his new football with him. Their daughter Alice is the only one at home. She has already been to the library and came back. She has been back for about an hour. The house is very quiet. Alice thinks it's the most peaceful Saturday afternoon she has ever had.",
+    audioSrc: '/audio/lesson-79-80.m4a', transcript: "This is the Smith family's Saturday afternoon. Mr. Smith has gone to the garage to fix the car. He has been there since lunch. Mrs. Smith has gone to the hairdresser's — she has an appointment at 2. Their son Tom has gone to the park with his friends. He has taken his new football with him. Their daughter Alice is the only one at home. She has already been to the library and came back. She has been back for about an hour. The house is very quiet. Alice thinks it's the most peaceful Saturday afternoon she has ever had.",
     question: '谁已经出去但已经回来了？',
     options: [
       '女儿 Alice — she has been to the library and came back（去过图书馆回来了）',
@@ -368,7 +368,7 @@ export const lesson7980Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', 'been/gone 综合理解'],
     block: 'listening',
     prompt: '听音频故事，选出公司内谁在谁不在：',
-    audioSrc: '/audio/lesson-79-80.mp3', transcript: "It is Monday morning at the office. The manager is looking for three people but cannot find them. The receptionist tells him: 'Mr. Wang has gone to Shanghai for a business meeting. He left yesterday and will be back on Wednesday.' 'Ms. Li has gone to the bank. She said she would be back in thirty minutes — that was an hour ago!' 'And the new assistant, David? I saw him earlier but now I can't find him.' The receptionist checks and says, 'David has gone to the post office to send an urgent package. He left five minutes ago.' The manager sighs. 'Three people have gone, and I needed them all for the 10 o'clock meeting.' Just then, David comes back. 'I have been to the post office,' he says. 'The package has been sent. I came back as quickly as I could.' The manager says, 'Well, at least one person has come back!'",
+    audioSrc: '/audio/lesson-79-80.m4a', transcript: "It is Monday morning at the office. The manager is looking for three people but cannot find them. The receptionist tells him: 'Mr. Wang has gone to Shanghai for a business meeting. He left yesterday and will be back on Wednesday.' 'Ms. Li has gone to the bank. She said she would be back in thirty minutes — that was an hour ago!' 'And the new assistant, David? I saw him earlier but now I can't find him.' The receptionist checks and says, 'David has gone to the post office to send an urgent package. He left five minutes ago.' The manager sighs. 'Three people have gone, and I needed them all for the 10 o'clock meeting.' Just then, David comes back. 'I have been to the post office,' he says. 'The package has been sent. I came back as quickly as I could.' The manager says, 'Well, at least one person has come back!'",
     question: '经理需要三个人开会，最后有几个回来了？',
     options: [
       '只有David——他去了邮局然后回来了（has been to the post office and came back）',

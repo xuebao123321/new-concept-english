@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { db } from '../db/database';
+import { api } from '../db/api';
 import { getLevelByXp, getXpToNextLevel } from '../utils/xp-calculator';
 import { checkAndUpdateStreak, checkAndRefillHearts, loseHeart, rewardHeart } from '../utils/streak';
 import { checkAchievements } from '../utils/achievements';
@@ -70,13 +71,13 @@ export const useUserStore = create<UserStore>((set, get) => ({
     set({ userState, currentRank: rank, xpProgress: progress });
   },
 
-  addXp: async (amount: number) => {
+  addXp: async (amount: number, opts?: { correct?: boolean }) => {
     const { userState } = get();
     if (!userState) return;
 
     const newXp = userState.totalXp + amount;
-    const newCorrect = userState.totalCorrect + 1;
-    const newTotal = userState.totalQuestionsAnswered + 1;
+    const newCorrect = userState.totalCorrect + (opts?.correct ? 1 : 0);
+    const newTotal = userState.totalQuestionsAnswered + (opts?.correct !== undefined ? 1 : 0);
 
     await db.userState.update('me', {
       totalXp: newXp,
@@ -84,11 +85,16 @@ export const useUserStore = create<UserStore>((set, get) => ({
       totalQuestionsAnswered: newTotal,
     });
 
+    // 同步今日 XP 到 dailyStats
+    db.updateTodayStats({ xpEarned: amount }).catch(() => {});
+
+    // 异步同步到服务端
+    api.syncXp(newXp).catch(() => {});
+
     const refreshed = (await db.userState.get('me'))!;
     const rank = getLevelByXp(newXp);
     const progress = getXpToNextLevel(newXp);
 
-    // 检查是否升级
     const oldRank = get().currentRank;
     const leveledUp = oldRank && rank.level > oldRank.level;
 
@@ -151,8 +157,13 @@ export const useUserStore = create<UserStore>((set, get) => ({
       await db.userState.update('me', {
         unlockedAchievements: updatedUnlocks,
       });
+      // 成就奖励 XP: 每个 +15
+      const xpAmount = newAchievements.length * 15;
+      const newXp = userState.totalXp + xpAmount;
+      await db.userState.update('me', { totalXp: newXp });
+      api.syncXp(newXp).catch(() => {});
       set({
-        userState: { ...userState, unlockedAchievements: updatedUnlocks },
+        userState: { ...userState, unlockedAchievements: updatedUnlocks, totalXp: newXp },
         newAchievements,
       });
     }

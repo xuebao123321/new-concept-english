@@ -51,12 +51,23 @@ export const useLessonProgressStore = create<LessonProgressStore>((set, get) => 
   isUnlocked: (lessonGroup: string) => {
     const { progressMap } = get();
     const idx = LESSON_GROUPS.indexOf(lessonGroup);
-    if (idx === 0) return true;
     if (idx === -1) return false;
 
+    const self = progressMap.get(lessonGroup);
+
+    // 自身有明确状态时，以 status 为准
+    if (self?.status) {
+      if (self.status === 'locked') return false;          // 被锁定 → 不可访问
+      if (self.status === 'unlocked' || self.status === 'in_progress' || self.status === 'completed') return true;
+    }
+
+    // 第一课：没有 status 记录时默认解锁
+    if (idx === 0) return true;
+
+    // 自身无记录或 status 为空 → 检查前一课是否完成（顺序解锁）
     const prevGroup = LESSON_GROUPS[idx - 1];
     const prevProgress = progressMap.get(prevGroup);
-    return prevProgress?.completed === true;
+    return prevProgress?.completed === true || prevProgress?.status === 'completed';
   },
 
   isCompleted: (lessonGroup: string) => {
@@ -83,16 +94,13 @@ export const useLessonProgressStore = create<LessonProgressStore>((set, get) => 
 
   // 判断某个学习块是否解锁
   isBlockUnlocked: (lessonGroup: string, block: BlockType) => {
-    const { progressMap } = get();
-    const progress = progressMap.get(lessonGroup);
+    const { isUnlocked, progressMap } = get();
 
-    // 词汇块始终解锁
-    if (block === 'vocabulary') return true;
+    // 课程未解锁 → 所有块都不能进入
+    if (!isUnlocked(lessonGroup)) return false;
 
-    // 其他块需要前一个块完成
-    const blockIdx = BLOCK_ORDER.indexOf(block);
-    const prevBlock = BLOCK_ORDER[blockIdx - 1];
-    return progress?.blockProgress?.[prevBlock] === true;
+    // 课程已解锁 → 所有 4 个块都可以直接进入
+    return true;
   },
 
   // 标记一个学习块为已完成

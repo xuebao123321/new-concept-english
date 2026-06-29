@@ -10,6 +10,7 @@ import type { WrongQuestionItem, WrongQuestionSummary } from '../../types';
 // ── 类型 ──
 interface LessonItem {
   lesson_group: string; completed: boolean; best_accuracy: number; attempts: number;
+  status?: string; unlocked_by?: string;
 }
 
 interface DayActivity { date: string; total: number; correct: number; }
@@ -41,9 +42,10 @@ interface Props {
   userId: number;
   role: 'student' | 'parent';
   showControls?: boolean;
+  refreshKey?: number;
 }
 
-export default function LearningReport({ userId, role, showControls = false }: Props) {
+export default function LearningReport({ userId, role, showControls = false, refreshKey = 0 }: Props) {
   const [report, setReport] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -57,7 +59,7 @@ export default function LearningReport({ userId, role, showControls = false }: P
   });
   const [wrongLoading, setWrongLoading] = useState(false);
 
-  useEffect(() => { loadReport(); }, [userId, role]);
+  useEffect(() => { loadReport(); }, [userId, role, refreshKey]);
 
   const loadReport = async () => {
     setLoading(true);
@@ -296,31 +298,41 @@ export default function LearningReport({ userId, role, showControls = false }: P
                       </div>
                     )}
                     <div className={`text-[11px] mt-0.5 font-medium ${
-                      lesson.completed ? 'text-forest' : lesson.attempts > 0 ? 'text-honey' : 'text-ink-muted'
+                      lesson.completed ? 'text-forest' : lesson.status === 'locked' ? 'text-berry' : lesson.attempts > 0 ? 'text-honey' : 'text-ink-muted'
                     }`}>
                       {lesson.completed
                         ? `✅ 已完成 (${Math.round(lesson.best_accuracy * 100)}%)`
+                        : lesson.status === 'locked'
+                        ? '🔒 已锁定'
                         : lesson.attempts > 0
                         ? `🔄 ${lesson.attempts} 次尝试 (${Math.round(lesson.best_accuracy * 100)}%)`
+                        : lesson.status === 'unlocked' || lesson.status === 'in_progress'
+                        ? '🔓 待学习'
                         : '未解锁'}
                     </div>
                   </div>
                   {/* 操作按钮 (仅家长模式) */}
-                  {showControls && (
-                    <button onClick={() =>
-                      lesson.completed
-                        ? handleResetLesson(lesson.lesson_group)
-                        : handleUnlockLesson(lesson.lesson_group)
-                    } disabled={lessonLoading === lesson.lesson_group}
-                      className={`px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap ${
-                        lessonLoading === lesson.lesson_group ? 'bg-warm-bg text-ink-muted'
-                        : lesson.completed
-                        ? 'bg-berry-pale text-berry border border-berry/30'
-                        : 'bg-forest-pale text-forest border border-forest/30'
-                      }`}>
-                      {lessonLoading === lesson.lesson_group ? '...' : lesson.completed ? '🔒' : '🔓'}
-                    </button>
-                  )}
+                  {showControls && (() => {
+                    const isLocked = lesson.status === 'locked' && lesson.unlocked_by === 'parent_locked';
+                    const actionLabel = lessonLoading === lesson.lesson_group ? '...'
+                      : isLocked ? '🔓 解锁'
+                      : '🔒 锁定';
+                    const actionStyle = lessonLoading === lesson.lesson_group
+                      ? 'bg-warm-bg text-ink-muted'
+                      : isLocked
+                      ? 'bg-forest-pale text-forest border border-forest/30'
+                      : 'bg-berry-pale text-berry border border-berry/30';
+                    return (
+                      <button onClick={() =>
+                        isLocked
+                          ? handleUnlockLesson(lesson.lesson_group)
+                          : handleResetLesson(lesson.lesson_group)
+                      } disabled={lessonLoading === lesson.lesson_group}
+                        className={`px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap ${actionStyle}`}>
+                        {actionLabel}
+                      </button>
+                    );
+                  })()}
                 </div>
               </div>
             );

@@ -319,7 +319,7 @@ export const lesson111112Questions: Question[] = [
     difficulty: 'easy', tags: ['听力', '间接引语', '购物询问'],
     block: 'listening',
     prompt: '听音频，选出顾客询问了什么信息：',
-    audioSrc: '/audio/lesson-111-112.mp3', transcript: "A: Good morning. Can I help you? B: Yes, I'm interested in this television. Can you tell me about it? A: Of course. This is our most popular model. B: How much is it? A: It's £1,200. But you can pay by instalments. B: Really? How much is the deposit? A: Only £200. Then you can pay the rest over 12 months. B: That sounds reasonable. And when can you deliver it? A: We can deliver it this Friday. B: Great. I'll take it.",
+    audioSrc: '/audio/lesson-111-112.m4a', transcript: "A: Good morning. Can I help you? B: Yes, I'm interested in this television. Can you tell me about it? A: Of course. This is our most popular model. B: How much is it? A: It's £1,200. But you can pay by instalments. B: Really? How much is the deposit? A: Only £200. Then you can pay the rest over 12 months. B: That sounds reasonable. And when can you deliver it? A: We can deliver it this Friday. B: Great. I'll take it.",
     question: '顾客没有问哪个问题？',
     options: [
       '保修期多长（how long the warranty was）',
@@ -335,7 +335,7 @@ export const lesson111112Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '间接引语', '分期细节'],
     block: 'listening',
     prompt: '听音频，选出分期付款的正确方案：',
-    audioSrc: '/audio/lesson-111-112.mp3', transcript: "A: Good morning. Can I help you? B: Yes, I'm interested in this television. Can you tell me about it? A: Of course. This is our most popular model. B: How much is it? A: It's £1,200. But you can pay by instalments. B: Really? How much is the deposit? A: Only £200. Then you can pay the rest over 12 months. B: That sounds reasonable. And when can you deliver it? A: We can deliver it this Friday. B: Great. I'll take it.",
+    audioSrc: '/audio/lesson-111-112.m4a', transcript: "A: Good morning. Can I help you? B: Yes, I'm interested in this television. Can you tell me about it? A: Of course. This is our most popular model. B: How much is it? A: It's £1,200. But you can pay by instalments. B: Really? How much is the deposit? A: Only £200. Then you can pay the rest over 12 months. B: That sounds reasonable. And when can you deliver it? A: We can deliver it this Friday. B: Great. I'll take it.",
     question: '分期付款是首付多少，之后分几个月付？',
     options: [
       '首付 £200，分12个月（deposit £200, over 12 months）',
@@ -351,7 +351,7 @@ export const lesson111112Questions: Question[] = [
     difficulty: 'medium', tags: ['听力', '间接引语', '转述对话'],
     block: 'listening',
     prompt: '听音频，选出顾客最终做了什么决定：',
-    audioSrc: '/audio/lesson-111-112.mp3', transcript: "Tom: I went to the electronics shop yesterday. Jane: Oh? Tell me about it. Tom: I saw a television I really liked. I asked the assistant how much it was, and he said it was £1,500. Jane: That's expensive! Tom: I know. I asked him if I could have a discount. He said no, but he said I could pay in instalments. I asked how much the deposit would be. He said £300. Then I asked if the price included delivery. He said yes, it did. So I decided to buy it. Jane: You bought it? Just like that? Tom: Well, I asked my wife first! I called her and asked her what she thought. She said if I really wanted it, I should get it. Jane: Lucky you! My husband never asks me anything before he buys something.",
+    audioSrc: '/audio/lesson-111-112.m4a', transcript: "Tom: I went to the electronics shop yesterday. Jane: Oh? Tell me about it. Tom: I saw a television I really liked. I asked the assistant how much it was, and he said it was £1,500. Jane: That's expensive! Tom: I know. I asked him if I could have a discount. He said no, but he said I could pay in instalments. I asked how much the deposit would be. He said £300. Then I asked if the price included delivery. He said yes, it did. So I decided to buy it. Jane: You bought it? Just like that? Tom: Well, I asked my wife first! I called her and asked her what she thought. She said if I really wanted it, I should get it. Jane: Lucky you! My husband never asks me anything before he buys something.",
     question: 'Tom 最终买电视了吗？他怎么决定的？',
     options: [
       '买了。问了妻子，妻子说如果他真想要就买（asked his wife, she said if he really wanted it he should get it）',
@@ -367,7 +367,7 @@ export const lesson111112Questions: Question[] = [
     difficulty: 'hard', tags: ['听力', '间接引语', '采访场景'],
     block: 'listening',
     prompt: '听音频，选出受访者认为买车时最重要的因素：',
-    audioSrc: '/audio/lesson-111-112.mp3', transcript: "Interviewer: Today we're asking people on the street about buying cars. Sir, can I ask you a few questions? Man: Sure. Interviewer: What do you think is the most important thing when buying a car? Man: Well, I asked myself three questions before I bought mine. I asked myself how much I could afford. I asked myself what kind of car I really needed. And I asked myself whether I was buying it for the right reasons. Interviewer: And what were your answers? Man: I said I could afford about £15,000. I said I needed a family car, not a sports car. And I said yes, because my old car was ten years old and always breaking down. Interviewer: So which car did you buy? Man: I bought a blue family saloon. I asked the dealer if the price included a three-year warranty. He said it did. I asked when they could deliver it. He said the next week. And I asked how I should pay. He said either cash or bank transfer. Interviewer: So what's your advice to other buyers? Man: I'd say — ask yourself the important questions first. Don't just ask the dealer. Interviewer: Thank you!",
+    audioSrc: '/audio/lesson-111-112.m4a', transcript: "Interviewer: Today we're asking people on the street about buying cars. Sir, can I ask you a few questions? Man: Sure. Interviewer: What do you think is the most important thing when buying a car? Man: Well, I asked myself three questions before I bought mine. I asked myself how much I could afford. I asked myself what kind of car I really needed. And I asked myself whether I was buying it for the right reasons. Interviewer: And what were your answers? Man: I said I could afford about £15,000. I said I needed a family car, not a sports car. And I said yes, because my old car was ten years old and always breaking down. Interviewer: So which car did you buy? Man: I bought a blue family saloon. I asked the dealer if the price included a three-year warranty. He said it did. I asked when they could deliver it. He said the next week. And I asked how I should pay. He said either cash or bank transfer. Interviewer: So what's your advice to other buyers? Man: I'd say — ask yourself the important questions first. Don't just ask the dealer. Interviewer: Thank you!",
     question: '这位先生买车前问了哪三个问题？',
     options: [
       '能负担多少、需要什么类型的车、是否出于正当理由买车（how much he could afford, what kind he needed, whether for the right reasons）',

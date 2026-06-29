@@ -1,5 +1,5 @@
 // 生产用 Railway，开发用本地
-const API_BASE = import.meta.env.PROD
+export const API_BASE = import.meta.env.PROD
   ? (import.meta.env.VITE_API_URL || 'https://new-concept-english-production.up.railway.app')
   : 'http://localhost:8000';
 
@@ -11,6 +11,12 @@ async function request(path: string, options: RequestInit = {}, retries = 1): Pr
     try {
       const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
       if (!res.ok) {
+        if (res.status === 401) {
+          localStorage.removeItem('nce_token');
+          alert('登录已过期,请重新登录');
+          setTimeout(() => { window.location.href = '/welcome'; }, 500);
+          throw new Error('登录已过期');
+        }
         const err = await res.json().catch(() => ({ detail: '网络错误，请稍后重试' }));
         throw new Error(err.detail || '请求失败');
       }
@@ -46,18 +52,33 @@ export const api = {
   deleteAccount: () =>
     request('/api/user/account', { method: 'DELETE' }),
 
+  // 个人资料
+  updateProfile: (data: { nickname?: string; grade?: string }) =>
+    request('/api/user/update-profile', { method: 'PUT', body: JSON.stringify(data) }),
+  updateChildProfile: (childId: number, data: { nickname?: string; grade?: string }) =>
+    request(`/api/parent/child/${childId}/update-profile`, { method: 'PUT', body: JSON.stringify(data) }),
+
   // 家庭 & 家长
   bindFamily: (family_code: string) =>
     request('/api/family/bind', { method: 'POST', body: JSON.stringify({ family_code }) }),
   getChildren: () => request('/api/parent/children'),
   unlockLesson: (childId: number, lessonGroup: string) =>
     request(`/api/parent/child/${childId}/unlock-lesson`, { method: 'POST', body: JSON.stringify({ lesson_group: lessonGroup }) }),
+  // 锁定课程（仅改 status='locked'，不动已完成数据）
   resetLesson: (childId: number, lessonGroup: string) =>
     request(`/api/parent/child/${childId}/reset-lesson`, { method: 'POST', body: JSON.stringify({ lesson_group: lessonGroup }) }),
   childReport: (childId: number) => request(`/api/parent/child/${childId}/report`),
   myReport: () => request('/api/user/my-report'),
   wrongQuestions: (childId: number) => request(`/api/parent/child/${childId}/wrong-questions`),
   myWrongQuestions: () => request('/api/user/wrong-questions'),
+
+  // XP 同步
+  syncXp: (totalXp: number) =>
+    request('/api/user/sync-xp', { method: 'POST', body: JSON.stringify({ total_xp: totalXp }) }),
+
+  // 奖励系统 (V10)
+  checkRewards: (params?: { check_type?: string }) =>
+    request('/api/rewards/check', { method: 'POST', body: JSON.stringify(params || {}) }),
 
   // 健康检查
   health: () => request('/api/health'),
