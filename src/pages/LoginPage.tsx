@@ -219,12 +219,14 @@ export default function LoginPage() {
 
           {/* 学生注册: 家庭码输入 */}
           {mode === 'register' && role === 'student' && (
-            <input value={familyCode} onChange={e => setFamilyCode(e.target.value.toUpperCase())}
-              placeholder="家长给你的家庭码 (6位,可选)" maxLength={6} className="w-full"
-              autoComplete="off" />
-            {!familyCode && (
-              <p className="text-[10px] text-ink-muted">可先跳过,登录后再绑定</p>
-            )}
+            <>
+              <input value={familyCode} onChange={e => setFamilyCode(e.target.value.toUpperCase())}
+                placeholder="家长给你的家庭码 (6位,可选)" maxLength={6} className="w-full"
+                autoComplete="off" />
+              {!familyCode && (
+                <p className="text-[10px] text-ink-muted">可先跳过,登录后再绑定</p>
+              )}
+            </>
           )}
 
           {/* 家长注册成功展示家庭码 */}
