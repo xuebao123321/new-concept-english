@@ -95,7 +95,7 @@ export default function LessonDetailPage() {
           }).length;
 
           return (
-            <motion.button
+            <button
               key={b.id}
               onClick={() => unlocked && navigate(`/lesson/${groupId}/block/${b.id}`)}
               disabled={!unlocked}
@@ -106,10 +106,6 @@ export default function LessonDetailPage() {
                   ? 'glass-panel hover:border-forest/40'
                   : 'bg-white border-warm-border opacity-50 cursor-not-allowed'
               }`}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: staggerDelay(i, 'listBig'), ...springs.slideUp }}
-              whileTap={unlocked ? { scale: 0.98 } : {}}
             >
               {/* 图标 */}
               <div
@@ -139,7 +135,7 @@ export default function LessonDetailPage() {
               </div>
 
               <span className="text-ink-muted text-lg flex-shrink-0">→</span>
-            </motion.button>
+            </button>
           );
         })}
       </div>

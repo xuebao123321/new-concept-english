@@ -127,11 +127,10 @@ export default function StarMapPage() {
         const planet = PLANET_STYLES[stage.id] || PLANET_STYLES[1];
 
         return (
-          <motion.div
+          <div
             key={stage.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: staggerDelay(stageIdx, 'listBig'), ...springs.slideUp }}
+            className="animate-fade-in"
+            style={{ animationDelay: `${stageIdx * 80}ms` }}
           >
             {/* 连接线 */}
             {stageIdx > 0 && (
@@ -246,7 +245,7 @@ export default function StarMapPage() {
                 </div>
               )}
             </div>
-          </motion.div>
+          </div>
         );
       })}
     </div>

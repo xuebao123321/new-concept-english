@@ -54,14 +54,7 @@ export default function AppShell() {
 
       <main className="flex-1 pb-24 relative z-10">
         <div className="max-w-lg mx-auto">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={loc.pathname}
-              {...variants.page}
-            >
-              <Outlet />
-            </motion.div>
-          </AnimatePresence>
+          <Outlet />
         </div>
       </main>
 
