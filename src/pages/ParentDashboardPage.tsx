@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { api } from '../db/api';
 import { useAuthStore } from '../stores/useAuthStore';
 import { springs, staggerDelay } from '../utils/motion-tokens';
-import { LESSON_GROUPS } from '../data/lessons';
+import { LESSONS, LESSON_GROUPS } from '../data/lessons';
 
 interface ChildItem {
   id: number;
@@ -18,6 +18,17 @@ interface ChildReport {
   completed_lessons: number;
   total_lessons: number;
   type_stats: Record<string, { total: number; correct: number; accuracy: number }>;
+  lesson_list?: Array<{
+    lesson_group: string;
+    completed: boolean;
+    best_accuracy: number;
+    attempts: number;
+  }>;
+  recent_activity?: Array<{
+    date: string;
+    total: number;
+    correct: number;
+  }>;
 }
 
 export default function ParentDashboardPage() {
@@ -27,6 +38,7 @@ export default function ParentDashboardPage() {
   const [selectedChild, setSelectedChild] = useState<number | null>(null);
   const [report, setReport] = useState<ChildReport | null>(null);
   const [reportLoading, setReportLoading] = useState(false);
+  const [lessonLoading, setLessonLoading] = useState<string | null>(null);
   const [msg, setMsg] = useState('');
 
   const familyCode = user?.family_code || '';
@@ -44,9 +56,7 @@ export default function ParentDashboardPage() {
     }
   };
 
-  const handleSelectChild = async (childId: number) => {
-    if (selectedChild === childId) { setSelectedChild(null); setReport(null); return; }
-    setSelectedChild(childId);
+  const loadReport = async (childId: number) => {
     setReportLoading(true);
     try {
       const r = await api.childReport(childId);
@@ -55,6 +65,41 @@ export default function ParentDashboardPage() {
       setMsg('❌ ' + (e.message || '加载报告失败'));
     } finally {
       setReportLoading(false);
+    }
+  };
+
+  const handleSelectChild = async (childId: number) => {
+    if (selectedChild === childId) { setSelectedChild(null); setReport(null); return; }
+    setSelectedChild(childId);
+    setReport(null);
+    await loadReport(childId);
+  };
+
+  const handleUnlockLesson = async (childId: number, lessonGroup: string) => {
+    setLessonLoading(lessonGroup);
+    try {
+      await api.unlockLesson(childId, lessonGroup);
+      setMsg(`✅ ${lessonGroup} 已解锁`);
+      const r = await api.childReport(childId);
+      setReport(r);
+    } catch (e: any) {
+      setMsg('❌ ' + (e.message || '操作失败'));
+    } finally {
+      setLessonLoading(null);
+    }
+  };
+
+  const handleResetLesson = async (childId: number, lessonGroup: string) => {
+    setLessonLoading(lessonGroup);
+    try {
+      await api.resetLesson(childId, lessonGroup);
+      setMsg(`✅ ${lessonGroup} 已重置`);
+      const r = await api.childReport(childId);
+      setReport(r);
+    } catch (e: any) {
+      setMsg('❌ ' + (e.message || '操作失败'));
+    } finally {
+      setLessonLoading(null);
     }
   };
 
@@ -67,7 +112,7 @@ export default function ParentDashboardPage() {
       }
       setMsg('✅ 已全部解锁');
       loadChildren();
-      if (selectedChild === childId) handleSelectChild(childId);
+      await loadReport(childId);
     } catch (e: any) {
       setMsg('❌ ' + (e.message || '操作失败'));
     }
@@ -82,7 +127,7 @@ export default function ParentDashboardPage() {
       }
       setMsg('✅ 已全部重置');
       loadChildren();
-      if (selectedChild === childId) handleSelectChild(childId);
+      await loadReport(childId);
     } catch (e: any) {
       setMsg('❌ ' + (e.message || '操作失败'));
     }
@@ -93,8 +138,6 @@ export default function ParentDashboardPage() {
       .catch(() => setMsg('❌ 复制失败'));
     setTimeout(() => setMsg(''), 2000);
   };
-
-  const selectedName = children.find(c => c.id === selectedChild)?.nickname || '';
 
   return (
     <div className="px-4 py-4 space-y-4">
@@ -141,6 +184,7 @@ export default function ParentDashboardPage() {
                 className={`card p-4 w-full text-left transition-all ${
                   selectedChild === c.id ? 'border-forest bg-forest-pale/50' : 'hover:border-forest/30'
                 }`}>
+                {/* 头像行 */}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-forest-pale text-forest flex items-center justify-center text-lg font-extrabold">
                     {c.nickname?.charAt(0) || '?'}
@@ -154,14 +198,16 @@ export default function ParentDashboardPage() {
                   <span className="text-ink-muted text-lg">{selectedChild === c.id ? '▼' : '→'}</span>
                 </div>
 
-                {/* 展开: 报告 + 操作 */}
+                {/* ═══ 展开: 详情 ═══ */}
                 {selectedChild === c.id && (
-                  <motion.div className="mt-3 pt-3 border-t border-warm-border space-y-2"
+                  <motion.div className="mt-3 pt-3 border-t border-warm-border space-y-3"
                     initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
+
                     {reportLoading ? (
                       <p className="text-sm text-ink-light text-center py-2">加载报告...</p>
                     ) : report ? (
                       <>
+                        {/* 统计摘要 */}
                         <div className="grid grid-cols-3 gap-2 text-center">
                           <div className="bg-warm-bg rounded-xl py-2">
                             <div className="text-h3 font-extrabold text-forest tabular-nums">{report.completed_lessons}</div>
@@ -179,12 +225,15 @@ export default function ParentDashboardPage() {
                             <div className="text-caption text-ink-light">完成率</div>
                           </div>
                         </div>
-                        {/* 题型统计 */}
-                        <div className="text-caption text-ink-light font-bold mt-1">各题型正确率</div>
+
+                        {/* 题型正确率 */}
+                        <div className="text-caption text-ink-light font-bold">各题型正确率</div>
                         <div className="grid grid-cols-5 gap-1">
                           {Object.entries(report.type_stats || {}).map(([qt, s]) => (
                             <div key={qt} className="text-center bg-warm-bg rounded-lg py-1.5">
-                              <div className="text-xs font-extrabold" style={{ color: s.accuracy >= 80 ? '#5B9A5A' : s.accuracy >= 50 ? '#FBBF24' : '#E57373' }}>
+                              <div className="text-xs font-extrabold" style={{
+                                color: s.accuracy >= 80 ? '#5B9A5A' : s.accuracy >= 50 ? '#FBBF24' : '#E57373'
+                              }}>
                                 {s.accuracy}%
                               </div>
                               <div className="text-[10px] text-ink-muted">
@@ -193,20 +242,83 @@ export default function ParentDashboardPage() {
                             </div>
                           ))}
                         </div>
+
+                        {/* 全部解锁/重置 快捷按钮 */}
+                        <div className="flex gap-2">
+                          <button onClick={(e) => { e.stopPropagation(); handleUnlockAll(c.id); }}
+                            className="flex-1 py-2 text-xs font-bold rounded-xl bg-forest-pale text-forest border border-forest/30">
+                            🔓 解锁全部
+                          </button>
+                          <button onClick={(e) => { e.stopPropagation(); handleResetAll(c.id); }}
+                            className="flex-1 py-2 text-xs font-bold rounded-xl bg-berry-pale text-berry border border-berry/30">
+                            🔒 重置全部
+                          </button>
+                        </div>
+
+                        {/* ═══ 逐课清单 (可滚动) ═══ */}
+                        <div>
+                          <div className="text-caption text-ink-light font-bold mb-1">📋 课程清单</div>
+                          <div className="max-h-80 overflow-y-auto space-y-0 rounded-xl border border-warm-border">
+                            {report.lesson_list?.map((lesson) => {
+                              const lessonData = LESSONS.filter(l => l.group === lesson.lesson_group);
+                              const title = lessonData[0]?.titleCn || lesson.lesson_group;
+                              const engTitle = lessonData[0]?.title || '';
+                              const nums = lessonData.map(l => l.lessonNumber).join('-');
+
+                              return (
+                                <div key={lesson.lesson_group}
+                                  className="px-3 py-2.5 border-b border-warm-border last:border-b-0 bg-white hover:bg-warm-bg/50">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-xs font-extrabold text-ink-muted whitespace-nowrap">
+                                          L{nums}
+                                        </span>
+                                        <span className="text-sm font-bold text-ink truncate">{title}</span>
+                                      </div>
+                                      {engTitle && (
+                                        <div className="text-xs text-ink-muted truncate mt-0.5">{engTitle}</div>
+                                      )}
+                                      <div className={`text-[11px] mt-0.5 font-medium ${
+                                        lesson.completed
+                                          ? 'text-forest'
+                                          : lesson.attempts > 0
+                                          ? 'text-honey'
+                                          : 'text-ink-muted'
+                                      }`}>
+                                        {lesson.completed
+                                          ? '✅ 已完成' + (lesson.best_accuracy > 0 ? ` (${Math.round(lesson.best_accuracy * 100)}%)` : '')
+                                          : lesson.attempts > 0
+                                          ? `🔄 尝试过 ${lesson.attempts} 次 (${Math.round(lesson.best_accuracy * 100)}%)`
+                                          : '🔒 未解锁'}
+                                      </div>
+                                    </div>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        lesson.completed
+                                          ? handleResetLesson(c.id, lesson.lesson_group)
+                                          : handleUnlockLesson(c.id, lesson.lesson_group);
+                                      }}
+                                      disabled={lessonLoading === lesson.lesson_group}
+                                      className={`px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                                        lessonLoading === lesson.lesson_group
+                                          ? 'bg-warm-bg text-ink-muted'
+                                          : lesson.completed
+                                          ? 'bg-berry-pale text-berry border border-berry/30 hover:bg-berry/10'
+                                          : 'bg-forest-pale text-forest border border-forest/30 hover:bg-forest/20'
+                                      }`}
+                                    >
+                                      {lessonLoading === lesson.lesson_group ? '...' : lesson.completed ? '🔒' : '🔓'}
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
                       </>
                     ) : null}
-
-                    {/* 操作按钮 */}
-                    <div className="flex gap-2 pt-1">
-                      <button onClick={(e) => { e.stopPropagation(); handleUnlockAll(c.id); }}
-                        className="flex-1 py-2 text-xs font-bold rounded-xl bg-forest-pale text-forest border border-forest/30">
-                        🔓 解锁全部
-                      </button>
-                      <button onClick={(e) => { e.stopPropagation(); handleResetAll(c.id); }}
-                        className="flex-1 py-2 text-xs font-bold rounded-xl bg-berry-pale text-berry border border-berry/30">
-                        🔒 重置全部
-                      </button>
-                    </div>
                   </motion.div>
                 )}
               </button>
