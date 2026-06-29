@@ -194,7 +194,8 @@ def sync_xp(data: dict, user: dict = Depends(get_current_user)):
     current_xp = int(user.get("total_xp", 0) or 0)
     if xp > current_xp:
         conn = get_db()
-        conn.execute("UPDATE users SET total_xp=? WHERE id=?", (xp, user["id"]))
+        cur = conn.execute("UPDATE users SET total_xp=? WHERE id=?", (xp, user["id"]))
+        cur.rowcount  # 强制 Turso 惰性游标执行
         if hasattr(conn, 'commit'): conn.commit()
         current_xp = xp
     return {"ok": True, "total_xp": current_xp}

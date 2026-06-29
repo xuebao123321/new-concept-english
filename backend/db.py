@@ -55,7 +55,10 @@ def get_db() -> sqlite3.Connection:
 
 class _TursoWrapper:
     def execute(self, sql: str, params: tuple = ()):
-        return _TursoCursor(self, sql, params)
+        cur = _TursoCursor(self, sql, params)
+        # 立即执行 SQL，避免惰性游标导致 DML 语句丢失
+        cur._ensure()
+        return cur
     def commit(self): pass
     def cursor(self): return self
 
