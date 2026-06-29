@@ -548,11 +548,15 @@ def child_report(child_id: int, user: dict = Depends(get_current_user)):
         found = [r for r in progress_rows if r.get("lesson_group") == lg]
         if found:
             f = found[0]
+            try: acc = float(f.get("best_accuracy") or 0)
+            except: acc = 0.0
+            try: att = int(f.get("attempts") or 0)
+            except: att = 0
             lesson_list.append({
                 "lesson_group": lg,
-                "completed": bool(f.get("completed")),
-                "best_accuracy": float(f.get("best_accuracy") or 0),
-                "attempts": int(f.get("attempts") or 0),
+                "completed": bool(int(f.get("completed") or 0)),
+                "best_accuracy": acc,
+                "attempts": att,
                 "status": f.get("status", "locked"),
                 "unlocked_by": f.get("unlocked_by", ""),
             })
@@ -610,11 +614,15 @@ def my_report(user: dict = Depends(get_current_user)):
         found = [r for r in progress_rows if r.get("lesson_group") == lg]
         if found:
             f = found[0]
+            try: acc = float(f.get("best_accuracy") or 0)
+            except: acc = 0.0
+            try: att = int(f.get("attempts") or 0)
+            except: att = 0
             lesson_list.append({
                 "lesson_group": lg,
-                "completed": bool(f.get("completed")),
-                "best_accuracy": float(f.get("best_accuracy") or 0),
-                "attempts": int(f.get("attempts") or 0),
+                "completed": bool(int(f.get("completed") or 0)),
+                "best_accuracy": acc,
+                "attempts": att,
                 "status": f.get("status", "locked"),
                 "unlocked_by": f.get("unlocked_by", ""),
             })
