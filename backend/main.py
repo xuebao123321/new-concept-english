@@ -1,7 +1,7 @@
 """FastAPI 主入口"""
 import os
 from fastapi import FastAPI, HTTPException, Request, Depends
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
@@ -881,8 +881,6 @@ if DIST_DIR and DIST_DIR.exists():
         _p = DIST_DIR / _sub
         if _p.exists():
             app.mount(f"/{_sub}", StaticFiles(directory=str(_p)), name=_sub)
-
-    from fastapi.responses import HTMLResponse
 
     @app.get("/", include_in_schema=False)
     async def _root():
