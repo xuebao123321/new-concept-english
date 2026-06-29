@@ -6,6 +6,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState<'student' | 'parent'>('student');
+  const [familyCode, setFamilyCode] = useState('');
+  const [parentFamilyCode, setParentFamilyCode] = useState(''); // 家长注册成功后展示
 
   // 忘记密码子状态
   const [showForgot, setShowForgot] = useState(false);
@@ -28,13 +31,25 @@ export default function LoginPage() {
       const res = await fetch(`${API}${ep}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': '1' },
-        body: JSON.stringify({ username, password, nickname: username }),
+        body: JSON.stringify({ username, password, nickname: username, role, family_code: familyCode }),
       });
       const d = await res.json();
       if (!res.ok) throw new Error(d.detail || '操作失败');
       localStorage.setItem('nce_token', d.access_token);
-      setMsg('✅ 登录成功！跳转中...');
-      setTimeout(() => { window.location.href = '/'; }, 500);
+      if (mode === 'register') {
+        if (role === 'parent' && d.user?.family_code) {
+          setParentFamilyCode(d.user.family_code);
+          setMsg(`✅ 注册成功! 你的家庭码: ${d.user.family_code}`);
+          setMode('login');
+          setPassword('');
+        } else {
+          setMsg('✅ 注册成功！跳转中...');
+          setTimeout(() => { window.location.href = '/'; }, 500);
+        }
+      } else {
+        setMsg('✅ 登录成功！跳转中...');
+        setTimeout(() => { window.location.href = '/'; }, 500);
+      }
     } catch (e: any) {
       setMsg('❌ ' + (e.message || '网络错误'));
     } finally {
@@ -183,6 +198,41 @@ export default function LoginPage() {
           <input type="password" value={password} onChange={e => setPassword(e.target.value)}
             placeholder="密码" required minLength={4} className="w-full"
             autoComplete={mode === 'login' ? 'current-password' : 'new-password'} />
+
+          {/* 角色选择 (仅注册) */}
+          {mode === 'register' && (
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setRole('student')}
+                className={`flex-1 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
+                  role === 'student' ? 'border-forest bg-forest-pale text-forest' : 'border-warm-border text-ink-light'
+                }`}>
+                📚 我是学生
+              </button>
+              <button type="button" onClick={() => setRole('parent')}
+                className={`flex-1 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
+                  role === 'parent' ? 'border-honey bg-honey-pale text-honey' : 'border-warm-border text-ink-light'
+                }`}>
+                👨‍👩‍👧 我是家长
+              </button>
+            </div>
+          )}
+
+          {/* 学生注册: 家庭码输入 */}
+          {mode === 'register' && role === 'student' && (
+            <input value={familyCode} onChange={e => setFamilyCode(e.target.value.toUpperCase())}
+              placeholder="家长给你的家庭码 (6位)" maxLength={6} className="w-full"
+              autoComplete="off" />
+          )}
+
+          {/* 家长注册成功展示家庭码 */}
+          {mode === 'login' && parentFamilyCode && (
+            <div className="p-3 rounded-xl bg-honey-pale border border-honey/30 text-center">
+              <p className="text-sm font-bold text-honey">👨‍👩‍👧 你的家庭码</p>
+              <p className="text-2xl font-extrabold text-ink tracking-widest mt-1">{parentFamilyCode}</p>
+              <p className="text-xs text-ink-muted mt-1">让学生注册时输入此码加入家庭</p>
+            </div>
+          )}
+
           <button type="submit" disabled={loading}
             className="btn-brand w-full text-base">
             {loading ? '处理中...' : mode === 'login' ? '登录' : '注册'}

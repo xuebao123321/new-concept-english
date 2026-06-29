@@ -1,11 +1,13 @@
+import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import TopBar from './TopBar';
 import LevelUpModal from '../gamification/LevelUpModal';
 import { useUserStore } from '../../stores/useUserStore';
+import { useAuthStore } from '../../stores/useAuthStore';
 import { variants } from '../../utils/motion-tokens';
 
-const TABS = [
+const STUDENT_TABS = [
   { path: '/', icon: '🏠', label: '首页' },
   { path: '/star-map', icon: '🌟', label: '星图' },
   { path: '/lesson', icon: '📚', label: '学习' },
@@ -13,8 +15,15 @@ const TABS = [
   { path: '/profile', icon: '👤', label: '我的' },
 ];
 
+const PARENT_TABS = [
+  { path: '/parent', icon: '🏠', label: '首页' },
+  { path: '/star-map', icon: '🌟', label: '星图' },
+  { path: '/leaderboard', icon: '🏆', label: '排行' },
+  { path: '/profile', icon: '👤', label: '我的' },
+];
+
 function getPageTitle(pathname: string): string {
-  if (pathname === '/') return '🏠 温暖森林学院';
+  if (pathname === '/' || pathname === '/parent') return '🏠 温暖森林学院';
   if (pathname.startsWith('/star-map')) return '🌟 学习星图';
   if (pathname.startsWith('/lesson')) return '📚 知识森林';
   if (pathname.startsWith('/review')) return '📝 复习小屋';
@@ -30,6 +39,14 @@ export default function AppShell() {
   const isFullScreen = loc.pathname.includes('/block/') || loc.pathname.includes('/test/');
   const pageTitle = getPageTitle(loc.pathname);
   const { pendingLevelUp, clearLevelUp } = useUserStore();
+  const { user } = useAuthStore();
+  const isParent = user?.role === 'parent';
+  const TABS = isParent ? PARENT_TABS : STUDENT_TABS;
+
+  // 家长首页 → /parent
+  useEffect(() => {
+    if (isParent && loc.pathname === '/') nav('/parent', { replace: true });
+  }, [isParent, loc.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col bg-cream text-ink">

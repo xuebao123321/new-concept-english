@@ -25,6 +25,7 @@ const ScheduledReviewPage = lazy(() => import('./pages/ScheduledReviewPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
 const WelcomePage = lazy(() => import('./pages/WelcomePage'));
+const ParentDashboardPage = lazy(() => import('./pages/ParentDashboardPage'));
 
 function Loading() {
   return (
@@ -85,6 +86,7 @@ export default function App() {
       <Route element={<RequireAuth />}>
         <Route element={<AppShell />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/parent" element={<ParentDashboardPage />} />
           <Route path="/star-map" element={<StarMapPage />} />
           <Route path="/lesson" element={<LessonSelectPage />} />
           <Route path="/lesson/:groupId" element={<LessonDetailPage />} />
