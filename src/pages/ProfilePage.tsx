@@ -10,6 +10,7 @@ import type { DailyStats } from '../types';
 import { springs } from '../utils/motion-tokens';
 import { useAuthStore } from '../stores/useAuthStore';
 import { api } from '../db/api';
+import LearningReport from '../components/report/LearningReport';
 
 export default function ProfilePage() {
   const { userState, init } = useUserStore();
@@ -206,7 +207,13 @@ export default function ProfilePage() {
         ))}
       </div>
 
-      {/* ═══ 5. 分组: 设置 ═══ */}
+      {/* ═══ 5. 分组: 学习报告 (服务端数据) ═══ */}
+      <SectionTitle emoji="📊" label="学习报告" />
+      <div className="glass-panel p-4">
+        <LearningReport userId={0} role="student" showControls={false} />
+      </div>
+
+      {/* ═══ 6. 分组: 设置 ═══ */}
       <SectionTitle emoji="⚙️" label="设置" />
       <div className="glass-panel p-4 space-y-3">
         {/* 修改密码 */}

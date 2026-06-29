@@ -148,6 +148,27 @@ export interface WrongQuestion {
   mastered: boolean;
 }
 
+// 错题分析 API 返回类型 (V7)
+export interface WrongQuestionItem {
+  question_id: string;
+  lesson_group: string;
+  question_type: string;
+  user_answer: string;
+  question_text: string;
+  correct_answer: string;
+  difficulty: string;
+  wrong_count: number;
+  created_at: string;
+}
+
+export interface WrongQuestionSummary {
+  total_wrong: number;
+  by_type: Record<string, number>;
+  by_lesson: Record<string, number>;
+  most_missed_type: string;
+  most_missed_lesson: string;
+}
+
 // ===== 课程闯关进度 =====
 export interface LessonProgress {
   lessonGroup: string;           // 'lesson-01-02'

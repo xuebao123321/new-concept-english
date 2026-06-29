@@ -20,6 +20,30 @@ interface Props {
   onAnswer: (a: string, c: boolean, t: number) => void;
 }
 
+/** 从题目对象提取题干文本 */
+function getPromptText(q: Question): string {
+  switch (q.type) {
+    case 'choice': return q.prompt + (q.question ? ' ' + q.question : '');
+    case 'fill': return q.sentence || q.prompt || '';
+    case 'translate': return `翻译: ${q.sourceText || ''}`;
+    case 'reorder': return `连词成句: ${q.correctSentence || ''}`;
+    case 'listening': return q.question || q.prompt || '';
+    default: return '';
+  }
+}
+
+/** 从题目对象提取正确答案文本 */
+function getCorrectText(q: Question): string {
+  switch (q.type) {
+    case 'choice': return q.options?.[q.correctIndex] || '';
+    case 'fill': return q.answer || '';
+    case 'translate': return q.acceptableAnswers?.[0] || '';
+    case 'reorder': return q.correctSentence || '';
+    case 'listening': return q.options?.[q.correctIndex] || '';
+    default: return '';
+  }
+}
+
 const TYPE_LABELS: Record<QuestionType, string> = {
   choice: '📋 选择',
   fill: '✏️ 填空',
@@ -49,6 +73,9 @@ export default function QuestionCard({ question, questionNumber, totalQuestions,
       time_spent: timeSpent,
       lesson_group: question.lessonGroup,
       question_type: question.type,
+      question_text: getPromptText(question),
+      correct_answer: getCorrectText(question),
+      difficulty: question.difficulty || 'medium',
     }).catch(() => {});
     if (correct) {
       playCorrect();

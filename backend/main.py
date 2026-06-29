@@ -335,6 +335,64 @@ def child_report(child_id: int, user: dict = Depends(get_current_user)):
     }
 
 
+@app.get("/api/user/my-report")
+def my_report(user: dict = Depends(get_current_user)):
+    """学生/家长查看自己的学习报告"""
+    conn = get_db()
+    uid = user["id"]
+    progress_rows = get_user_progress(uid)
+    completed = sum(1 for r in progress_rows if r.get("completed"))
+    type_stats = {}
+    for qt in ["choice", "fill", "translate", "reorder", "listening"]:
+        row = conn.execute(
+            "SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records "
+            "WHERE user_id=? AND question_type=?", (uid, qt)).fetchone()
+        rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
+        t = rd.get("total") or 0
+        c = rd.get("correct") or 0
+        type_stats[qt] = {"total": t, "correct": c, "accuracy": round(c / t * 100) if t > 0 else 0}
+
+    # 逐课列表
+    lesson_list = []
+    for lg in ALL_LESSON_GROUPS:
+        found = [r for r in progress_rows if r.get("lesson_group") == lg]
+        if found:
+            f = found[0]
+            lesson_list.append({
+                "lesson_group": lg,
+                "completed": bool(f.get("completed")),
+                "best_accuracy": float(f.get("best_accuracy") or 0),
+                "attempts": int(f.get("attempts") or 0),
+            })
+        else:
+            lesson_list.append({
+                "lesson_group": lg, "completed": False,
+                "best_accuracy": 0, "attempts": 0,
+            })
+
+    # 最近 7 天活跃度
+    from datetime import datetime, timedelta
+    recent_activity = []
+    for i in range(6, -1, -1):
+        d = (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d")
+        row = conn.execute(
+            "SELECT COUNT(*) as total, SUM(correct) as correct FROM answer_records "
+            "WHERE user_id=? AND date(created_at)=?", (uid, d)).fetchone()
+        rd = row.to_dict() if hasattr(row, 'to_dict') else dict(row)
+        recent_activity.append({
+            "date": d, "total": rd.get("total") or 0,
+            "correct": rd.get("correct") or 0,
+        })
+
+    return {
+        "student": {"id": uid, "nickname": user.get("nickname", ""), "username": user["username"]},
+        "completed_lessons": completed, "total_lessons": len(ALL_LESSON_GROUPS),
+        "type_stats": type_stats,
+        "lesson_list": lesson_list,
+        "recent_activity": recent_activity,
+    }
+
+
 @app.get("/api/parent/child/{child_id}/wrong-questions")
 def child_wrong_questions(child_id: int, user: dict = Depends(get_current_user)):
     if user.get("role") != "parent":
@@ -344,16 +402,24 @@ def child_wrong_questions(child_id: int, user: dict = Depends(get_current_user))
                          (child_id, user["id"])).fetchone()
     if not child:
         raise HTTPException(404, "学生未找到")
+
+    # 查询所有答错记录,带新字段
     rows = conn.execute(
-        "SELECT question_id, lesson_group, question_type, user_answer, created_at "
+        "SELECT question_id, lesson_group, question_type, user_answer, "
+        "question_text, correct_answer, difficulty, created_at "
         "FROM answer_records WHERE user_id=? AND correct=0 "
-        "ORDER BY created_at DESC LIMIT 100",
+        "ORDER BY created_at DESC LIMIT 200",
         (child_id,)).fetchall()
+
+    # 去重 + 统计每个 question 的出错次数
+    from collections import Counter
+    wrong_count_map = Counter()
     seen = set()
     wrong_list = []
     for r in rows:
         d = r.to_dict() if hasattr(r, 'to_dict') else dict(r)
         qid = d["question_id"]
+        wrong_count_map[qid] += 1
         if qid not in seen:
             seen.add(qid)
             wrong_list.append({
@@ -361,11 +427,92 @@ def child_wrong_questions(child_id: int, user: dict = Depends(get_current_user))
                 "lesson_group": d.get("lesson_group", ""),
                 "question_type": d.get("question_type", "choice"),
                 "user_answer": d.get("user_answer", ""),
+                "question_text": d.get("question_text", ""),
+                "correct_answer": d.get("correct_answer", ""),
+                "difficulty": d.get("difficulty", "medium"),
+                "wrong_count": 0,  # 稍后填充
                 "created_at": d.get("created_at", ""),
             })
-        if len(wrong_list) >= 30:
+        if len(wrong_list) >= 50:
             break
-    return {"wrong_questions": wrong_list}
+
+    # 填充 wrong_count
+    for item in wrong_list:
+        item["wrong_count"] = wrong_count_map.get(item["question_id"], 1)
+
+    # 聚合摘要
+    by_type = Counter(item["question_type"] for item in wrong_list)
+    by_lesson = Counter(item["lesson_group"] for item in wrong_list)
+
+    # 找出最弱题型和最弱课组
+    most_missed_type = by_type.most_common(1)[0][0] if by_type else ""
+    most_missed_lesson = by_lesson.most_common(1)[0][0] if by_lesson else ""
+
+    return {
+        "wrong_questions": wrong_list,
+        "summary": {
+            "total_wrong": len(wrong_list),
+            "by_type": dict(by_type),
+            "by_lesson": {k: v for k, v in by_lesson.most_common(10)},
+            "most_missed_type": most_missed_type,
+            "most_missed_lesson": most_missed_lesson,
+        }
+    }
+
+
+@app.get("/api/user/wrong-questions")
+def my_wrong_questions(user: dict = Depends(get_current_user)):
+    """学生查看自己的错题分析"""
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT question_id, lesson_group, question_type, user_answer, "
+        "question_text, correct_answer, difficulty, created_at "
+        "FROM answer_records WHERE user_id=? AND correct=0 "
+        "ORDER BY created_at DESC LIMIT 200",
+        (user["id"],)).fetchall()
+
+    from collections import Counter
+    wrong_count_map = Counter()
+    seen = set()
+    wrong_list = []
+    for r in rows:
+        d = r.to_dict() if hasattr(r, 'to_dict') else dict(r)
+        qid = d["question_id"]
+        wrong_count_map[qid] += 1
+        if qid not in seen:
+            seen.add(qid)
+            wrong_list.append({
+                "question_id": qid,
+                "lesson_group": d.get("lesson_group", ""),
+                "question_type": d.get("question_type", "choice"),
+                "user_answer": d.get("user_answer", ""),
+                "question_text": d.get("question_text", ""),
+                "correct_answer": d.get("correct_answer", ""),
+                "difficulty": d.get("difficulty", "medium"),
+                "wrong_count": 0,
+                "created_at": d.get("created_at", ""),
+            })
+        if len(wrong_list) >= 50:
+            break
+
+    for item in wrong_list:
+        item["wrong_count"] = wrong_count_map.get(item["question_id"], 1)
+
+    by_type = Counter(item["question_type"] for item in wrong_list)
+    by_lesson = Counter(item["lesson_group"] for item in wrong_list)
+    most_missed_type = by_type.most_common(1)[0][0] if by_type else ""
+    most_missed_lesson = by_lesson.most_common(1)[0][0] if by_lesson else ""
+
+    return {
+        "wrong_questions": wrong_list,
+        "summary": {
+            "total_wrong": len(wrong_list),
+            "by_type": dict(by_type),
+            "by_lesson": {k: v for k, v in by_lesson.most_common(10)},
+            "most_missed_type": most_missed_type,
+            "most_missed_lesson": most_missed_lesson,
+        }
+    }
 
 
 # ── 排行榜 ──

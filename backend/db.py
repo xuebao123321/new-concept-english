@@ -105,13 +105,13 @@ def init_db():
         _turso_request([
             ("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, salt TEXT NOT NULL, nickname TEXT DEFAULT '', role TEXT DEFAULT 'student', family_code TEXT DEFAULT '', parent_id INTEGER DEFAULT NULL, created_at TEXT DEFAULT (datetime('now')))", ()),
             ("CREATE TABLE IF NOT EXISTS user_progress (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, lesson_group TEXT NOT NULL, completed INTEGER DEFAULT 0, best_accuracy REAL DEFAULT 0, attempts INTEGER DEFAULT 0, last_attempt_at TEXT, completed_at TEXT, UNIQUE(user_id, lesson_group), FOREIGN KEY(user_id) REFERENCES users(id))", ()),
-            ("CREATE TABLE IF NOT EXISTS answer_records (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, question_id TEXT NOT NULL, lesson_group TEXT DEFAULT '', question_type TEXT DEFAULT 'choice', correct INTEGER DEFAULT 0, user_answer TEXT DEFAULT '', time_spent REAL DEFAULT 0, created_at TEXT DEFAULT (datetime('now')), FOREIGN KEY(user_id) REFERENCES users(id))", ()),
+            ("CREATE TABLE IF NOT EXISTS answer_records (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, question_id TEXT NOT NULL, lesson_group TEXT DEFAULT '', question_type TEXT DEFAULT 'choice', correct INTEGER DEFAULT 0, user_answer TEXT DEFAULT '', time_spent REAL DEFAULT 0, question_text TEXT DEFAULT '', correct_answer TEXT DEFAULT '', difficulty TEXT DEFAULT 'medium', created_at TEXT DEFAULT (datetime('now')), FOREIGN KEY(user_id) REFERENCES users(id))", ()),
             ("CREATE TABLE IF NOT EXISTS daily_stats (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, date TEXT NOT NULL, questions_done INTEGER DEFAULT 0, correct_count INTEGER DEFAULT 0, xp_earned INTEGER DEFAULT 0, minutes_spent REAL DEFAULT 0, UNIQUE(user_id, date), FOREIGN KEY(user_id) REFERENCES users(id))", ()),
         ])
     else:
         conn.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, salt TEXT NOT NULL, nickname TEXT DEFAULT '', role TEXT DEFAULT 'student', family_code TEXT DEFAULT '', parent_id INTEGER DEFAULT NULL, created_at TEXT DEFAULT (datetime('now')))")
         conn.execute("CREATE TABLE IF NOT EXISTS user_progress (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, lesson_group TEXT NOT NULL, completed INTEGER DEFAULT 0, best_accuracy REAL DEFAULT 0, attempts INTEGER DEFAULT 0, last_attempt_at TEXT, completed_at TEXT, UNIQUE(user_id, lesson_group), FOREIGN KEY(user_id) REFERENCES users(id))")
-        conn.execute("CREATE TABLE IF NOT EXISTS answer_records (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, question_id TEXT NOT NULL, lesson_group TEXT DEFAULT '', question_type TEXT DEFAULT 'choice', correct INTEGER DEFAULT 0, user_answer TEXT DEFAULT '', time_spent REAL DEFAULT 0, created_at TEXT DEFAULT (datetime('now')), FOREIGN KEY(user_id) REFERENCES users(id))")
+        conn.execute("CREATE TABLE IF NOT EXISTS answer_records (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, question_id TEXT NOT NULL, lesson_group TEXT DEFAULT '', question_type TEXT DEFAULT 'choice', correct INTEGER DEFAULT 0, user_answer TEXT DEFAULT '', time_spent REAL DEFAULT 0, question_text TEXT DEFAULT '', correct_answer TEXT DEFAULT '', difficulty TEXT DEFAULT 'medium', created_at TEXT DEFAULT (datetime('now')), FOREIGN KEY(user_id) REFERENCES users(id))")
         conn.execute("CREATE TABLE IF NOT EXISTS daily_stats (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, date TEXT NOT NULL, questions_done INTEGER DEFAULT 0, correct_count INTEGER DEFAULT 0, xp_earned INTEGER DEFAULT 0, minutes_spent REAL DEFAULT 0, UNIQUE(user_id, date), FOREIGN KEY(user_id) REFERENCES users(id))")
     # 迁移旧表: 补加 SaaS 字段
     _migrations = [
@@ -120,6 +120,16 @@ def init_db():
         "ALTER TABLE users ADD COLUMN parent_id INTEGER DEFAULT NULL",
     ]
     for _m in _migrations:
+        try: conn.execute(_m)
+        except: pass
+
+    # 错题分析升级: 加题干/正确答案/难度 (忽略已存在列)
+    _migrations_v7 = [
+        "ALTER TABLE answer_records ADD COLUMN question_text TEXT DEFAULT ''",
+        "ALTER TABLE answer_records ADD COLUMN correct_answer TEXT DEFAULT ''",
+        "ALTER TABLE answer_records ADD COLUMN difficulty TEXT DEFAULT 'medium'",
+    ]
+    for _m in _migrations_v7:
         try: conn.execute(_m)
         except: pass
 
@@ -183,8 +193,8 @@ def update_lesson_progress(user_id: int, lesson_group: str, correct: int, total:
 
 def save_answer(user_id: int, data: dict):
     conn = get_db()
-    conn.execute("INSERT INTO answer_records (user_id, question_id, lesson_group, question_type, correct, user_answer, time_spent) VALUES (?,?,?,?,?,?,?)",
-        (user_id, data['question_id'], data.get('lesson_group', ''), data.get('question_type', 'choice'), int(data.get('correct', False)), data.get('user_answer', ''), data.get('time_spent', 0)))
+    conn.execute("INSERT INTO answer_records (user_id, question_id, lesson_group, question_type, correct, user_answer, time_spent, question_text, correct_answer, difficulty) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        (user_id, data['question_id'], data.get('lesson_group', ''), data.get('question_type', 'choice'), int(data.get('correct', False)), data.get('user_answer', ''), data.get('time_spent', 0), data.get('question_text', ''), data.get('correct_answer', ''), data.get('difficulty', 'medium')))
     if hasattr(conn, 'commit'): conn.commit()
 
 

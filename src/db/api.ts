@@ -35,7 +35,7 @@ export const api = {
   getStats: () => request('/api/user/stats'),
 
   // 练习
-  submitAnswer: (data: { question_id: string; correct: boolean; user_answer: string; time_spent: number; lesson_group?: string; question_type?: string }) =>
+  submitAnswer: (data: { question_id: string; correct: boolean; user_answer: string; time_spent: number; lesson_group?: string; question_type?: string; question_text?: string; correct_answer?: string; difficulty?: string }) =>
     request('/api/practice/submit', { method: 'POST', body: JSON.stringify(data) }),
   updateProgress: (lesson_group: string, correct: number, total: number) =>
     request('/api/progress/update', { method: 'POST', body: JSON.stringify({ lesson_group, correct, total }) }),
@@ -55,7 +55,9 @@ export const api = {
   resetLesson: (childId: number, lessonGroup: string) =>
     request(`/api/parent/child/${childId}/reset-lesson`, { method: 'POST', body: JSON.stringify({ lesson_group: lessonGroup }) }),
   childReport: (childId: number) => request(`/api/parent/child/${childId}/report`),
+  myReport: () => request('/api/user/my-report'),
   wrongQuestions: (childId: number) => request(`/api/parent/child/${childId}/wrong-questions`),
+  myWrongQuestions: () => request('/api/user/wrong-questions'),
 
   // 健康检查
   health: () => request('/api/health'),

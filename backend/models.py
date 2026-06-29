@@ -52,6 +52,9 @@ class AnswerSubmitRequest(BaseModel):
     time_spent: float
     lesson_group: str = ""
     question_type: str = "choice"
+    question_text: str = ""       # 题干文本
+    correct_answer: str = ""      # 正确答案
+    difficulty: str = "medium"    # easy/medium/hard
 
 class AnswerSubmitResponse(BaseModel):
     xp_earned: int
