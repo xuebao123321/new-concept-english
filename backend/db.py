@@ -17,7 +17,9 @@ def _turso_request(statements: list[tuple]) -> list[list[dict]]:
     for sql, params in statements:
         args = []
         for p in (params or ()):
-            if isinstance(p, int):
+            if p is None:
+                args.append({"type": "null"})
+            elif isinstance(p, int):
                 args.append({"type": "integer", "value": str(p)})
             elif isinstance(p, float):
                 args.append({"type": "real", "value": str(p)})

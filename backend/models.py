@@ -17,6 +17,7 @@ class UserResponse(BaseModel):
     id: int
     username: str
     nickname: str
+    grade: str = ""
     role: str = "student"
     family_code: str = ""
     parent_id: Optional[int] = None

@@ -155,12 +155,15 @@ def delete_account(user: dict = Depends(get_current_user)):
 
 @app.get("/api/user/profile", response_model=UserResponse)
 def profile(user: dict = Depends(get_current_user)):
+    pid = user.get("parent_id")
+    if pid is not None and str(pid) == "None":
+        pid = None
     return {"id": user["id"], "username": user["username"],
             "nickname": user.get("nickname", ""),
             "grade": user.get("grade", ""),
             "role": user.get("role", "student"),
             "family_code": user.get("family_code", ""),
-            "parent_id": user.get("parent_id"),
+            "parent_id": pid,
             "created_at": user.get("created_at", "")}
 
 
