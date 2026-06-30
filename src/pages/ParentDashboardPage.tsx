@@ -87,7 +87,9 @@ export default function ParentDashboardPage() {
     try {
       const data = await api.wrongQuestions(childId);
       setWrongData(prev => ({ ...prev, [childId]: data }));
-    } catch { /* 静默失败 */ }
+    } catch (e: any) {
+      setMsg('❌ 错题加载失败: ' + (e.message || '未知错误'));
+    }
     finally { setWrongLoading(prev => ({ ...prev, [childId]: false })); }
   };
 
