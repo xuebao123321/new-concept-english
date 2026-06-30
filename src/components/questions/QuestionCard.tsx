@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MultipleChoice from './MultipleChoice';
 import FillInBlank from './FillInBlank';
@@ -13,6 +13,16 @@ import { springs } from '../../utils/motion-tokens';
 import { useUserStore } from '../../stores/useUserStore';
 import { api } from '../../db/api';
 import type { Question, QuestionType } from '../../types';
+
+/** Fisher-Yates 洗牌 */
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 interface Props {
   question: Question;
@@ -66,6 +76,18 @@ export default function QuestionCard({ question, questionNumber, totalQuestions,
   const [showHint, setShowHint] = useState(false);
   const { consumeHeart } = useUserStore();
 
+  // 随机打乱选择题/听力题选项（避免正确答案总在 A）
+  const displayQuestion = useMemo(() => {
+    if ((question.type !== 'choice' && question.type !== 'listening') || !('options' in question)) {
+      return question;
+    }
+    const orig = question.options as string[];
+    const correct = orig[question.correctIndex];
+    const shuffled = shuffle(orig);
+    const newIdx = shuffled.indexOf(correct);
+    return { ...question, options: shuffled, correctIndex: newIdx };
+  }, [question]);
+
   const handleAnswer = (answer: string, correct: boolean, timeSpent: number) => {
     setLastCorrect(correct);
     setShowResult(true);
@@ -112,11 +134,11 @@ export default function QuestionCard({ question, questionNumber, totalQuestions,
 
   const render = () => {
     switch (question.type) {
-      case 'choice': return <MultipleChoice question={question} onAnswer={handleAnswer} startTime={startTime} />;
+      case 'choice': return <MultipleChoice question={displayQuestion as any} onAnswer={handleAnswer} startTime={startTime} />;
       case 'fill': return <FillInBlank question={question} onAnswer={handleAnswer} startTime={startTime} />;
       case 'translate': return <TranslationInput question={question} onAnswer={handleAnswer} startTime={startTime} />;
       case 'reorder': return <SentenceReorder question={question} onAnswer={handleAnswer} startTime={startTime} />;
-      case 'listening': return <ListeningQuestionComp question={question} onAnswer={handleAnswer} startTime={startTime} />;
+      case 'listening': return <ListeningQuestionComp question={displayQuestion as any} onAnswer={handleAnswer} startTime={startTime} />;
       case 'speak': return <SpeakingQuestionComp question={question as any} onAnswer={handleAnswer} startTime={startTime} />;
       default: return <div className="text-ink-light">未知题型</div>;
     }

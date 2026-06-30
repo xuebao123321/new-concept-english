@@ -19,8 +19,11 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!userState) return;
     (async () => {
-      const wrong = await db.wrongQuestions.filter(wq => !wq.mastered).count();
-      setTotalWrong(wrong);
+      const wrongs = await db.wrongQuestions.filter(w => !w.mastered).toArray();
+      // 排除已在错题本中订正的（和 WrongBookPage 一致）
+      let corrected: Record<string, boolean> = {};
+      try { corrected = JSON.parse(localStorage.getItem('nce_wrongbook_corrected') || '{}'); } catch {}
+      setTotalWrong(wrongs.filter(w => !corrected[w.questionId]).length);
     })();
   }, [userState]);
 
