@@ -112,7 +112,8 @@ export default function BlockSessionPage() {
         question_text: qText,
         correct_answer: qCorrect,
         difficulty: cur.difficulty || 'medium',
-      }).catch(() => {});
+      }).then(r => console.log('submitAnswer OK:', r))
+        .catch(e => alert('错题保存失败: ' + (e.message || '网络错误')));
     }
 
     setTimeout(() => {

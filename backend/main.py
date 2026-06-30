@@ -852,10 +852,7 @@ def public_profile(user_id: int):
 
 @app.post("/api/practice/submit", response_model=AnswerSubmitResponse)
 def submit_answer(data: AnswerSubmitRequest, user: dict = Depends(get_current_user)):
-    try:
-        save_answer(user["id"], data.model_dump())
-    except Exception as e:
-        raise HTTPException(500, f"保存失败: {str(e)[:200]}")
+    save_answer(user["id"], data.model_dump())
     xp = 10 if data.correct else 0
     return {"xp_earned": xp, "combo_bonus": 0, "total_xp": 0}
 
