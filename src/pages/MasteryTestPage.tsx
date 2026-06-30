@@ -62,8 +62,18 @@ export default function MasteryTestPage() {
 
     if (!correct && phase === 'main') {
       setWrongList(prev => [...prev, cur]);
-      // 保存错题到本地 Dexie + 后端
-      const qText = 'prompt' in cur ? (cur as any).prompt : '';
+      // 保存错题到本地 Dexie（submitAnswer 由 QuestionCard 统一处理）
+      const fullText = (() => {
+        const q = cur as any;
+        switch (q.type) {
+          case 'choice': return (q.prompt || '') + (q.question ? ' ' + q.question : '');
+          case 'fill': return q.sentence || q.prompt || '';
+          case 'translate': return '翻译: ' + (q.sourceText || '');
+          case 'reorder': return '连词成句: ' + (q.correctSentence || '');
+          case 'listening': return q.question || q.prompt || '';
+          default: return q.prompt || '';
+        }
+      })();
       const qCorrect = 'options' in cur ? (cur as any).options[(cur as any).correctIndex] || '' :
                        'answer' in cur ? (cur as any).answer : '';
       db.wrongQuestions.put({
@@ -72,22 +82,11 @@ export default function MasteryTestPage() {
         mastered: false,
         lastWrongTime: Date.now(),
         wrongCount: 1,
-        questionText: qText,
+        questionText: fullText,
         correctAnswer: qCorrect,
         userAnswer: _answer,
         lessonGroup: groupId || '',
         questionType: cur.type,
-      }).catch(() => {});
-      api.submitAnswer({
-        question_id: cur.id,
-        correct: false,
-        user_answer: _answer,
-        time_spent: _timeSpent,
-        lesson_group: groupId || '',
-        question_type: cur.type,
-        question_text: qText,
-        correct_answer: qCorrect,
-        difficulty: cur.difficulty || 'medium',
       }).catch(() => {});
     }
 

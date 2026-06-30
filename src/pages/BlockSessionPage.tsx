@@ -86,8 +86,18 @@ export default function BlockSessionPage() {
 
     if (!correct && round === 'main') {
       setWrongList(newWrongList);
-      // 保存错题到本地 Dexie（同步等待）+ 后端（异步不阻塞）
-      const qText = 'prompt' in cur ? (cur as any).prompt : '';
+      // 保存错题到本地 Dexie（submitAnswer 由 QuestionCard 统一处理）
+      const fullText = (() => {
+        const q = cur as any;
+        switch (q.type) {
+          case 'choice': return (q.prompt || '') + (q.question ? ' ' + q.question : '');
+          case 'fill': return q.sentence || q.prompt || '';
+          case 'translate': return '翻译: ' + (q.sourceText || '');
+          case 'reorder': return '连词成句: ' + (q.correctSentence || '');
+          case 'listening': return q.question || q.prompt || '';
+          default: return q.prompt || '';
+        }
+      })();
       const qCorrect = 'options' in cur ? (cur as any).options[(cur as any).correctIndex] || '' :
                        'answer' in cur ? (cur as any).answer : '';
       await db.wrongQuestions.put({
@@ -96,24 +106,12 @@ export default function BlockSessionPage() {
         mastered: false,
         lastWrongTime: Date.now(),
         wrongCount: 1,
-        questionText: qText,
+        questionText: fullText,
         correctAnswer: qCorrect,
         userAnswer: _answer,
         lessonGroup: groupId || '',
         questionType: cur.type,
       });
-      api.submitAnswer({
-        question_id: cur.id,
-        correct: false,
-        user_answer: _answer,
-        time_spent: _timeSpent,
-        lesson_group: groupId || '',
-        question_type: cur.type,
-        question_text: qText,
-        correct_answer: qCorrect,
-        difficulty: cur.difficulty || 'medium',
-      }).then(r => console.log('submitAnswer OK:', r))
-        .catch(e => alert('错题保存失败: ' + (e.message || '网络错误')));
     }
 
     setTimeout(() => {
