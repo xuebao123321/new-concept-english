@@ -185,29 +185,27 @@ export default function WrongBookPage() {
             间隔复习 →
           </a>
         </div>
-        {summary && (
-          <div className="flex gap-2 text-xs flex-wrap mb-3">
-            <span className="px-2 py-1 rounded-full bg-berry-pale text-berry font-bold">
-              {totalCount} 道错题
+        <div className="flex gap-2 text-xs flex-wrap mb-3">
+          <span className="px-2 py-1 rounded-full bg-berry-pale text-berry font-bold">
+            {activeQuestions.length} 道待订正
+          </span>
+          {correctedCount > 0 && (
+            <span className="px-2 py-1 rounded-full bg-forest-pale text-forest font-bold">
+              ✅ 已订正 {correctedCount} 道
             </span>
-            {correctedCount > 0 && (
-              <span className="px-2 py-1 rounded-full bg-forest-pale text-forest font-bold">
-                ✅ 已订正 {correctedCount} 道
-              </span>
-            )}
-            {summary.most_missed_type && (
-              <span className="px-2 py-1 rounded-full bg-honey-pale text-honey font-bold">
-                弱项: {TYPE_LABELS[summary.most_missed_type] || summary.most_missed_type}
-              </span>
-            )}
-          </div>
-        )}
+          )}
+          {summary?.most_missed_type && (
+            <span className="px-2 py-1 rounded-full bg-honey-pale text-honey font-bold">
+              弱项: {TYPE_LABELS[summary.most_missed_type] || summary.most_missed_type}
+            </span>
+          )}
+        </div>
         {/* 订正进度条 */}
         {totalCount > 0 && (
           <div>
             <div className="flex justify-between text-[10px] font-bold mb-1">
               <span className="text-ink-muted">订正进度</span>
-              <span className="text-forest">{correctedCount}/{totalCount} ({Math.round(correctedCount / totalCount * 100)}%)</span>
+              <span className="text-forest">{correctedCount}/{totalCount}</span>
             </div>
             <div className="h-2 bg-warm-bg rounded-full overflow-hidden">
               <motion.div
@@ -217,6 +215,13 @@ export default function WrongBookPage() {
                 transition={{ duration: 0.5 }}
               />
             </div>
+          </div>
+        )}
+        {summary?.most_missed_type && (
+          <div className="flex gap-2 text-xs flex-wrap">
+            <span className="px-2 py-1 rounded-full bg-honey-pale text-honey font-bold">
+              弱项: {summary.most_missed_type}
+            </span>
           </div>
         )}
       </div>
