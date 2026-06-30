@@ -44,10 +44,6 @@ export default function ParentDashboardPage() {
       const res = await api.getChildren();
       const list = res.children || [];
       setChildren(list);
-      // 自动加载所有学生的报告
-      for (const c of list) {
-        loadReport(c.id);
-      }
     } catch (e: any) {
       setMsg('❌ ' + (e.message || '加载失败'));
     } finally {
@@ -455,7 +451,12 @@ export default function ParentDashboardPage() {
                       </div>
                     </div>
                   ) : (
-                    <p className="text-sm text-ink-muted text-center py-4">暂无数据</p>
+                    <div className="text-center py-3">
+                      <button onClick={() => loadReport(c.id)}
+                        className="px-4 py-2 text-xs font-bold rounded-xl bg-forest-pale text-forest hover:bg-forest/20">
+                        📊 加载学习报告
+                      </button>
+                    </div>
                   )}
                 </div>
               </motion.div>
