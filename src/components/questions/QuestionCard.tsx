@@ -80,7 +80,7 @@ export default function QuestionCard({ question, questionNumber, totalQuestions,
       question_text: getPromptText(question),
       correct_answer: getCorrectText(question),
       difficulty: question.difficulty || 'medium',
-    }).catch(() => {});
+    }).catch(e => console.warn('submitAnswer(QuestionCard):', e.message));
     if (correct) {
       playCorrect();
       const newCombo = combo + 1;
