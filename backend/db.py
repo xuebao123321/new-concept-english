@@ -34,6 +34,8 @@ def _turso_request(statements: list[tuple]) -> list[list[dict]]:
     data = resp.json()
     results = []
     for r in data.get("results", []):
+        if r.get("type") == "error":
+            raise Exception(f"Turso error: {r.get('error',{}).get('message','unknown')}")
         if r.get("type") == "ok" and "response" in r:
             rr = r["response"]["result"]
             cols = [c["name"] for c in rr.get("cols", [])]
